@@ -356,3 +356,35 @@ select { font: inherit; }
   font-weight: 700;
   cursor: pointer;
 }
+
+
+.vm-catalog-groups {
+  margin-top: 12px;
+  overflow: auto;
+  display: grid;
+  gap: 14px;
+}
+
+.vm-catalog-group h3 {
+  margin: 0 0 7px;
+  color: var(--vm-text-secondary);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.vm-math-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  font-size: 18px;
+}
+
+.vm-catalog-empty {
+  margin: 14px 0 0;
+  color: var(--vm-text-secondary);
+  font-size: 12px;
+}

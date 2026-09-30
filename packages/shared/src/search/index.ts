@@ -1,0 +1,1 @@
+export { normalizeVietnameseSearch } from "./normalizeVietnamese";

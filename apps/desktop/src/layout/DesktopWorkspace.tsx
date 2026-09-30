@@ -134,7 +134,7 @@ export function DesktopWorkspace() {
           onKeyDown={handleKey("right")}
         />
         <div className="vm-panel-column" data-collapsed={rightCollapsed}>
-          <SymbolPanel />
+          <SymbolPanel editor={editor} />
         </div>
       </section>
     </main>

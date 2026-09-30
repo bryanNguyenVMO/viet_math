@@ -1,3 +1,13 @@
+export {
+  MATH_CATALOG,
+  searchMathCatalog,
+} from "./catalog";
+export type {
+  MathCatalogAliases,
+  MathCatalogCategory,
+  MathCatalogItem,
+  MathCatalogKind,
+} from "./catalog";
 export { ImeCompositionGuard } from "./ImeCompositionGuard";
 export { MathLiveAdapter } from "./MathLiveAdapter";
 export type { InsertOptions, MathLivePort } from "./MathLivePort";

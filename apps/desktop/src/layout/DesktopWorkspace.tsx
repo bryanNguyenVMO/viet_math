@@ -4,8 +4,15 @@ import {
   detectInitialLocale,
   type Locale,
 } from "@vietmath/i18n";
-import { resolveShortcut } from "@vietmath/shared";
-import { Sigma } from "lucide-react";
+import {
+  DEFAULT_APP_SETTINGS,
+  SETTINGS_KEY,
+  normalizeAppSettings,
+  resolveShortcut,
+  resolveTheme,
+  type AppSettings,
+} from "@vietmath/shared";
+import { Settings as SettingsIcon, Sigma } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -16,6 +23,7 @@ import {
 } from "react";
 
 import { EditorWorkspace } from "../editor/EditorWorkspace";
+import { SettingsDialog } from "../settings/SettingsDialog";
 import { TauriStorage } from "../storage/TauriStorage";
 import { LibraryPanel } from "./LibraryPanel";
 import { SymbolPanel } from "./SymbolPanel";
@@ -34,13 +42,55 @@ function clamp(value: number, min: number, max: number) {
 export function DesktopWorkspace() {
   const [editor, setEditor] = useState<VietMathEditor | null>(null);
   const storage = useMemo(() => new TauriStorage(), []);
-  const [locale, setLocale] = useState<Locale>(() => detectInitialLocale());
+  const [settings, setSettings] = useState<AppSettings>(() => ({
+    ...DEFAULT_APP_SETTINGS,
+    locale: detectInitialLocale(),
+  }));
+  const [locale, setLocale] = useState<Locale>(() => settings.locale);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [searchRequestKey, setSearchRequestKey] = useState(0);
   const { t } = createTranslator(locale);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void storage.get(SETTINGS_KEY).then((raw) => {
+      if (cancelled) return;
+      const loaded = normalizeAppSettings(raw);
+      setSettings(loaded);
+      setLocale(loaded.locale);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [storage]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const apply = () => {
+      document.documentElement.dataset.theme = resolveTheme(
+        settings.theme,
+        media.matches,
+      );
+    };
+
+    apply();
+    if (settings.theme !== "system") return;
+
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, [settings.theme]);
+
+  const saveSettings = useCallback((next: AppSettings) => {
+    setSettings(next);
+    setLocale(next.locale);
+  }, []);
 
   const handleEditorReady = useCallback((next: VietMathEditor | null) => {
     setEditor(next);
@@ -151,6 +201,14 @@ export function DesktopWorkspace() {
               {t("locale.en")}
             </button>
           </div>
+          <button
+            type="button"
+            className="vm-settings-trigger"
+            aria-label={t("actions.settings")}
+            onClick={() => setSettingsOpen(true)}
+          >
+            <SettingsIcon size={16} />
+          </button>
           <span className="vm-panel-eyebrow">{t("app.alpha")}</span>
         </div>
       </header>
@@ -197,6 +255,14 @@ export function DesktopWorkspace() {
           />
         </div>
       </section>
+      <SettingsDialog
+        open={settingsOpen}
+        storage={storage}
+        settings={settings}
+        locale={locale}
+        onClose={() => setSettingsOpen(false)}
+        onSaved={saveSettings}
+      />
     </main>
   );
 }

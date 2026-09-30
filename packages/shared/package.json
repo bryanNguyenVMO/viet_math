@@ -7,6 +7,7 @@
     ".": "./src/index.ts",
     "./search": "./src/search/index.ts",
     "./clipboard": "./src/clipboard/index.ts",
-    "./shortcuts": "./src/shortcuts/index.ts"
+    "./shortcuts": "./src/shortcuts/index.ts",
+    "./settings": "./src/settings/index.ts"
   }
 }

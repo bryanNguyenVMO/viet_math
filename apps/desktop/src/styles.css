@@ -494,3 +494,115 @@ select { font: inherit; }
   background: #2563eb;
   color: #fff;
 }
+
+
+.vm-settings-trigger {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-surface);
+  color: var(--vm-text-secondary);
+  cursor: pointer;
+}
+
+.vm-settings-trigger:hover,
+.vm-settings-trigger:focus-visible {
+  color: var(--vm-primary);
+  border-color: var(--vm-primary);
+  outline: none;
+}
+
+.vm-settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.vm-settings-dialog {
+  width: min(520px, 100%);
+  max-height: min(720px, 90vh);
+  overflow: auto;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-lg);
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  box-shadow: var(--vm-shadow-md);
+}
+
+.vm-settings-header,
+.vm-settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.vm-settings-header {
+  border-bottom: 1px solid var(--vm-border);
+}
+
+.vm-settings-header h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.vm-settings-header button {
+  border: 0;
+  background: transparent;
+  color: var(--vm-text-secondary);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.vm-settings-form {
+  display: grid;
+  gap: 14px;
+  padding: 18px 16px;
+}
+
+.vm-settings-form label {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(180px, 1.3fr);
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.vm-settings-form select {
+  width: 100%;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  padding: 8px 10px;
+  background: var(--vm-bg);
+  color: var(--vm-text);
+}
+
+.vm-settings-footer {
+  justify-content: flex-end;
+  border-top: 1px solid var(--vm-border);
+}
+
+.vm-settings-footer button {
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  padding: 8px 12px;
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.vm-settings-footer button.is-primary {
+  border-color: var(--vm-primary);
+  background: var(--vm-primary);
+  color: white;
+}

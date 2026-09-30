@@ -1,4 +1,4 @@
-import type { VietMathEditor } from "@vietmath/editor-core";
+import { STRUCTURE_TEMPLATES, type VietMathEditor } from "@vietmath/editor-core";
 import {
   BookOpen,
   ChevronDown,
@@ -36,22 +36,14 @@ const recentFormulas = [
 ];
 
 const structures = [
-  { label: "Phân số", sample: "a/b", latex: String.raw`\frac{}{}` },
-  { label: "Căn thức", sample: "√x", latex: String.raw`\sqrt{}` },
-  { label: "Mũ", sample: "x²", latex: String.raw`^{}` },
-  { label: "Tích phân", sample: "∫", latex: String.raw`\int_{}^{}` },
-  { label: "Tổng", sample: "∑", latex: String.raw`\sum_{}^{}` },
-  { label: "Giới hạn", sample: "lim", latex: String.raw`\lim_{x\to 0}` },
-  {
-    label: "Ma trận",
-    sample: "▦",
-    latex: String.raw`\begin{bmatrix} & \\ & \end{bmatrix}`,
-  },
-  {
-    label: "Hệ",
-    sample: "{",
-    latex: String.raw`\begin{cases} & \\ & \end{cases}`,
-  },
+  { label: "Phân số", sample: "a/b", latex: STRUCTURE_TEMPLATES.fraction },
+  { label: "Căn thức", sample: "√x", latex: STRUCTURE_TEMPLATES.squareRoot },
+  { label: "Mũ", sample: "x²", latex: STRUCTURE_TEMPLATES.superscript },
+  { label: "Tích phân", sample: "∫", latex: STRUCTURE_TEMPLATES.integral },
+  { label: "Tổng", sample: "∑", latex: STRUCTURE_TEMPLATES.summation },
+  { label: "Giới hạn", sample: "lim", latex: STRUCTURE_TEMPLATES.limit },
+  { label: "Ma trận", sample: "▦", latex: STRUCTURE_TEMPLATES.matrix },
+  { label: "Hệ", sample: "{", latex: STRUCTURE_TEMPLATES.cases },
 ];
 
 const symbols = [

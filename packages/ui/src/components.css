@@ -1,0 +1,80 @@
+.vm-button,
+.vm-icon-button,
+.vm-symbol-button,
+.vm-equation-card {
+  font: inherit;
+  color: inherit;
+}
+
+.vm-button {
+  min-height: 34px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  padding: 7px 12px;
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  cursor: pointer;
+}
+
+.vm-button:hover:not(:disabled) { background: var(--vm-surface-hover); }
+.vm-button:disabled { cursor: not-allowed; opacity: .5; }
+.vm-button--primary { border-color: var(--vm-primary); background: var(--vm-primary); color: white; }
+.vm-button--primary:hover:not(:disabled) { background: var(--vm-primary-hover); }
+.vm-button--ghost { border-color: transparent; background: transparent; }
+.vm-button--danger { border-color: var(--vm-danger); color: var(--vm-danger); }
+
+.vm-icon-button,
+.vm-symbol-button {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-surface);
+  cursor: pointer;
+}
+
+.vm-icon-button { width: 34px; height: 34px; padding: 0; }
+.vm-symbol-button { min-width: 44px; min-height: 42px; padding: 6px 8px; }
+.vm-icon-button:hover:not(:disabled),
+.vm-symbol-button:hover:not(:disabled) { background: var(--vm-surface-hover); }
+
+.vm-panel {
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-lg);
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  box-shadow: var(--vm-shadow-sm);
+}
+
+.vm-search-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-surface);
+}
+
+.vm-search-input input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--vm-text);
+}
+
+.vm-equation-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  padding: 10px;
+  background: var(--vm-surface);
+  cursor: pointer;
+}
+
+.vm-equation-card:hover { background: var(--vm-surface-hover); }
+.vm-equation-card__title { display: block; font-size: 12px; font-weight: 700; }
+.vm-equation-card__preview { display: block; margin-top: 8px; color: var(--vm-text-secondary); }

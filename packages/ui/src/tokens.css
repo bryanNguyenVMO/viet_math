@@ -1,0 +1,38 @@
+:root {
+  --vm-bg: #f8fafc;
+  --vm-surface: #ffffff;
+  --vm-surface-hover: #f1f5f9;
+  --vm-border: #dbe4f0;
+  --vm-border-strong: #cbd5e1;
+  --vm-text: #172033;
+  --vm-text-secondary: #64748b;
+  --vm-text-muted: #94a3b8;
+  --vm-primary: #2563eb;
+  --vm-primary-hover: #1d4ed8;
+  --vm-danger: #dc2626;
+  --vm-warning: #d97706;
+  --vm-success: #16a34a;
+  --vm-radius-sm: 6px;
+  --vm-radius-md: 8px;
+  --vm-radius-lg: 10px;
+  --vm-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --vm-shadow-md: 0 10px 30px rgba(15, 23, 42, 0.10);
+}
+
+[data-theme="dark"] {
+  --vm-bg: #0f172a;
+  --vm-surface: #111c30;
+  --vm-surface-hover: #1e293b;
+  --vm-border: #2b3a51;
+  --vm-border-strong: #475569;
+  --vm-text: #f8fafc;
+  --vm-text-secondary: #cbd5e1;
+  --vm-text-muted: #94a3b8;
+  --vm-primary: #60a5fa;
+  --vm-primary-hover: #93c5fd;
+  --vm-danger: #f87171;
+  --vm-warning: #fbbf24;
+  --vm-success: #4ade80;
+  --vm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
+  --vm-shadow-md: 0 12px 36px rgba(0, 0, 0, 0.28);
+}

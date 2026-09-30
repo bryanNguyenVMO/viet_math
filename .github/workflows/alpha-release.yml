@@ -2,6 +2,10 @@ name: VietMath Alpha Release
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/alpha-release.yml"
 
 jobs:
   build-installer:

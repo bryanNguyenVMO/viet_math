@@ -25,6 +25,9 @@ importers:
       '@vietmath/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@vietmath/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       lucide-react:
         specifier: ^0.544.0
         version: 0.544.0(react@19.3.0)
@@ -131,6 +134,12 @@ importers:
   packages/i18n: {}
 
   packages/shared: {}
+
+  packages/storage:
+    dependencies:
+      '@vietmath/equation-model':
+        specifier: workspace:*
+        version: link:../equation-model
 
   packages/ui:
     dependencies:

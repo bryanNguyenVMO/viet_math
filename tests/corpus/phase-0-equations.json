@@ -1,0 +1,373 @@
+[
+  {
+    "id": "basic-001",
+    "latex": "x+y=z",
+    "tags": [
+      "basic"
+    ]
+  },
+  {
+    "id": "basic-002",
+    "latex": "a-b=c",
+    "tags": [
+      "basic"
+    ]
+  },
+  {
+    "id": "basic-003",
+    "latex": "xy=z",
+    "tags": [
+      "basic"
+    ]
+  },
+  {
+    "id": "basic-004",
+    "latex": "\\\\frac{a}{b}",
+    "tags": [
+      "fraction"
+    ]
+  },
+  {
+    "id": "basic-005",
+    "latex": "\\\\frac{a+b}{c+d}",
+    "tags": [
+      "fraction"
+    ]
+  },
+  {
+    "id": "nested-001",
+    "latex": "\\\\frac{1}{1+\\\\frac{1}{x}}",
+    "tags": [
+      "fraction",
+      "nested"
+    ]
+  },
+  {
+    "id": "radical-001",
+    "latex": "\\\\sqrt{x}",
+    "tags": [
+      "radical"
+    ]
+  },
+  {
+    "id": "radical-002",
+    "latex": "\\\\sqrt[3]{x+y}",
+    "tags": [
+      "radical"
+    ]
+  },
+  {
+    "id": "radical-003",
+    "latex": "\\\\sqrt{\\\\frac{a}{b}}",
+    "tags": [
+      "radical",
+      "fraction"
+    ]
+  },
+  {
+    "id": "script-001",
+    "latex": "x^2",
+    "tags": [
+      "script"
+    ]
+  },
+  {
+    "id": "script-002",
+    "latex": "x_i",
+    "tags": [
+      "script"
+    ]
+  },
+  {
+    "id": "script-003",
+    "latex": "x_i^2",
+    "tags": [
+      "script"
+    ]
+  },
+  {
+    "id": "calculus-001",
+    "latex": "\\\\int_0^1 x^2\\\\,dx",
+    "tags": [
+      "calculus",
+      "integral"
+    ]
+  },
+  {
+    "id": "calculus-002",
+    "latex": "\\\\int_{-\\\\infty}^{\\\\infty} e^{-x^2}\\\\,dx",
+    "tags": [
+      "calculus",
+      "integral"
+    ]
+  },
+  {
+    "id": "calculus-003",
+    "latex": "\\\\sum_{i=1}^{n} i",
+    "tags": [
+      "calculus",
+      "sum"
+    ]
+  },
+  {
+    "id": "calculus-004",
+    "latex": "\\\\prod_{i=1}^{n} a_i",
+    "tags": [
+      "calculus",
+      "product"
+    ]
+  },
+  {
+    "id": "calculus-005",
+    "latex": "\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin x}{x}",
+    "tags": [
+      "calculus",
+      "limit"
+    ]
+  },
+  {
+    "id": "calculus-006",
+    "latex": "\\\\frac{d}{dx}x^n=nx^{n-1}",
+    "tags": [
+      "calculus",
+      "derivative"
+    ]
+  },
+  {
+    "id": "calculus-007",
+    "latex": "\\\\frac{\\\\partial f}{\\\\partial x}",
+    "tags": [
+      "calculus",
+      "derivative"
+    ]
+  },
+  {
+    "id": "trig-001",
+    "latex": "\\\\sin^2 x+\\\\cos^2 x=1",
+    "tags": [
+      "trig"
+    ]
+  },
+  {
+    "id": "trig-002",
+    "latex": "\\\\tan x=\\\\frac{\\\\sin x}{\\\\cos x}",
+    "tags": [
+      "trig",
+      "fraction"
+    ]
+  },
+  {
+    "id": "log-001",
+    "latex": "\\\\log_a x=\\\\frac{\\\\ln x}{\\\\ln a}",
+    "tags": [
+      "log"
+    ]
+  },
+  {
+    "id": "relation-001",
+    "latex": "a\\\\le b",
+    "tags": [
+      "relation"
+    ]
+  },
+  {
+    "id": "relation-002",
+    "latex": "x\\\\ne y",
+    "tags": [
+      "relation"
+    ]
+  },
+  {
+    "id": "set-001",
+    "latex": "x\\\\in A\\\\cap B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-002",
+    "latex": "A\\\\cup B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "greek-001",
+    "latex": "\\\\alpha+\\\\beta=\\\\gamma",
+    "tags": [
+      "greek"
+    ]
+  },
+  {
+    "id": "greek-002",
+    "latex": "\\\\theta=\\\\pi/2",
+    "tags": [
+      "greek"
+    ]
+  },
+  {
+    "id": "vector-001",
+    "latex": "\\\\vec{a}+\\\\vec{b}",
+    "tags": [
+      "vector"
+    ]
+  },
+  {
+    "id": "accent-001",
+    "latex": "\\\\hat{x}+\\\\bar{y}",
+    "tags": [
+      "accent"
+    ]
+  },
+  {
+    "id": "matrix-001",
+    "latex": "\\\\begin{bmatrix}a&b\\\\\\\\c&d\\\\end{bmatrix}",
+    "tags": [
+      "matrix"
+    ]
+  },
+  {
+    "id": "matrix-002",
+    "latex": "\\\\begin{pmatrix}1&0\\\\\\\\0&1\\\\end{pmatrix}",
+    "tags": [
+      "matrix"
+    ]
+  },
+  {
+    "id": "matrix-003",
+    "latex": "\\\\begin{vmatrix}a&b\\\\\\\\c&d\\\\end{vmatrix}",
+    "tags": [
+      "matrix",
+      "determinant"
+    ]
+  },
+  {
+    "id": "cases-001",
+    "latex": "f(x)=\\\\begin{cases}x^2 & x\\\\ge0\\\\\\\\-x & x<0\\\\end{cases}",
+    "tags": [
+      "cases"
+    ]
+  },
+  {
+    "id": "cases-vi-001",
+    "latex": "f(x)=\\\\begin{cases}x^2 & \\\\text{nếu }x\\\\ge0\\\\\\\\-x & \\\\text{nếu }x<0\\\\end{cases}",
+    "tags": [
+      "cases",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "text-vi-001",
+    "latex": "\\\\text{phương trình}",
+    "tags": [
+      "text",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "text-vi-002",
+    "latex": "x\\\\in\\\\mathbb{R}\\\\quad\\\\text{với mọi }x",
+    "tags": [
+      "text",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "text-vi-003",
+    "latex": "\\\\text{điều kiện }x>0",
+    "tags": [
+      "text",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "geometry-001",
+    "latex": "a^2+b^2=c^2",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-002",
+    "latex": "S=\\\\pi r^2",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-003",
+    "latex": "V=\\\\frac{4}{3}\\\\pi r^3",
+    "tags": [
+      "geometry",
+      "fraction"
+    ]
+  },
+  {
+    "id": "prob-001",
+    "latex": "P(A\\\\mid B)=\\\\frac{P(A\\\\cap B)}{P(B)}",
+    "tags": [
+      "probability"
+    ]
+  },
+  {
+    "id": "stats-001",
+    "latex": "\\\\bar{x}=\\\\frac{1}{n}\\\\sum_{i=1}^{n}x_i",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "complex-001",
+    "latex": "z=a+bi",
+    "tags": [
+      "complex"
+    ]
+  },
+  {
+    "id": "complex-002",
+    "latex": "|z|=\\\\sqrt{a^2+b^2}",
+    "tags": [
+      "complex",
+      "radical"
+    ]
+  },
+  {
+    "id": "physics-001",
+    "latex": "E=mc^2",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-002",
+    "latex": "F=ma",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "nested-002",
+    "latex": "\\\\sqrt{1+\\\\frac{x^2}{1+\\\\sqrt{y}}}",
+    "tags": [
+      "nested",
+      "radical",
+      "fraction"
+    ]
+  },
+  {
+    "id": "largeop-001",
+    "latex": "\\\\sum_{k=0}^{\\\\infty}\\\\frac{x^k}{k!}",
+    "tags": [
+      "sum",
+      "fraction"
+    ]
+  },
+  {
+    "id": "unicode-001",
+    "latex": "\\\\text{tiếng Việt: nghiệm }x_1,x_2",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  }
+]

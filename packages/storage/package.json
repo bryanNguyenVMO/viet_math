@@ -1,0 +1,12 @@
+{
+  "name": "@vietmath/storage",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@vietmath/equation-model": "workspace:*"
+  }
+}

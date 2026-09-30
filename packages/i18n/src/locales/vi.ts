@@ -6,6 +6,7 @@ export const vi = {
   "actions.undo": "Hoàn tác",
   "actions.redo": "Làm lại",
   "actions.insert": "Chèn",
+  "editor.visual": "Soạn thảo",
   "structures.fraction": "Phân số",
   "structures.squareRoot": "Căn thức",
   "structures.superscript": "Mũ",

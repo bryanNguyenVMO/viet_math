@@ -8,7 +8,8 @@ on:
       - "pnpm-workspace.yaml"
       - "pnpm-lock.yaml"
       - "apps/**"
-      - "packages/**"\n      - "tests/**"
+      - "packages/**"
+      - "tests/**"
       - ".github/workflows/phase0-desktop.yml"
   workflow_dispatch:
 

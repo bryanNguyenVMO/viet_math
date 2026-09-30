@@ -13,6 +13,7 @@
     "@tauri-apps/api": "^2.8.0",
     "@vietmath/editor": "workspace:*",
     "@vietmath/equation-model": "workspace:*",
+    "@vietmath/i18n": "workspace:*",
     "@vietmath/ui": "workspace:*",
     "lucide-react": "^0.544.0",
     "mathlive": "0.110.0",

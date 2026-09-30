@@ -1,4 +1,9 @@
 import type { VietMathEditor } from "@vietmath/editor";
+import {
+  createTranslator,
+  detectInitialLocale,
+  type Locale,
+} from "@vietmath/i18n";
 import { Sigma } from "lucide-react";
 import {
   useCallback,
@@ -24,10 +29,12 @@ function clamp(value: number, min: number, max: number) {
 
 export function DesktopWorkspace() {
   const [editor, setEditor] = useState<VietMathEditor | null>(null);
+  const [locale, setLocale] = useState<Locale>(() => detectInitialLocale());
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
+  const { t } = createTranslator(locale);
 
   const handleEditorReady = useCallback((next: VietMathEditor | null) => {
     setEditor(next);
@@ -96,12 +103,32 @@ export function DesktopWorkspace() {
       <header className="vm-titlebar">
         <div className="vm-brand">
           <span className="vm-brand-mark" aria-hidden="true"><Sigma size={19} /></span>
-          <span>VietMath</span>
+          <span>{t("app.title")}</span>
         </div>
-        <span className="vm-panel-eyebrow">Desktop Alpha</span>
+        <div className="vm-titlebar-actions">
+          <div className="vm-locale-switch" aria-label="Language">
+            <button
+              type="button"
+              className={locale === "vi" ? "is-active" : undefined}
+              aria-pressed={locale === "vi"}
+              onClick={() => setLocale("vi")}
+            >
+              {t("locale.vi")}
+            </button>
+            <button
+              type="button"
+              className={locale === "en" ? "is-active" : undefined}
+              aria-pressed={locale === "en"}
+              onClick={() => setLocale("en")}
+            >
+              {t("locale.en")}
+            </button>
+          </div>
+          <span className="vm-panel-eyebrow">{t("app.alpha")}</span>
+        </div>
       </header>
 
-      <Toolbar editor={editor} />
+      <Toolbar editor={editor} locale={locale} />
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
         <div className="vm-panel-column" data-collapsed={leftCollapsed}>
@@ -111,13 +138,13 @@ export function DesktopWorkspace() {
           type="button"
           className="vm-resize-handle"
           data-resize-handle="left"
-          aria-label={leftCollapsed ? "Mở thư viện" : "Kéo để đổi kích thước thư viện; Enter để thu gọn"}
+          aria-label={leftCollapsed ? t("layout.openLibrary") : t("layout.resizeLibrary")}
           onPointerDown={startResize("left")}
           onKeyDown={handleKey("left")}
         />
 
         <div className="vm-panel-column">
-          <section className="vm-editor-panel" aria-label="Equation editor">
+          <section className="vm-editor-panel" aria-label={t("layout.editor")}>
             <EditorWorkspace
               initialLatex={initialLatex}
               onEditorReady={handleEditorReady}
@@ -129,12 +156,12 @@ export function DesktopWorkspace() {
           type="button"
           className="vm-resize-handle"
           data-resize-handle="right"
-          aria-label={rightCollapsed ? "Mở bảng ký hiệu" : "Kéo để đổi kích thước ký hiệu; Enter để thu gọn"}
+          aria-label={rightCollapsed ? t("layout.openSymbols") : t("layout.resizeSymbols")}
           onPointerDown={startResize("right")}
           onKeyDown={handleKey("right")}
         />
         <div className="vm-panel-column" data-collapsed={rightCollapsed}>
-          <SymbolPanel editor={editor} />
+          <SymbolPanel editor={editor} locale={locale} />
         </div>
       </section>
     </main>

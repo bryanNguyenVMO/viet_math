@@ -3,30 +3,38 @@ import {
   type StructureTemplateName,
   type VietMathEditor,
 } from "@vietmath/editor";
+import {
+  createTranslator,
+  type Locale,
+  type TranslationKey,
+} from "@vietmath/i18n";
 import { Button, IconButton } from "@vietmath/ui";
 import { Copy, Redo2, Settings, Undo2 } from "lucide-react";
 
 type ToolbarProps = {
   editor: VietMathEditor | null;
+  locale: Locale;
 };
 
 const structures: Array<{
   name: StructureTemplateName;
-  label: string;
+  labelKey: TranslationKey;
   sample: string;
 }> = [
-  { name: "fraction", label: "Phân số", sample: "a/b" },
-  { name: "squareRoot", label: "Căn thức", sample: "√x" },
-  { name: "superscript", label: "Mũ", sample: "x²" },
-  { name: "subscript", label: "Chỉ số", sample: "x₁" },
-  { name: "integral", label: "Tích phân", sample: "∫" },
-  { name: "summation", label: "Tổng", sample: "Σ" },
-  { name: "limit", label: "Giới hạn", sample: "lim" },
-  { name: "matrix", label: "Ma trận", sample: "▦" },
-  { name: "cases", label: "Hệ", sample: "{ }" },
+  { name: "fraction", labelKey: "structures.fraction", sample: "a/b" },
+  { name: "squareRoot", labelKey: "structures.squareRoot", sample: "√x" },
+  { name: "superscript", labelKey: "structures.superscript", sample: "x²" },
+  { name: "subscript", labelKey: "structures.subscript", sample: "x₁" },
+  { name: "integral", labelKey: "structures.integral", sample: "∫" },
+  { name: "summation", labelKey: "structures.summation", sample: "Σ" },
+  { name: "limit", labelKey: "structures.limit", sample: "lim" },
+  { name: "matrix", labelKey: "structures.matrix", sample: "▦" },
+  { name: "cases", labelKey: "structures.cases", sample: "{ }" },
 ];
 
-export function Toolbar({ editor }: ToolbarProps) {
+export function Toolbar({ editor, locale }: ToolbarProps) {
+  const { t } = createTranslator(locale);
+
   const insert = (name: StructureTemplateName) => {
     editor?.insertLatex(STRUCTURE_TEMPLATES[name]);
     editor?.focus();
@@ -36,13 +44,13 @@ export function Toolbar({ editor }: ToolbarProps) {
     <div className="vm-toolbar" aria-label="VietMath toolbar">
       <div className="vm-toolbar__group">
         <IconButton
-          aria-label="Hoàn tác"
+          aria-label={t("actions.undo")}
           icon={<Undo2 size={17} />}
           disabled={!editor}
           onClick={() => editor?.undo()}
         />
         <IconButton
-          aria-label="Làm lại"
+          aria-label={t("actions.redo")}
           icon={<Redo2 size={17} />}
           disabled={!editor}
           onClick={() => editor?.redo()}
@@ -54,7 +62,7 @@ export function Toolbar({ editor }: ToolbarProps) {
           <Button
             key={structure.name}
             variant="ghost"
-            aria-label={`Chèn ${structure.label}`}
+            aria-label={`${t("actions.insert")} ${t(structure.labelKey)}`}
             disabled={!editor}
             onClick={() => insert(structure.name)}
           >
@@ -64,9 +72,9 @@ export function Toolbar({ editor }: ToolbarProps) {
       </div>
       <div className="vm-toolbar__spacer" />
       <Button variant="primary">
-        <Copy size={15} /> Sao chép
+        <Copy size={15} /> {t("actions.copy")}
       </Button>
-      <IconButton aria-label="Cài đặt" icon={<Settings size={17} />} />
+      <IconButton aria-label={t("actions.settings")} icon={<Settings size={17} />} />
     </div>
   );
 }

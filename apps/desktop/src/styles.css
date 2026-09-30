@@ -388,3 +388,35 @@ select { font: inherit; }
   color: var(--vm-text-secondary);
   font-size: 12px;
 }
+
+
+.vm-titlebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vm-locale-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--vm-border);
+  border-radius: 7px;
+  background: var(--vm-bg);
+}
+
+.vm-locale-switch button {
+  border: 0;
+  border-radius: 5px;
+  padding: 4px 7px;
+  background: transparent;
+  color: var(--vm-text-secondary);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.vm-locale-switch button.is-active {
+  background: var(--vm-surface);
+  color: var(--vm-primary);
+  box-shadow: var(--vm-shadow-sm);
+}

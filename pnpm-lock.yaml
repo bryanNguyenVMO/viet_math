@@ -133,6 +133,12 @@ importers:
 
   packages/i18n: {}
 
+  packages/exporters:
+    dependencies:
+      '@vietmath/equation-model':
+        specifier: workspace:*
+        version: link:../equation-model
+
   packages/shared: {}
 
   packages/storage:

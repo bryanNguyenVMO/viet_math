@@ -24,3 +24,14 @@ export interface SettingsRepository {
   set(key: string, value: string): Promise<void>;
   get(key: string): Promise<string | null>;
 }
+
+export interface FavoriteRepository {
+  setFavorite(id: string, favorite: boolean): Promise<void>;
+  listFavorites(): Promise<StoredEquation[]>;
+}
+
+export type FormulaTemplate = {
+  id: string;
+  title: string;
+  document: EquationDocument;
+};

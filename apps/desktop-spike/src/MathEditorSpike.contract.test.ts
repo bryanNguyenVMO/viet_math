@@ -25,4 +25,12 @@ describe("MathLive desktop integration contract", () => {
     expect(app).toContain("<MathEditorSpike");
     expect(app).toContain("insertLatex");
   });
+
+  it("tracks IME composition at the MathLive boundary", () => {
+    const source = readFileSync(componentPath, "utf8");
+
+    expect(source).toContain("ImeCompositionGuard");
+    expect(source).toContain('"compositionstart"');
+    expect(source).toContain('"compositionend"');
+  });
 });

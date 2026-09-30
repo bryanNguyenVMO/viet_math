@@ -9,15 +9,34 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [{
-      "title": "VietMath",
-      "width": 1180,
-      "height": 760,
-      "minWidth": 760,
-      "minHeight": 560,
-      "resizable": true
-    }],
-    "security": { "csp": null }
+    "windows": [
+      {
+        "label": "main",
+        "title": "VietMath",
+        "width": 1180,
+        "height": 760,
+        "minWidth": 760,
+        "minHeight": 560,
+        "resizable": true
+      },
+      {
+        "label": "quick",
+        "title": "VietMath Quick",
+        "url": "index.html?mode=quick",
+        "width": 560,
+        "height": 330,
+        "minWidth": 440,
+        "minHeight": 260,
+        "resizable": true,
+        "visible": false,
+        "alwaysOnTop": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
   },
-  "bundle": { "active": false }
+  "bundle": {
+    "active": false
+  }
 }

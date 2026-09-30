@@ -1,5 +1,8 @@
+import { QuickEditor } from "./quick/QuickEditor";
 import { DesktopWorkspace } from "./layout/DesktopWorkspace";
 
 export function App() {
-  return <DesktopWorkspace />;
+  const mode = new URLSearchParams(window.location.search).get("mode");
+
+  return mode === "quick" ? <QuickEditor /> : <DesktopWorkspace />;
 }

@@ -7,8 +7,8 @@ on:
       - "package.json"
       - "pnpm-workspace.yaml"
       - "pnpm-lock.yaml"
-      - "apps/desktop-spike/**"
-      - "packages/**"
+      - "apps/**"
+      - "packages/**"\n      - "tests/**"
       - ".github/workflows/phase0-desktop.yml"
   workflow_dispatch:
 

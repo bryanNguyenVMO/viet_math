@@ -1,6 +1,13 @@
+import type { VietMathEditor } from "@vietmath/editor";
 import { Sigma } from "lucide-react";
-import { useCallback, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 
+import { MathEditorSurface } from "../editor/MathEditorSurface";
 import { LibraryPanel } from "./LibraryPanel";
 import { SymbolPanel } from "./SymbolPanel";
 import { Toolbar } from "./Toolbar";
@@ -9,16 +16,22 @@ const MIN_LEFT = 200;
 const MAX_LEFT = 420;
 const MIN_RIGHT = 220;
 const MAX_RIGHT = 420;
+const initialLatex = String.raw`x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
 export function DesktopWorkspace() {
+  const [editor, setEditor] = useState<VietMathEditor | null>(null);
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
+
+  const handleEditorReady = useCallback((next: VietMathEditor | null) => {
+    setEditor(next);
+  }, []);
 
   const startResize = useCallback(
     (side: "left" | "right") => (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -88,7 +101,7 @@ export function DesktopWorkspace() {
         <span className="vm-panel-eyebrow">Desktop Alpha</span>
       </header>
 
-      <Toolbar />
+      <Toolbar editor={editor} />
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
         <div className="vm-panel-column" data-collapsed={leftCollapsed}>
@@ -105,9 +118,10 @@ export function DesktopWorkspace() {
 
         <div className="vm-panel-column">
           <section className="vm-editor-panel" aria-label="Equation editor">
-            <div className="vm-editor-placeholder">
-              Production equation editor — Task 4
-            </div>
+            <MathEditorSurface
+              initialLatex={initialLatex}
+              onReady={handleEditorReady}
+            />
           </section>
         </div>
 

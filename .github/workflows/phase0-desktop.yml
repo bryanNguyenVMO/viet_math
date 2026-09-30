@@ -11,6 +11,7 @@ on:
       - "packages/**"
       - "tests/**"
       - ".github/workflows/phase0-desktop.yml"
+      - ".github/workflows/alpha-release.yml"
   workflow_dispatch:
 
 jobs:

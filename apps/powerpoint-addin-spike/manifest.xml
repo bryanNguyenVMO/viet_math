@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="TaskPaneApp">
+  <Id>6e3ae4e6-e1a5-46df-b428-a3ec006be772</Id>
+  <Version>0.0.1.0</Version>
+  <ProviderName>VietMath</ProviderName>
+  <DefaultLocale>vi-VN</DefaultLocale>
+  <DisplayName DefaultValue="VietMath PowerPoint Phase 0" />
+  <Description DefaultValue="VietMath Phase 0 PowerPoint lifecycle validation add-in." />
+  <Hosts>
+    <Host Name="Presentation" />
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.8">
+      <Set Name="PowerPointApi" MinVersion="1.8" />
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/apps/powerpoint-addin-spike/taskpane.html" />
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>

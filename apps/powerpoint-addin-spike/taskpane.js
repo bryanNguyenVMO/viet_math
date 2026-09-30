@@ -87,3 +87,48 @@ Office.onReady((info) => {
     ? "PowerPoint host ready — shape bindings are supported."
     : "PowerPoint host ready — PowerPointApi 1.8 binding support is required.";
 });
+
+
+const PHASE0_ID = "phase0-powerpoint-equation";
+const SAMPLE_PNG_BASE64 =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAF/gL+H0TbWQAAAABJRU5ErkJggg==";
+
+function encodeSource(revision) {
+  const payload = JSON.stringify({
+    id: PHASE0_ID,
+    schemaVersion: 1,
+    latex: "\\frac{a+" + revision + "}{b}",
+    revision,
+  });
+  return btoa(unescape(encodeURIComponent(payload)));
+}
+
+document.querySelector("#insert-sample")?.addEventListener("click", async () => {
+  const status = document.querySelector("#status");
+  try {
+    const result = await insertEquationShape({
+      id: PHASE0_ID,
+      base64Image: SAMPLE_PNG_BASE64,
+      encodedSource: encodeSource(1),
+    });
+    if (status) status.textContent =
+      "Inserted shape " + result.shapeId + ". Move/resize/rotate it, save/reopen, then Update.";
+  } catch (error) {
+    if (status) status.textContent = "Insert failed: " + String(error);
+  }
+});
+
+document.querySelector("#update-sample")?.addEventListener("click", async () => {
+  const status = document.querySelector("#status");
+  try {
+    const result = await updateBoundEquation({
+      id: PHASE0_ID,
+      base64Image: SAMPLE_PNG_BASE64,
+      encodedSource: encodeSource(2),
+    });
+    if (status) status.textContent =
+      "Updated bound shape " + result.shapeId + "; geometry: " + JSON.stringify(result.geometry);
+  } catch (error) {
+    if (status) status.textContent = "Update failed: " + String(error);
+  }
+});

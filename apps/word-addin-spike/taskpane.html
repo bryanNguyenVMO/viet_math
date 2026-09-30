@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>VietMath Word Spike</title>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; color: #172033; }
+      button { margin: 4px 4px 4px 0; padding: 8px 10px; }
+      pre { white-space: pre-wrap; background: #f6f8fb; padding: 10px; border-radius: 8px; }
+    </style>
   </head>
   <body>
     <main>
       <h1>VietMath Word Spike</h1>
-      <p>Phase 0 host page. Native OOXML insertion is validated manually in Word.</p>
+      <p>Phase 0: Insert → Save → Reopen → Recover → Update.</p>
       <button id="insert">Insert sample equation</button>
-      <pre id="status"></pre>
+      <button id="recover">Recover VietMath source</button>
+      <button id="update">Update sample equation</button>
+      <pre id="status">Waiting for Word host…</pre>
     </main>
     <script type="module" src="./taskpane.js"></script>
   </body>

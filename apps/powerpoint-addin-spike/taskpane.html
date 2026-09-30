@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>VietMath PowerPoint Spike</title>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; color: #172033; }
+      button { margin: 4px 4px 8px 0; padding: 8px 10px; }
+    </style>
   </head>
   <body>
     <main>
       <h1>VietMath PowerPoint Spike</h1>
       <p id="status">Waiting for PowerPoint host…</p>
+      <button id="insert-sample">Insert sample shape</button>
+      <button id="update-sample">Update bound shape</button>
       <p>
-        Phase 0 validates a stable geometric-shape + image-fill + binding
-        strategy. Equation image generation is supplied by the export spike.
+        After insert: move/resize/rotate the shape, save and reopen the deck,
+        then press Update and verify geometry is preserved.
       </p>
     </main>
     <script type="module" src="./taskpane.js"></script>

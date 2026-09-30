@@ -126,3 +126,44 @@ Phase 0 chỉ được đóng khi mọi gate có disposition:
 - hoặc FAIL nhưng đã có fix + regression test;
 - hoặc scoped limitation + fallback;
 - hoặc ADR thay kiến trúc.
+
+
+## 9. Sideload Office spikes
+
+The repository includes:
+
+- \`apps/word-addin-spike/manifest.xml\`
+- \`apps/powerpoint-addin-spike/manifest.xml\`
+
+Both manifests point to \`https://localhost:3000\`.
+
+Serve the repository root through a **trusted HTTPS localhost server** on port 3000, then sideload the relevant manifest into Word/PowerPoint.
+
+Generic static-server shape:
+
+\`\`\`bash
+npx http-server -S -C <trusted-localhost-cert.pem> -K <trusted-localhost-key.pem> -p 3000 .
+\`\`\`
+
+Use a locally trusted development certificate. Do not bypass certificate warnings inside Office.
+
+### Word
+
+1. Sideload \`apps/word-addin-spike/manifest.xml\`.
+2. Open the task pane.
+3. Insert sample equation.
+4. Save, close, reopen.
+5. Recover source.
+6. Update sample equation.
+7. Record whether the content control/source survived.
+
+### PowerPoint
+
+1. Sideload \`apps/powerpoint-addin-spike/manifest.xml\`.
+2. Insert sample shape.
+3. Move, resize and rotate it.
+4. Save, close, reopen.
+5. Update bound shape.
+6. Confirm the same shape is updated and geometry is preserved.
+
+These are validation harnesses, not production add-ins.

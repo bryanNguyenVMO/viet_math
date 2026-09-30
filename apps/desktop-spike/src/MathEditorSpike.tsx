@@ -1,4 +1,5 @@
 import {
+  ImeCompositionGuard,
   MathLiveAdapter,
   type MathLivePort,
   type VietMathEditor,
@@ -35,20 +36,34 @@ export function MathEditorSpike({
     if (!mount) return;
 
     const mathfield = new MathfieldElement();
+    const imeGuard = new ImeCompositionGuard();
+
     mathfield.value = initialLatex;
     mathfield.setAttribute("aria-label", "Nhập công thức toán");
     mathfield.setAttribute("smart-fence", "");
 
     const editor = new MathLiveAdapter(createMathLivePort(mathfield));
     const handleInput = () => onLatexChange(editor.getLatex());
+    const handleCompositionStart = () => {
+      imeGuard.startComposition();
+      mathfield.dataset.imeComposing = "true";
+    };
+    const handleCompositionEnd = () => {
+      imeGuard.endComposition();
+      mathfield.dataset.imeComposing = "false";
+    };
 
     mathfield.addEventListener("input", handleInput);
+    mathfield.addEventListener("compositionstart", handleCompositionStart);
+    mathfield.addEventListener("compositionend", handleCompositionEnd);
     mount.replaceChildren(mathfield);
     onReady(editor);
     onLatexChange(editor.getLatex());
 
     return () => {
       mathfield.removeEventListener("input", handleInput);
+      mathfield.removeEventListener("compositionstart", handleCompositionStart);
+      mathfield.removeEventListener("compositionend", handleCompositionEnd);
       mathfield.remove();
       onReady(null);
     };

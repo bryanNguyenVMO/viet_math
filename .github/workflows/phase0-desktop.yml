@@ -8,6 +8,7 @@ on:
       - "pnpm-workspace.yaml"
       - "pnpm-lock.yaml"
       - "apps/desktop-spike/**"
+      - "packages/**"
       - ".github/workflows/phase0-desktop.yml"
   workflow_dispatch:
 

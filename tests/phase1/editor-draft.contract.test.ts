@@ -22,7 +22,7 @@ describe("Phase 1 visual/LaTeX editing contract", () => {
       ? readFileSync(sourcePanelPath, "utf8")
       : "";
 
-    expect(workspace).toContain("Soạn thảo");
+    expect(workspace).toContain('t("editor.visual")');
     expect(workspace).toContain("LaTeX");
     expect(workspace).toContain("draftLatex");
     expect(sourcePanel).toContain("textarea");

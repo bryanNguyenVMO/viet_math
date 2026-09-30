@@ -10,6 +10,7 @@ export class MemoryStorage {
   private readonly drafts = new Map<string, EquationDocument>();
   private readonly settings = new Map<string, string>();
   private readonly equations = new Map<string, StoredEquation>();
+  private readonly favorites = new Set<string>();
 
   async save(key: string, document: EquationDocument): Promise<void> {
     this.drafts.set(key, clone(document));
@@ -45,6 +46,18 @@ export class MemoryStorage {
     return [...this.equations.values()]
       .sort((left, right) => right.lastOpenedAt - left.lastOpenedAt)
       .slice(0, Math.max(0, limit))
+      .map(clone);
+  }
+
+  async setFavorite(id: string, favorite: boolean): Promise<void> {
+    if (favorite) this.favorites.add(id);
+    else this.favorites.delete(id);
+  }
+
+  async listFavorites(): Promise<StoredEquation[]> {
+    return [...this.favorites]
+      .map((id) => this.equations.get(id))
+      .filter((equation): equation is StoredEquation => Boolean(equation))
       .map(clone);
   }
 }

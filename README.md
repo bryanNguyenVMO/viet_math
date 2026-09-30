@@ -30,13 +30,16 @@ The documents below are the current source of truth for product and technical de
 ### Phase documents
 
 - [Phase 0 — Technical Validation](docs/phases/PHASE_0_TECHNICAL_VALIDATION.md) — implementation plan chi tiết
-- [Phase 1 — Desktop Alpha](docs/phases/PHASE_1_DESKTOP_ALPHA.md) — phase brief
+- [Phase 1 — Desktop Alpha](docs/phases/PHASE_1_DESKTOP_ALPHA.md) — implementation plan
+- [Phase 1 Summary](docs/validation/PHASE_1_SUMMARY.md) — automated implementation status and alpha closure gates
 - [Phase 2 — Word Beta](docs/phases/PHASE_2_WORD_BETA.md) — phase brief
 - [Phase 3 — PowerPoint + Document Productivity](docs/phases/PHASE_3_POWERPOINT.md) — phase brief
 - [Phase 4 — 1.0 Stabilization](docs/phases/PHASE_4_STABILIZATION.md) — phase brief
 
 ## Status
 
-Planning / technical validation.
+**Phase 1 — Desktop Alpha automated implementation is complete.**
 
-The initial implementation must validate the equation editor, Vietnamese IME behavior, export pipeline, and Microsoft Office integration before the product scope is expanded.
+Windows/macOS desktop builds and alpha installers are green in CI. Phase 1 remains open until target-user alpha testing is completed and blocker/critical findings are resolved or explicitly scoped.
+
+See [Phase 1 Summary](docs/validation/PHASE_1_SUMMARY.md).

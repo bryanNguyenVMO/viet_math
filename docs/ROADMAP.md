@@ -1,6 +1,6 @@
 # VietMath — Development Roadmap
 
-> Status: Phase 0 validation v0.3  
+> Status: Phase 1 Desktop Alpha validation v0.4  
 > Roadmap này dùng exit criteria thay vì chỉ dùng deadline.
 
 ## 1. Nguyên tắc triển khai
@@ -26,7 +26,7 @@ Implementation detail được tách theo phase để tránh over-plan:
 - [Phase 3 — PowerPoint + Document Productivity](phases/PHASE_3_POWERPOINT.md)
 - [Phase 4 — 1.0 Stabilization](phases/PHASE_4_STABILIZATION.md)
 
-Phase 0 được viết thành implementation plan chi tiết ngay. Phase 1–4 chỉ là brief và sẽ được mở rộng sau khi phase trước cung cấp bằng chứng kỹ thuật mới.
+Phase 0 và Phase 1 đã có implementation plan chi tiết. Phase 2–4 vẫn là phase brief và sẽ được mở rộng ngay trước khi triển khai.
 
 ## 2. Phase 0 — Technical Validation
 
@@ -89,13 +89,33 @@ Estimated: 4–6 tuần sau Phase 0.
 - LaTeX/SVG/PNG/MathML;
 - light/dark/system theme.
 
+### Current status
+
+**Automated implementation: COMPLETE. Alpha closure: PENDING USER TESTING.**
+
+Evidence:
+
+- production desktop app exists under `apps/desktop`;
+- current test/build workflow passes;
+- Windows and macOS Tauri debug builds pass;
+- NSIS Windows installer and macOS DMG installer pass;
+- alpha user-test script + repeatable result template are ready.
+
+Remaining gate:
+
+- run the fixed alpha script with **5–10 target users**;
+- resolve or explicitly scope blocker/critical findings before closing Phase 1.
+
+See [PHASE_1_SUMMARY.md](validation/PHASE_1_SUMMARY.md).
+
 ### Quality gates
 
 - 100+ equation corpus;
 - IME regression coverage;
 - crash recovery;
 - no known data-loss bug;
-- typing/startup/memory metrics measured.
+- typing/startup/memory metrics measured;
+- 5–10 target-user alpha sessions completed.
 
 Chi tiết: [PHASE_1_DESKTOP_ALPHA.md](phases/PHASE_1_DESKTOP_ALPHA.md)
 
@@ -226,13 +246,11 @@ Repository docs là source-of-truth cho AI agent và developer; tránh duplicate
 
 ## 11. Current next step
 
-Close the remaining Phase 0 manual gates using the checklists under `docs/validation/`.
+Run **Phase 1 Alpha User Testing** using:
 
-Do **not** treat Desktop Alpha as architecture-locked until:
+- [PHASE_1_ALPHA_TEST.md](testing/PHASE_1_ALPHA_TEST.md)
+- [PHASE_1_ALPHA_RESULT_TEMPLATE.md](testing/PHASE_1_ALPHA_RESULT_TEMPLATE.md)
 
-1. Vietnamese IME is green on real Windows/macOS;
-2. SVG/PNG renderer fidelity is green;
-3. Word/PowerPoint host lifecycle is green or an explicit replacement strategy is approved;
-4. runtime startup/RAM/input-latency data has been recorded.
+Do not start Phase 2 production work until blocker/critical findings from Desktop Alpha are resolved or explicitly scoped.
 
-After those gates, expand Phase 1 brief into the detailed implementation plan.
+After Phase 1 closure, expand `PHASE_2_WORD_BETA.md` into the detailed Word Beta implementation plan.

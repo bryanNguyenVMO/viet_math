@@ -2,8 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 >
-> Status: **READY FOR IMPLEMENTATION**  
-> Updated: 2026-09-30
+> Status: **AUTOMATED IMPLEMENTATION COMPLETE — ALPHA USER TESTING PENDING**  
+> Updated: 2026-10-01
 
 **Goal:** Turn the validated Phase 0 architecture into a coherent VietMath Desktop Alpha for Windows and macOS that a real user can install, edit equations with, recover work, manage a small formula library, and copy/export results.
 
@@ -44,6 +44,16 @@
 5. **Theme isolation:** switching app theme must not change canonical equation source or default black/transparent export output.
 
 ---
+
+## Execution status
+
+- Tasks 1–19: implemented with current CI green.
+- Task 20: testing kit is ready; real 5–10 user sessions are still required.
+- Latest verified code-bearing commit at this status update: `2e86f5e692e82d17bef8e2773cb8f853bc763bdb`.
+- Desktop CI run `36747930809`: tests/build + Windows/macOS Tauri debug builds PASS.
+- Alpha Release run `36747930829`: Windows NSIS + macOS DMG installers PASS.
+
+See `docs/validation/PHASE_1_SUMMARY.md`.
 
 ## Milestones
 

@@ -22,6 +22,6 @@ describe("Phase 1 symbol search UI", () => {
 
   it("passes the production editor into the symbol panel", () => {
     const source = readFileSync(workspacePath, "utf8");
-    expect(source.replace(/\\s+/gu, " ")).toContain("<SymbolPanel editor={editor}");
+    expect(source.replace(/\s+/gu, " ")).toContain("<SymbolPanel editor={editor}");
   });
 });

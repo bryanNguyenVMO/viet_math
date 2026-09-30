@@ -7,12 +7,14 @@ import {
 import { Sigma } from "lucide-react";
 import {
   useCallback,
+  useMemo,
   useState,
   type KeyboardEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
 import { EditorWorkspace } from "../editor/EditorWorkspace";
+import { TauriStorage } from "../storage/TauriStorage";
 import { LibraryPanel } from "./LibraryPanel";
 import { SymbolPanel } from "./SymbolPanel";
 import { Toolbar } from "./Toolbar";
@@ -29,6 +31,7 @@ function clamp(value: number, min: number, max: number) {
 
 export function DesktopWorkspace() {
   const [editor, setEditor] = useState<VietMathEditor | null>(null);
+  const storage = useMemo(() => new TauriStorage(), []);
   const [locale, setLocale] = useState<Locale>(() => detectInitialLocale());
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
@@ -147,6 +150,8 @@ export function DesktopWorkspace() {
           <section className="vm-editor-panel" aria-label={t("layout.editor")}>
             <EditorWorkspace
               initialLatex={initialLatex}
+              locale={locale}
+              storage={storage}
               onEditorReady={handleEditorReady}
             />
           </section>

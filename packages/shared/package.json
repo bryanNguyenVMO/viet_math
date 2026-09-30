@@ -8,6 +8,7 @@
     "./search": "./src/search/index.ts",
     "./clipboard": "./src/clipboard/index.ts",
     "./shortcuts": "./src/shortcuts/index.ts",
-    "./settings": "./src/settings/index.ts"
+    "./settings": "./src/settings/index.ts",
+    "./errors": "./src/errors/index.ts"
   }
 }

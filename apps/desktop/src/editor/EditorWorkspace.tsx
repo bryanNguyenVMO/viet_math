@@ -9,9 +9,14 @@ import {
   createDraftAutosave,
   type DraftRepository,
 } from "@vietmath/storage";
+import {
+  createUserError,
+  type UserError,
+} from "@vietmath/shared";
 import { Button } from "@vietmath/ui";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { ErrorNotice } from "../errors/ErrorNotice";
 import { LatexSourcePanel } from "./LatexSourcePanel";
 import { MathEditorSurface } from "./MathEditorSurface";
 
@@ -51,6 +56,7 @@ export function EditorWorkspace({
   const [mode, setMode] = useState<EditorViewMode>("visual");
   const [editor, setEditor] = useState<VietMathEditor | null>(null);
   const [sourceError, setSourceError] = useState<string | null>(null);
+  const [userError, setUserError] = useState<UserError | null>(null);
   const [storageReady, setStorageReady] = useState(false);
   const [recoveredDocument, setRecoveredDocument] =
     useState<EquationDocument | null>(null);
@@ -76,8 +82,11 @@ export function EditorWorkspace({
         if (recovered) setRecoveredDocument(recovered);
         else setStorageReady(true);
       })
-      .catch(() => {
-        if (!disposed) setStorageReady(true);
+      .catch((error) => {
+        if (!disposed) {
+          setUserError(createUserError("RECOVERY_FAILED", error));
+          setStorageReady(true);
+        }
       });
 
     return () => {
@@ -144,15 +153,25 @@ export function EditorWorkspace({
   }, [editor, recoveredDocument]);
 
   const discardRecovered = useCallback(async () => {
-    await storage.clear(DRAFT_KEY);
-    setRecoveredDocument(null);
-    setStorageReady(true);
+    try {
+      await storage.clear(DRAFT_KEY);
+      setRecoveredDocument(null);
+      setStorageReady(true);
+      setUserError(null);
+    } catch (error) {
+      setUserError(createUserError("STORAGE_FAILED", error));
+    }
   }, [storage]);
 
   const sourceValue = document.draftLatex ?? document.latex;
 
   return (
     <div className="vm-editor-workspace">
+      <ErrorNotice
+        error={userError}
+        locale={locale}
+        onDismiss={() => setUserError(null)}
+      />
       {recoveredDocument ? (
         <div className="vm-recovery-banner" role="status">
           <span>{t("recovery.message")}</span>

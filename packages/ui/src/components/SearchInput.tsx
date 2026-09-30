@@ -1,14 +1,20 @@
-import type { InputHTMLAttributes, ReactNode } from "react";
+import {
+  forwardRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+} from "react";
 
 export type SearchInputProps = InputHTMLAttributes<HTMLInputElement> & {
   icon?: ReactNode;
 };
 
-export function SearchInput({ icon, ...props }: SearchInputProps) {
-  return (
-    <label className="vm-search-input">
-      {icon}
-      <input type="search" {...props} />
-    </label>
-  );
-}
+export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
+  function SearchInput({ icon, ...props }, ref) {
+    return (
+      <label className="vm-search-input">
+        {icon}
+        <input ref={ref} type="search" {...props} />
+      </label>
+    );
+  },
+);

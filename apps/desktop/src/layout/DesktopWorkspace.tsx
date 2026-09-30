@@ -4,12 +4,14 @@ import {
   detectInitialLocale,
   type Locale,
 } from "@vietmath/i18n";
+import { resolveShortcut } from "@vietmath/shared";
 import { Sigma } from "lucide-react";
 import {
   useCallback,
+  useEffect,
   useMemo,
   useState,
-  type KeyboardEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
@@ -37,6 +39,7 @@ export function DesktopWorkspace() {
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
+  const [searchRequestKey, setSearchRequestKey] = useState(0);
   const { t } = createTranslator(locale);
 
   const handleEditorReady = useCallback((next: VietMathEditor | null) => {
@@ -71,7 +74,28 @@ export function DesktopWorkspace() {
     [leftWidth, rightWidth],
   );
 
-  const handleKey = (side: "left" | "right") => (event: KeyboardEvent<HTMLButtonElement>) => {
+  useEffect(() => {
+    const handleShortcut = (event: globalThis.KeyboardEvent) => {
+      const action = resolveShortcut({
+        key: event.key,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        isComposing: event.isComposing,
+      });
+
+      if (action !== "symbol-search") return;
+
+      event.preventDefault();
+      setRightCollapsed(false);
+      setSearchRequestKey((value) => value + 1);
+    };
+
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
+
+  const handleKey = (side: "left" | "right") => (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (side === "left") setLeftCollapsed((value) => !value);
@@ -166,7 +190,11 @@ export function DesktopWorkspace() {
           onKeyDown={handleKey("right")}
         />
         <div className="vm-panel-column" data-collapsed={rightCollapsed}>
-          <SymbolPanel editor={editor} locale={locale} />
+          <SymbolPanel
+            editor={editor}
+            locale={locale}
+            searchRequestKey={searchRequestKey}
+          />
         </div>
       </section>
     </main>

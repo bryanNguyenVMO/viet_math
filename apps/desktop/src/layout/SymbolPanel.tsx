@@ -11,11 +11,12 @@ import {
 import { Panel, SearchInput, SymbolButton } from "@vietmath/ui";
 import { convertLatexToMarkup } from "mathlive/ssr";
 import { Search, Sigma } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type SymbolPanelProps = {
   editor: VietMathEditor | null;
   locale: Locale;
+  searchRequestKey: number;
 };
 
 const categoryKeys: Record<MathCatalogCategory, TranslationKey> = {
@@ -27,9 +28,18 @@ const categoryKeys: Record<MathCatalogCategory, TranslationKey> = {
   set: "categories.set",
 };
 
-export function SymbolPanel({ editor, locale }: SymbolPanelProps) {
+export function SymbolPanel({
+  editor,
+  locale,
+  searchRequestKey,
+}: SymbolPanelProps) {
   const { t } = createTranslator(locale);
   const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchRequestKey > 0) searchRef.current?.focus();
+  }, [searchRequestKey]);
   const results = useMemo(() => searchMathCatalog(query).slice(0, 28), [query]);
 
   const grouped = useMemo(() => {
@@ -57,6 +67,7 @@ export function SymbolPanel({ editor, locale }: SymbolPanelProps) {
       </div>
 
       <SearchInput
+        ref={searchRef}
         aria-label={t("symbols.searchLabel")}
         placeholder={t("symbols.searchPlaceholder")}
         icon={<Search size={15} />}

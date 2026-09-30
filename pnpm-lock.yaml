@@ -107,7 +107,14 @@ importers:
 
   packages/equation-model: {}
 
-  packages/ui: {}
+  packages/ui:
+    dependencies:
+      react:
+        specifier: ^19.1.1
+        version: 19.3.0
+      react-dom:
+        specifier: ^19.1.1
+        version: 19.3.0(react@19.3.0)
 
 packages:
 

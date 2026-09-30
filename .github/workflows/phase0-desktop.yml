@@ -23,13 +23,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install dependencies and refresh lockfile
-        run: pnpm install --no-frozen-lockfile
-      - name: Emit generated lockfile
-        run: |
-          echo "__VIETMATH_LOCK_BEGIN__"
-          cat pnpm-lock.yaml
-          echo "__VIETMATH_LOCK_END__"
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Run tests
         run: pnpm test
       - name: Build web assets
@@ -50,9 +46,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
       - uses: dtolnay/rust-toolchain@stable
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Build web assets
         run: pnpm build
       - name: Build Tauri debug binary

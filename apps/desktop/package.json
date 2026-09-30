@@ -15,6 +15,7 @@
     "@vietmath/equation-model": "workspace:*",
     "@vietmath/i18n": "workspace:*",
     "@vietmath/ui": "workspace:*",
+    "@vietmath/storage": "workspace:*",
     "lucide-react": "^0.544.0",
     "mathlive": "0.110.0",
     "react": "^19.1.1",

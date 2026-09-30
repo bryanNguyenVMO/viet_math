@@ -1,0 +1,10 @@
+{
+  "name": "vietmath",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "scripts": {
+    "test": "pnpm --filter @vietmath/desktop-spike test --run",
+    "build": "pnpm --filter @vietmath/desktop-spike build",
+    "tauri:build": "pnpm --filter @vietmath/desktop-spike tauri build --debug"
+  }
+}

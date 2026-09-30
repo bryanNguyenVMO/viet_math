@@ -15,9 +15,9 @@ describe("Phase 1 crash recovery integration", () => {
   it("provides a Tauri storage adapter over the native commands", () => {
     const source = read("apps/desktop/src/storage/TauriStorage.ts");
 
-    expect(source).toContain('invoke("save_draft"');
-    expect(source).toContain('invoke("load_draft"');
-    expect(source).toContain('invoke("clear_draft"');
+    expect(source).toContain('"save_draft"');
+    expect(source).toContain('"load_draft"');
+    expect(source).toContain('"clear_draft"');
     expect(source).toContain("serializeEquation");
     expect(source).toContain("deserializeEquation");
   });

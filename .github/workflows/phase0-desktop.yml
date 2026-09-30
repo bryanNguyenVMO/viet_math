@@ -24,10 +24,15 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-      - name: Print generated lockfile
-        run: cat pnpm-lock.yaml
+      - name: Preserve generated lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase0-pnpm-lock
+          path: pnpm-lock.yaml
       - name: Run tests
         run: pnpm test
+      - name: Build web assets
+        run: pnpm build
 
   desktop-build:
     needs: test
@@ -49,5 +54,5 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Build web assets
         run: pnpm build
-      - name: Build Tauri debug bundle
+      - name: Build Tauri debug binary
         run: pnpm tauri:build

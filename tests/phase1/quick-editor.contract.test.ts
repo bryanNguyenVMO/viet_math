@@ -15,7 +15,7 @@ describe("Phase 1 quick editor contract", () => {
     const app = readFileSync(appPath, "utf8");
     const quick = existsSync(quickPath) ? readFileSync(quickPath, "utf8") : "";
 
-    expect(app).toContain('mode") === "quick"');
+    expect(app).toContain('mode === "quick"');
     expect(app).toContain("<QuickEditor");
     expect(quick).toContain("Quick Editor");
     expect(quick).toContain("Escape");

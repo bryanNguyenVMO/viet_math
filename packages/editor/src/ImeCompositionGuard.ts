@@ -1,6 +1,19 @@
 export class ImeCompositionGuard {
-  startComposition(): void {}
-  endComposition(): void {}
-  isComposing(): boolean { return false; }
-  shouldHandleKeyboardCommand(_eventIsComposing: boolean): boolean { return true; }
+  private composing = false;
+
+  startComposition(): void {
+    this.composing = true;
+  }
+
+  endComposition(): void {
+    this.composing = false;
+  }
+
+  isComposing(): boolean {
+    return this.composing;
+  }
+
+  shouldHandleKeyboardCommand(eventIsComposing: boolean): boolean {
+    return !this.composing && !eventIsComposing;
+  }
 }

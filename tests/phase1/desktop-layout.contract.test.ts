@@ -22,7 +22,7 @@ describe("Phase 1 production desktop layout", () => {
     expect(app).toContain("<DesktopWorkspace");
     expect(toolbar).toContain('aria-label="VietMath toolbar"');
     expect(library).toContain('aria-label="Formula library"');
-    expect(workspace).toContain('aria-label="Equation editor"');
+    expect(workspace).toContain('aria-label={t("layout.editor")}');
     expect(symbols).toContain('aria-label="Symbol palette"');
   });
 

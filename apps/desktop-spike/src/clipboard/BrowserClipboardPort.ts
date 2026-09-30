@@ -14,10 +14,15 @@ export class BrowserClipboardPort implements ClipboardPort {
       throw new Error("Rich clipboard is not available in this WebView");
     }
 
-    const blobData: BlobPart =
-      typeof data === "string"
-        ? data
-        : data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
+    let blobData: BlobPart;
+    if (typeof data === "string") {
+      blobData = data;
+    } else {
+      const copy = new Uint8Array(data.byteLength);
+      copy.set(data);
+      blobData = copy.buffer;
+    }
+
     const blob = new Blob([blobData], { type: mimeType });
     const item = new ClipboardItem({ [mimeType]: blob });
 

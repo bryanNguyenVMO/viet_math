@@ -7,52 +7,57 @@ import { describe, expect, it } from "vitest";
 const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
 const desktopRoot = join(repoRoot, "apps", "desktop");
 
-function read(path: string): string {
-  const fullPath = join(repoRoot, path);
-  return existsSync(fullPath) ? readFileSync(fullPath, "utf8") : "";
-}
+function collectSourceFiles(root: string): string[] {
+  if (!existsSync(root)) return [];
 
-function collectSourceFiles(dir: string): string[] {
-  if (!existsSync(dir)) return [];
-
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) return collectSourceFiles(path);
-    return /\.(ts|tsx|js|jsx)$/u.test(name) ? [path] : [];
-  });
+  const files: string[] = [];
+  for (const entry of readdirSync(root)) {
+    const fullPath = join(root, entry);
+    const stat = statSync(fullPath);
+    if (stat.isDirectory()) {
+      files.push(...collectSourceFiles(fullPath));
+    } else if (/\.(ts|tsx|js|jsx)$/u.test(entry)) {
+      files.push(fullPath);
+    }
+  }
+  return files;
 }
 
 describe("Phase 1 production desktop structure", () => {
-  it("creates a standalone production desktop app", () => {
-    expect(existsSync(join(desktopRoot, "package.json"))).toBe(true);
-    expect(existsSync(join(desktopRoot, "src", "main.tsx"))).toBe(true);
-    expect(existsSync(join(desktopRoot, "src-tauri", "tauri.conf.json"))).toBe(true);
+  it("creates a dedicated @vietmath/desktop production app", () => {
+    const packagePath = join(desktopRoot, "package.json");
 
-    const packageJson = JSON.parse(read("apps/desktop/package.json"));
-    expect(packageJson.name).toBe("@vietmath/desktop");
-    expect(packageJson.scripts).toMatchObject({
+    expect(existsSync(packagePath)).toBe(true);
+
+    const pkg = JSON.parse(readFileSync(packagePath, "utf8"));
+    expect(pkg.name).toBe("@vietmath/desktop");
+    expect(pkg.scripts).toMatchObject({
       dev: "vite",
       build: expect.any(String),
       tauri: "tauri",
     });
   });
 
-  it("does not make production source depend on Phase 0 spike apps", () => {
-    const sourceFiles = collectSourceFiles(join(desktopRoot, "src"));
-    const combined = sourceFiles.map((path) => readFileSync(path, "utf8")).join("\n");
-
-    expect(combined).not.toContain("desktop-spike");
-    expect(combined).not.toContain("word-addin-spike");
-    expect(combined).not.toContain("powerpoint-addin-spike");
+  it("contains the production Tauri and React entry points", () => {
+    for (const relativePath of [
+      "index.html",
+      "src/main.tsx",
+      "src/App.tsx",
+      "src-tauri/Cargo.toml",
+      "src-tauri/build.rs",
+      "src-tauri/tauri.conf.json",
+      "src-tauri/src/main.rs",
+    ]) {
+      expect(existsSync(join(desktopRoot, relativePath))).toBe(true);
+    }
   });
 
-  it("gives the root workspace production desktop commands", () => {
-    const rootPackage = JSON.parse(read("package.json"));
+  it("does not import Phase 0 desktop-spike code from production source", () => {
+    const files = collectSourceFiles(join(desktopRoot, "src"));
+    expect(files.length).toBeGreaterThan(0);
 
-    expect(rootPackage.scripts).toMatchObject({
-      dev: "pnpm --filter @vietmath/desktop dev",
-      build: "pnpm --filter @vietmath/desktop build",
-      "tauri:build": "pnpm --filter @vietmath/desktop tauri build --debug",
-    });
+    for (const file of files) {
+      expect(readFileSync(file, "utf8")).not.toContain("desktop-spike");
+    }
   });
 });

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: use a task-by-task implementation workflow with tests/verification before moving to the next task.
 >
-> Status: Ready for implementation planning review  
+> Status: Automated spike implementation complete; manual validation gates pending  
 > Updated: 2026-09-30
 
 **Goal:** Prove that VietMath's proposed desktop/editor/export/Office architecture is technically viable before investing in the production application.
@@ -18,6 +18,25 @@
 - `docs/EDITOR_SPEC.md`  
 - `docs/OFFICE_INTEGRATION.md`  
 - `docs/TEST_STRATEGY.md`
+
+## Execution status — 2026-09-30
+
+Automated implementation has reached Task 10 documentation with the following evidence:
+
+| Task | Automated status | Manual gate |
+|---|---|---|
+| 1. Desktop shell | PASS | runtime startup/RAM |
+| 2. Equation model | PASS | none |
+| 3. MathLive adapter | PASS | deep interactive QA |
+| 4. Vietnamese IME | PASS for composition guard | UniKey/VNI/macOS IME |
+| 5. Export | LaTeX/MathML PASS; SVG/PNG boundary PASS | self-contained SVG/PNG visual fidelity |
+| 6. Clipboard | PASS for abstraction | native paste matrix |
+| 7. Word | OMML/OOXML/source contract PASS | real Word save/reopen/edit/transfer |
+| 8. PowerPoint | shape/tag/binding/update contract PASS | real PowerPoint save/reopen/update |
+| 9. Performance | CI footprint PASS | cold start/RAM/input latency |
+| 10. ADR/review | documented | Phase 0 closure waits for gates above |
+
+**Execution ruling:** repository owner explicitly requested implementation directly on `main`, overriding this plan's suggested feature-branch strategy for Phase 0.
 
 ## Global constraints
 
@@ -70,7 +89,9 @@ Do not scaffold production-only packages until a Phase 0 result justifies them.
 
 ## 2. Branch strategy
 
-Use small branches so failures can be isolated:
+Recommended default for future phases is still small branches so failures can be isolated.
+
+For this Phase 0 execution, the repository owner explicitly requested direct commits on `main`. The branch list below is therefore reference-only:
 
 ```text
 feature/phase-0-desktop-spike

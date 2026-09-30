@@ -1,6 +1,6 @@
 # VietMath — Architecture
 
-> Status: Proposed architecture v0.1  
+> Status: Phase 0 provisional architecture v0.2  
 > Updated: 2026-09-30  
 > Các lựa chọn dependency phải được xác minh trong Phase 0 trước khi coi là locked.
 
@@ -22,7 +22,15 @@ Kiến trúc cần đáp ứng đồng thời:
 
 ### Desktop shell
 
-**Tauri 2** là lựa chọn ưu tiên để thử nghiệm.
+**Tauri 2** là desktop shell được **chấp nhận tạm thời sau Phase 0 automated validation**.
+
+Bằng chứng hiện có:
+
+- Tauri debug binary build thành công trên GitHub-hosted Windows và macOS runners;
+- desktop web assets, unit/integration tests và Rust shell build cùng một workflow;
+- chưa có build-level blocker buộc phải chuyển sang Electron.
+
+Runtime startup/RAM/IME/clipboard trên máy thật vẫn là manual gate trước khi coi quyết định này fully locked.
 
 Lý do:
 
@@ -60,7 +68,9 @@ Animation mặc định dùng CSS transition ngắn; chỉ thêm animation libra
 
 ### Math editor
 
-**MathLive** là candidate chính cho structured interactive editing.
+**MathLive** được **chấp nhận tạm thời** cho structured interactive editing sau Phase 0 automated validation.
+
+Đã có VietMath adapter cho get/set/insert/focus/undo/redo, structure templates và IME composition guard. Real Windows/macOS Vietnamese IME behavior vẫn phải được chạy qua manual matrix trước Desktop Alpha.
 
 Không wrap trực tiếp MathLive khắp app. Phải tạo adapter:
 
@@ -74,13 +84,17 @@ Mục đích: giảm coupling và cho phép thay/chỉnh engine sau này.
 
 ### Rendering/export
 
-Proposed:
+Phase 0 findings:
 
 - MathLive cho interactive editor.
-- MathJax được load khi cần cho các export/conversion mà editor engine không đáp ứng tốt.
-- Custom export pipeline cho SVG/PNG/MathML.
+- MathLive SSR MathML conversion đã được validate bằng automated tests.
+- LaTeX export giữ canonical source.
+- MathLive static markup không được coi là self-contained production SVG.
+- Generic SVG `foreignObject` chỉ là boundary spike, **không phải production Office SVG strategy**.
+- MathJax vẫn là candidate chính để validate self-contained SVG/PNG source khi editor engine không đáp ứng đủ.
+- Custom export pipeline giữ renderer-independent interfaces để có thể thay backend.
 
-Không render lại MathJax sau mỗi keystroke nếu không cần.
+Không render MathJax sau mỗi keystroke; nếu được chọn, chỉ lazy-load khi export cần nó.
 
 ### Storage
 
@@ -95,6 +109,8 @@ Desktop:
 - Word adapter riêng.
 - PowerPoint adapter riêng.
 - MathML/OMML conversion module riêng.
+- Phase 0 Word: OMML primitive + OOXML package + source metadata round-trip đã pass automated tests; Word desktop round-trip vẫn pending manual host validation.
+- Phase 0 PowerPoint: bound geometric shape + image fill + tag strategy đã pass automated contracts; actual PowerPoint save/reopen/update remains a manual host gate.
 
 ## 3. Monorepo structure dự kiến
 
@@ -442,7 +458,8 @@ docs/adr/
 0001-desktop-shell.md
 0002-editor-engine.md
 0003-equation-source-model.md
-0004-word-storage-format.md
+0004-word-storage-and-conversion.md
+0005-powerpoint-object-strategy.md
 ...
 ```
 

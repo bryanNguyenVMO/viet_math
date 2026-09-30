@@ -1,6 +1,6 @@
 # VietMath — Microsoft Office Integration
 
-> Status: Design v0.1  
+> Status: Design v0.2 — Phase 0 findings incorporated  
 > Office integration là subsystem độc lập và phải được test trên Office thật.
 
 ## 1. Mục tiêu
@@ -71,9 +71,15 @@ targetMode
 hash/version
 ```
 
-Metadata mechanism sẽ được xác minh trong Phase 0, ví dụ content control + document metadata/custom XML nếu API/platform cho phép.
+Phase 0 automated spike đã chứng minh được:
 
-Không lock implementation trước spike.
+- OMML primitives có thể được đóng trong Word OOXML `pkg:package`;
+- equation có thể nằm trong `w:sdt` content control;
+- VietMath source metadata có thể round-trip qua một encoded tag cho short fixtures.
+
+**Ruling:** full source trong `w:tag` chỉ là Phase 0 proof-of-concept. Production nên giữ tag nhỏ (object ID/schema/version) và lưu full source ở document-level metadata/custom XML hoặc cơ chế tương đương đã được host-test.
+
+Word desktop insert/save/reopen/edit vẫn phải được validate trên Microsoft 365 Windows/macOS trước Phase 2.
 
 ## 4. Editing existing Word equation
 
@@ -146,13 +152,22 @@ Nếu metadata không tự đi theo ổn định, add-in cần managed copy/impo
 
 ### 8.1. v1 preferred path
 
-Ưu tiên:
+Phase 0 chọn strategy ưu tiên:
 
-- vector image/SVG nếu Office/platform support đủ;
-- source metadata/tag liên kết với shape;
-- edit bằng VietMath add-in.
+1. tạo geometric shape;
+2. fill shape bằng equation image/vector-compatible rendering;
+3. gắn VietMath tag/object ID;
+4. dùng PowerPoint shape binding khi PowerPointApi 1.8 khả dụng;
+5. khi edit, update `shape.fill.setImage(...)` trên **cùng shape** thay vì delete/reinsert.
 
-Lý do: PowerPoint equation/native API path cần được xác minh riêng và không nên giả định giống Word.
+Lý do:
+
+- shape ID/tags cho object identity;
+- binding cho stable lookup;
+- update cùng shape giúp giữ geometry tốt hơn;
+- không phụ thuộc vào preview-only picture insertion path.
+
+PowerPoint native equation path vẫn là separate capability và không được giả định giống Word.
 
 ### 8.2. Update shape
 
@@ -174,12 +189,13 @@ Nếu không giữ được attribute nào, limitation phải rõ.
 
 Mỗi inserted shape có VietMath object ID.
 
-Source có thể lưu qua:
+Phase 0 dùng shape tag để chứng minh object/source round-trip ở mức short fixture.
 
-- supported tags/custom metadata;
-- document-level store;
+Production target:
 
-tùy API validation.
+- shape tag giữ VietMath object ID/schema pointer;
+- full source chuyển sang document-level store nếu host validation xác nhận một cơ chế đáng tin;
+- binding ID dùng dạng `vietmath:<object-id>` khi binding API khả dụng.
 
 Phải xử lý:
 
@@ -317,11 +333,23 @@ Trước khi build UI hoàn chỉnh, cần prototype:
 
 ### PowerPoint
 
-1. Insert SVG equation.
-2. Store identity/source.
-3. Save/reopen.
-4. Edit and replace.
-5. Verify position/size.
-6. Duplicate slide and verify object handling.
+Automated spike hiện có:
+
+1. metadata encode/decode;
+2. stable binding ID policy;
+3. bound geometric-shape host contract;
+4. same-shape image update strategy;
+5. geometry snapshot preservation contract;
+6. duplicate object must receive a new VietMath ID.
+
+Manual Microsoft 365 Windows/macOS gate còn lại:
+
+1. insert rendered equation image/vector-compatible output;
+2. save/reopen;
+3. recover tag/binding;
+4. edit and refresh same shape;
+5. verify x/y/width/height/rotation;
+6. verify duplicate shape/slide ID handling;
+7. verify z-order/grouping/animation limitations.
 
 Nếu proof-of-concept không ổn, architecture phải được điều chỉnh trước feature expansion.

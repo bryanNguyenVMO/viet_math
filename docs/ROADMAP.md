@@ -1,6 +1,6 @@
 # VietMath — Development Roadmap
 
-> Status: Planning v0.2  
+> Status: Phase 0 validation v0.3  
 > Roadmap này dùng exit criteria thay vì chỉ dùng deadline.
 
 ## 1. Nguyên tắc triển khai
@@ -35,6 +35,21 @@ Estimated: 2–3 tuần với team nhỏ full-time.
 ### Mục tiêu
 
 Xác minh các rủi ro kiến trúc lớn trước khi scaffold sản phẩm đầy đủ.
+
+### Current status
+
+**Automated architecture spikes are implemented. Phase 0 is not closed yet.**
+
+Remaining closure gates require real target hosts/machines:
+
+- Windows/macOS Vietnamese IME matrix;
+- self-contained SVG/PNG fidelity validation;
+- native clipboard paste matrix;
+- Word Microsoft 365 save/reopen/edit/transfer;
+- PowerPoint Microsoft 365 save/reopen/update;
+- real-machine startup/RAM/input-latency benchmark.
+
+See [PHASE_0_SUMMARY.md](validation/PHASE_0_SUMMARY.md).
 
 ### Exit criteria
 
@@ -166,12 +181,14 @@ Không cam kết thứ tự cho đến khi có user data:
 
 ## 8. Branch strategy
 
-Giai đoạn đầu:
+Recommended default after Phase 0:
 
 ```text
 main
 └── feature/*
 ```
+
+Phase 0 was executed directly on `main` because the repository owner explicitly requested that exception.
 
 Không tạo `develop` chỉ vì convention nếu chưa có nhu cầu thực tế.
 
@@ -209,4 +226,13 @@ Repository docs là source-of-truth cho AI agent và developer; tránh duplicate
 
 ## 11. Current next step
 
-Review [Phase 0 implementation plan](phases/PHASE_0_TECHNICAL_VALIDATION.md). Sau khi plan được approve, bắt đầu branch/spike đầu tiên thay vì scaffold toàn bộ production app.
+Close the remaining Phase 0 manual gates using the checklists under `docs/validation/`.
+
+Do **not** treat Desktop Alpha as architecture-locked until:
+
+1. Vietnamese IME is green on real Windows/macOS;
+2. SVG/PNG renderer fidelity is green;
+3. Word/PowerPoint host lifecycle is green or an explicit replacement strategy is approved;
+4. runtime startup/RAM/input-latency data has been recorded.
+
+After those gates, expand Phase 1 brief into the detailed implementation plan.

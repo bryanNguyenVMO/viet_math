@@ -420,3 +420,23 @@ select { font: inherit; }
   color: var(--vm-primary);
   box-shadow: var(--vm-shadow-sm);
 }
+
+.vm-recovery-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--vm-radius-md, 8px);
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 13px;
+}
+
+.vm-recovery-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

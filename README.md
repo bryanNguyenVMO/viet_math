@@ -27,6 +27,14 @@ The documents below are the current source of truth for product and technical de
 - [Roadmap](docs/ROADMAP.md) — phase phát triển và tiêu chí hoàn thành
 - [Test Strategy](docs/TEST_STRATEGY.md) — chiến lược kiểm thử và quality gates
 
+### Phase documents
+
+- [Phase 0 — Technical Validation](docs/phases/PHASE_0_TECHNICAL_VALIDATION.md) — implementation plan chi tiết
+- [Phase 1 — Desktop Alpha](docs/phases/PHASE_1_DESKTOP_ALPHA.md) — phase brief
+- [Phase 2 — Word Beta](docs/phases/PHASE_2_WORD_BETA.md) — phase brief
+- [Phase 3 — PowerPoint + Document Productivity](docs/phases/PHASE_3_POWERPOINT.md) — phase brief
+- [Phase 4 — 1.0 Stabilization](docs/phases/PHASE_4_STABILIZATION.md) — phase brief
+
 ## Status
 
 Planning / technical validation.

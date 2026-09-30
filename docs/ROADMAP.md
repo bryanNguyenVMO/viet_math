@@ -1,6 +1,6 @@
 # VietMath — Development Roadmap
 
-> Status: Planning v0.1  
+> Status: Planning v0.2  
 > Roadmap này dùng exit criteria thay vì chỉ dùng deadline.
 
 ## 1. Nguyên tắc triển khai
@@ -18,6 +18,16 @@ Thứ tự ưu tiên:
 7. UX polish.
 8. Feature breadth.
 
+Implementation detail được tách theo phase để tránh over-plan:
+
+- [Phase 0 — Technical Validation](phases/PHASE_0_TECHNICAL_VALIDATION.md)
+- [Phase 1 — Desktop Alpha](phases/PHASE_1_DESKTOP_ALPHA.md)
+- [Phase 2 — Word Beta](phases/PHASE_2_WORD_BETA.md)
+- [Phase 3 — PowerPoint + Document Productivity](phases/PHASE_3_POWERPOINT.md)
+- [Phase 4 — 1.0 Stabilization](phases/PHASE_4_STABILIZATION.md)
+
+Phase 0 được viết thành implementation plan chi tiết ngay. Phase 1–4 chỉ là brief và sẽ được mở rộng sau khi phase trước cung cấp bằng chứng kỹ thuật mới.
+
 ## 2. Phase 0 — Technical Validation
 
 Estimated: 2–3 tuần với team nhỏ full-time.
@@ -25,53 +35,6 @@ Estimated: 2–3 tuần với team nhỏ full-time.
 ### Mục tiêu
 
 Xác minh các rủi ro kiến trúc lớn trước khi scaffold sản phẩm đầy đủ.
-
-### Tasks
-
-#### Desktop shell
-
-- Prototype Tauri 2.
-- React + TypeScript.
-- Windows build.
-- macOS build.
-- Measure startup/RAM baseline.
-
-#### Editor
-
-- Integrate MathLive candidate.
-- Create thin adapter.
-- Fraction/root/script/matrix/cases.
-- Undo/redo.
-- Paste LaTeX.
-- Extract LaTeX.
-
-#### Vietnamese IME
-
-- Telex.
-- VNI.
-- Text inside equation.
-- Composition event handling.
-
-#### Export
-
-- SVG.
-- PNG.
-- MathML.
-- Bounding box tests.
-
-#### Word spike
-
-- Insert native equation candidate.
-- Store source metadata.
-- Save/reopen.
-- Edit/update.
-
-#### PowerPoint spike
-
-- Insert vector equation.
-- Store source identity.
-- Save/reopen.
-- Edit/replace.
 
 ### Exit criteria
 
@@ -92,40 +55,34 @@ Phase 0 pass khi:
 - supported/unsupported notes;
 - decision: proceed / modify architecture.
 
+Chi tiết: [PHASE_0_TECHNICAL_VALIDATION.md](phases/PHASE_0_TECHNICAL_VALIDATION.md)
+
 ## 3. Phase 1 — Desktop Alpha
 
 Estimated: 4–6 tuần sau Phase 0.
 
 ### Scope
 
-- application shell;
+- production desktop shell;
 - production editor wrapper;
-- toolbar compact;
+- compact/full toolbar;
 - symbol/template search;
 - Vietnamese + English;
-- recent equations;
-- favorites;
-- templates;
+- recent/favorites/templates;
 - settings;
-- autosave;
-- history;
-- LaTeX import/export;
-- SVG/PNG/MathML export;
-- basic keyboard shortcuts;
-- light/dark mode.
+- autosave/history;
+- LaTeX/SVG/PNG/MathML;
+- light/dark/system theme.
 
 ### Quality gates
 
-- 100+ equation corpus.
-- IME regression suite/manual checklist.
-- Crash recovery draft.
-- No known data-loss bug.
-- p95 typing target measured.
+- 100+ equation corpus;
+- IME regression coverage;
+- crash recovery;
+- no known data-loss bug;
+- typing/startup/memory metrics measured.
 
-### Alpha audience
-
-- internal;
-- 5–10 giáo viên/người soạn tài liệu thử nghiệm.
+Chi tiết: [PHASE_1_DESKTOP_ALPHA.md](phases/PHASE_1_DESKTOP_ALPHA.md)
 
 ## 4. Phase 2 — Word Beta
 
@@ -133,43 +90,35 @@ Estimated: 5–8 tuần.
 
 ### Scope
 
-- Office add-in shell.
-- Shared editor package.
-- Word insert.
-- Word edit existing VietMath equation.
-- Native/fallback capability check.
-- Metadata source persistence.
-- Conflict detection.
-- Save/reopen lifecycle.
-- Copy/document transfer tests.
+- Office add-in shell;
+- shared editor package;
+- Word insert/edit/update;
+- native/fallback capability check;
+- metadata source persistence;
+- conflict detection;
+- save/reopen lifecycle;
+- transfer/copy tests.
 
 ### Exit criteria
 
-Một tester có thể soạn một file Word gồm nhiều loại công thức, đóng/mở lại, gửi sang máy test thứ hai và tiếp tục edit mà không mất source ở các case supported.
+Một tester có thể soạn file Word gồm các công thức supported, đóng/mở lại, chuyển sang môi trường supported khác và tiếp tục edit mà không mất source.
 
-## 5. Phase 3 — PowerPoint + Document Tools
+Chi tiết: [PHASE_2_WORD_BETA.md](phases/PHASE_2_WORD_BETA.md)
+
+## 5. Phase 3 — PowerPoint + Document Productivity
 
 Estimated: 3–5 tuần.
 
-### PowerPoint
+### Scope
 
 - insert vector;
 - source metadata;
 - edit/update;
 - preserve geometry;
-- duplicate slide handling.
+- duplicate slide/shape handling;
+- optional document productivity only after reliability is green.
 
-### Document productivity
-
-Sau khi Office lifecycle ổn mới cân nhắc:
-
-- equation numbering;
-- cross-reference helper;
-- style presets;
-- batch style update;
-- recent/template integration trong add-in.
-
-Không để document utilities làm chậm core reliability.
+Chi tiết: [PHASE_3_POWERPOINT.md](phases/PHASE_3_POWERPOINT.md)
 
 ## 6. Phase 4 — 1.0 Stabilization
 
@@ -180,10 +129,8 @@ Estimated: 3–5 tuần.
 - expand equation corpus lên 500+;
 - bug burn-down;
 - accessibility baseline;
-- installer polish;
-- updater;
-- code signing;
-- macOS notarization;
+- installer/updater;
+- signing/notarization;
 - crash/log strategy;
 - language review;
 - performance tuning;
@@ -197,6 +144,8 @@ Estimated: 3–5 tuần.
 - export golden tests pass;
 - install/update pass;
 - privacy behavior documented.
+
+Chi tiết: [PHASE_4_STABILIZATION.md](phases/PHASE_4_STABILIZATION.md)
 
 ## 7. Post-1.0 candidates
 
@@ -224,22 +173,9 @@ main
 └── feature/*
 ```
 
-Khi project có release cadence/team lớn hơn có thể thêm release branches nếu cần.
-
 Không tạo `develop` chỉ vì convention nếu chưa có nhu cầu thực tế.
 
-### Suggested branches
-
-```text
-feature/phase-0-desktop-spike
-feature/phase-0-office-spike
-feature/editor-core
-feature/export
-feature/word-addin
-feature/powerpoint-addin
-```
-
-PR phải nhỏ đủ để review.
+Suggested branches được phase plan định nghĩa theo từng subsystem để spike/feature có thể review độc lập.
 
 ## 9. Definition of Done chung
 
@@ -248,10 +184,10 @@ Một feature không Done chỉ vì UI hoạt động.
 Cần:
 
 - requirements/acceptance criteria;
-- unit/integration tests phù hợp;
+- tests phù hợp;
 - supported platform test;
 - error path;
-- i18n string;
+- i18n string nếu có UI;
 - keyboard/accessibility consideration;
 - docs update nếu behavior public;
 - no known silent data loss.
@@ -262,17 +198,15 @@ Trước implementation lớn:
 
 1. Update product/architecture spec nếu requirement đổi.
 2. Nếu là quyết định kiến trúc: thêm ADR.
-3. Tạo implementation plan/ticket.
+3. Mở rộng phase brief thành implementation plan chi tiết.
 4. Implement trên feature branch.
 5. PR.
 6. Tests/benchmark.
 7. Merge.
-8. Update roadmap status.
+8. Update roadmap/phase status.
 
-Repository docs là source-of-truth cho AI agent và developer; không duplicate requirement dài ở nhiều hệ thống nếu không cần.
+Repository docs là source-of-truth cho AI agent và developer; tránh duplicate requirement dài ở nhiều hệ thống nếu không cần.
 
-## 11. Initial next step
+## 11. Current next step
 
-Sau commit tài liệu này, việc tiếp theo không phải làm toàn bộ app.
-
-Việc tiếp theo là lập implementation plan chi tiết cho **Phase 0 — Technical Validation**, sau đó tạo branch và thực hiện từng spike có benchmark/exit criteria.
+Review [Phase 0 implementation plan](phases/PHASE_0_TECHNICAL_VALIDATION.md). Sau khi plan được approve, bắt đầu branch/spike đầu tiên thay vì scaffold toàn bộ production app.

@@ -4,17 +4,27 @@ import {
   type EquationDocument,
 } from "@vietmath/equation-model";
 import type { VietMathEditor } from "@vietmath/editor";
-import { useCallback, useState } from "react";
+import { createTranslator, type Locale } from "@vietmath/i18n";
+import {
+  createDraftAutosave,
+  type DraftRepository,
+} from "@vietmath/storage";
+import { Button } from "@vietmath/ui";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { LatexSourcePanel } from "./LatexSourcePanel";
 import { MathEditorSurface } from "./MathEditorSurface";
 
 type EditorWorkspaceProps = {
   initialLatex: string;
+  locale: Locale;
+  storage: DraftRepository;
   onEditorReady: (editor: VietMathEditor | null) => void;
 };
 
 type EditorViewMode = "visual" | "latex";
+
+const DRAFT_KEY = "current";
 
 function bracesAreBalanced(value: string): boolean {
   let depth = 0;
@@ -34,17 +44,57 @@ function bracesAreBalanced(value: string): boolean {
 
 export function EditorWorkspace({
   initialLatex,
+  locale,
+  storage,
   onEditorReady,
 }: EditorWorkspaceProps) {
   const [mode, setMode] = useState<EditorViewMode>("visual");
   const [editor, setEditor] = useState<VietMathEditor | null>(null);
   const [sourceError, setSourceError] = useState<string | null>(null);
+  const [storageReady, setStorageReady] = useState(false);
+  const [recoveredDocument, setRecoveredDocument] =
+    useState<EquationDocument | null>(null);
   const [document, setDocument] = useState<EquationDocument>({
     schemaVersion: 1,
     latex: initialLatex,
     displayMode: "block",
     style: {},
   });
+  const autosave = useMemo(
+    () => createDraftAutosave(storage, DRAFT_KEY, 300),
+    [storage],
+  );
+  const { t } = createTranslator(locale);
+
+  useEffect(() => {
+    let disposed = false;
+
+    storage
+      .load(DRAFT_KEY)
+      .then((recovered) => {
+        if (disposed) return;
+        if (recovered) setRecoveredDocument(recovered);
+        else setStorageReady(true);
+      })
+      .catch(() => {
+        if (!disposed) setStorageReady(true);
+      });
+
+    return () => {
+      disposed = true;
+    };
+  }, [storage]);
+
+  useEffect(() => {
+    if (storageReady) autosave.schedule(document);
+  }, [autosave, document, storageReady]);
+
+  useEffect(
+    () => () => {
+      void autosave.flush();
+    },
+    [autosave],
+  );
 
   const handleReady = useCallback(
     (next: VietMathEditor | null) => {
@@ -83,10 +133,40 @@ export function EditorWorkspace({
     setSourceError(null);
   }, [document.draftLatex, document.latex, editor]);
 
+  const restoreRecovered = useCallback(() => {
+    if (!recoveredDocument) return;
+
+    setDocument(recoveredDocument);
+    editor?.setLatex(recoveredDocument.latex);
+    if (recoveredDocument.draftLatex) setMode("latex");
+    setRecoveredDocument(null);
+    setStorageReady(true);
+  }, [editor, recoveredDocument]);
+
+  const discardRecovered = useCallback(async () => {
+    await storage.clear(DRAFT_KEY);
+    setRecoveredDocument(null);
+    setStorageReady(true);
+  }, [storage]);
+
   const sourceValue = document.draftLatex ?? document.latex;
 
   return (
     <div className="vm-editor-workspace">
+      {recoveredDocument ? (
+        <div className="vm-recovery-banner" role="status">
+          <span>{t("recovery.message")}</span>
+          <div className="vm-recovery-actions">
+            <Button variant="primary" onClick={restoreRecovered}>
+              {t("recovery.restore")}
+            </Button>
+            <Button variant="ghost" onClick={() => void discardRecovered()}>
+              {t("recovery.discard")}
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="vm-editor-tabs" role="tablist" aria-label="Chế độ soạn thảo">
         <button
           type="button"
@@ -95,7 +175,7 @@ export function EditorWorkspace({
           className={mode === "visual" ? "is-active" : undefined}
           onClick={() => setMode("visual")}
         >
-          Soạn thảo
+          {t("editor.visual")}
         </button>
         <button
           type="button"

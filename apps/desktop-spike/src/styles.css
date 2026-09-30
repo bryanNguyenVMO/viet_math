@@ -503,3 +503,50 @@ button {
     display: none;
   }
 }
+
+.mathfield-shell {
+  width: min(100%, 820px);
+  display: grid;
+  justify-items: stretch;
+  gap: 14px;
+}
+
+.mathfield-mount {
+  width: 100%;
+  min-height: 160px;
+  display: grid;
+  align-items: center;
+}
+
+.mathfield-mount math-field {
+  width: 100%;
+  min-height: 128px;
+  padding: 28px 32px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-lg);
+  background: var(--vm-surface);
+  box-shadow: 0 12px 38px rgb(15 23 42 / 6%);
+  font-size: clamp(28px, 4vw, 46px);
+  outline: none;
+}
+
+.mathfield-mount math-field:focus-within {
+  border-color: #93c5fd;
+  box-shadow:
+    0 0 0 3px rgb(59 130 246 / 10%),
+    0 12px 38px rgb(15 23 42 / 6%);
+}
+
+.latex-readout {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-self: center;
+  padding: 6px 10px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-sm);
+  background: var(--vm-bg);
+  color: var(--vm-text-secondary);
+  font-size: 11px;
+}

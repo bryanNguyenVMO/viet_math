@@ -1,9 +1,8 @@
+import type { VietMathEditor } from "@vietmath/editor-core";
 import {
   BookOpen,
-  Braces,
   ChevronDown,
   Copy,
-  Grid3X3,
   MoreHorizontal,
   Redo2,
   Search,
@@ -12,25 +11,87 @@ import {
   Star,
   Undo2,
 } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+
+import { MathEditorSpike } from "./MathEditorSpike";
+
+const initialLatex = String.raw`x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`;
 
 const recentFormulas = [
-  { title: "Phương trình bậc hai", formula: "x = (-b ± √Δ) / 2a" },
-  { title: "Định lý Pythagore", formula: "a² + b² = c²" },
-  { title: "Tích phân cơ bản", formula: "∫₀¹ x² dx" },
+  {
+    title: "Phương trình bậc hai",
+    formula: "x = (-b ± √Δ) / 2a",
+    latex: initialLatex,
+  },
+  {
+    title: "Định lý Pythagore",
+    formula: "a² + b² = c²",
+    latex: String.raw`a^2+b^2=c^2`,
+  },
+  {
+    title: "Tích phân cơ bản",
+    formula: "∫₀¹ x² dx",
+    latex: String.raw`\int_0^1 x^2\,dx`,
+  },
 ];
 
-const symbols = ["π", "∞", "∑", "√", "α", "β", "θ", "≈", "≠", "≤", "≥", "∈"];
-
 const structures = [
-  { label: "Phân số", sample: "a/b" },
-  { label: "Căn thức", sample: "√x" },
-  { label: "Mũ", sample: "x²" },
-  { label: "Tích phân", sample: "∫" },
-  { label: "Tổng", sample: "∑" },
-  { label: "Giới hạn", sample: "lim" },
+  { label: "Phân số", sample: "a/b", latex: String.raw`\frac{}{}` },
+  { label: "Căn thức", sample: "√x", latex: String.raw`\sqrt{}` },
+  { label: "Mũ", sample: "x²", latex: String.raw`^{}` },
+  { label: "Tích phân", sample: "∫", latex: String.raw`\int_{}^{}` },
+  { label: "Tổng", sample: "∑", latex: String.raw`\sum_{}^{}` },
+  { label: "Giới hạn", sample: "lim", latex: String.raw`\lim_{x\to 0}` },
+  {
+    label: "Ma trận",
+    sample: "▦",
+    latex: String.raw`\begin{bmatrix} & \\ & \end{bmatrix}`,
+  },
+  {
+    label: "Hệ",
+    sample: "{",
+    latex: String.raw`\begin{cases} & \\ & \end{cases}`,
+  },
+];
+
+const symbols = [
+  { label: "π", latex: String.raw`\pi` },
+  { label: "∞", latex: String.raw`\infty` },
+  { label: "∑", latex: String.raw`\sum` },
+  { label: "√", latex: String.raw`\sqrt{}` },
+  { label: "α", latex: String.raw`\alpha` },
+  { label: "β", latex: String.raw`\beta` },
+  { label: "θ", latex: String.raw`\theta` },
+  { label: "≈", latex: String.raw`\approx` },
+  { label: "≠", latex: String.raw`\ne` },
+  { label: "≤", latex: String.raw`\le` },
+  { label: "≥", latex: String.raw`\ge` },
+  { label: "∈", latex: String.raw`\in` },
 ];
 
 export function App() {
+  const editorRef = useRef<VietMathEditor | null>(null);
+  const [latex, setLatex] = useState(initialLatex);
+
+  const handleEditorReady = useCallback((editor: VietMathEditor | null) => {
+    editorRef.current = editor;
+  }, []);
+
+  const handleLatexChange = useCallback((value: string) => {
+    setLatex(value);
+  }, []);
+
+  const insertLatex = useCallback((value: string) => {
+    editorRef.current?.insertLatex(value);
+    editorRef.current?.focus();
+  }, []);
+
+  const setEquation = useCallback((value: string) => {
+    editorRef.current?.setLatex(value);
+    editorRef.current?.focus();
+    setLatex(value);
+  }, []);
+
   return (
     <div className="app-shell">
       <header className="titlebar">
@@ -56,28 +117,36 @@ export function App() {
 
       <section className="toolbar" aria-label="VietMath toolbar">
         <div className="tool-group history-tools">
-          <button className="tool-icon" aria-label="Hoàn tác"><Undo2 size={18} /></button>
-          <button className="tool-icon" aria-label="Làm lại"><Redo2 size={18} /></button>
+          <button
+            className="tool-icon"
+            aria-label="Hoàn tác"
+            onClick={() => editorRef.current?.undo()}
+          >
+            <Undo2 size={18} />
+          </button>
+          <button
+            className="tool-icon"
+            aria-label="Làm lại"
+            onClick={() => editorRef.current?.redo()}
+          >
+            <Redo2 size={18} />
+          </button>
         </div>
 
         <div className="tool-divider" />
 
         <div className="structure-tools">
           {structures.map((item) => (
-            <button className="structure-button" key={item.label}>
+            <button
+              className="structure-button"
+              key={item.label}
+              onClick={() => insertLatex(item.latex)}
+            >
               <span className="structure-sample">{item.sample}</span>
               <span>{item.label}</span>
             </button>
           ))}
-          <button className="structure-button">
-            <Grid3X3 size={21} />
-            <span>Ma trận</span>
-          </button>
-          <button className="structure-button">
-            <Braces size={21} />
-            <span>Hệ</span>
-          </button>
-          <button className="structure-button">
+          <button className="structure-button" aria-label="Thêm cấu trúc">
             <MoreHorizontal size={21} />
             <span>Thêm</span>
           </button>
@@ -85,7 +154,7 @@ export function App() {
 
         <div className="tool-spacer" />
 
-        <button className="primary-button">
+        <button className="primary-button" title="Clipboard được triển khai ở Task 6">
           <Copy size={16} />
           Sao chép
           <ChevronDown size={14} />
@@ -109,7 +178,11 @@ export function App() {
 
           <div className="formula-list">
             {recentFormulas.map((item) => (
-              <button className="formula-card" key={item.title}>
+              <button
+                className="formula-card"
+                key={item.title}
+                onClick={() => setEquation(item.latex)}
+              >
                 <span className="formula-card-title">{item.title}</span>
                 <span className="formula-preview">{item.formula}</span>
               </button>
@@ -128,27 +201,22 @@ export function App() {
               <button className="active">Soạn thảo</button>
               <button>LaTeX</button>
             </div>
-            <span className="spike-badge">Phase 0 shell</span>
+            <span className="spike-badge">MathLive spike</span>
           </div>
 
           <div className="editor-canvas">
-            <div className="equation-placeholder" aria-label="Công thức mẫu">
-              <span className="equation-line">x =</span>
-              <span className="fraction">
-                <span>-b ± √(b² - 4ac)</span>
-                <span className="fraction-rule" />
-                <span>2a</span>
-              </span>
-            </div>
-            <p className="editor-hint">
-              MathLive sẽ được tích hợp ở bước editor spike tiếp theo.
-            </p>
+            <MathEditorSpike
+              initialLatex={initialLatex}
+              onReady={handleEditorReady}
+              onLatexChange={handleLatexChange}
+            />
+            <code className="latex-readout">{latex}</code>
           </div>
 
           <footer className="editor-status">
-            <span>Visual editor</span>
-            <span>Offline-first</span>
-            <span>Tiếng Việt</span>
+            <span>MathLive 0.110.0</span>
+            <span>Offline bundle</span>
+            <span>VietMath adapter</span>
           </footer>
         </section>
 
@@ -168,14 +236,19 @@ export function App() {
 
           <div className="symbol-grid">
             {symbols.map((symbol) => (
-              <button key={symbol} className="symbol-button" aria-label={`Ký hiệu ${symbol}`}>
-                {symbol}
+              <button
+                key={symbol.label}
+                className="symbol-button"
+                aria-label={`Ký hiệu ${symbol.label}`}
+                onClick={() => insertLatex(symbol.latex)}
+              >
+                {symbol.label}
               </button>
             ))}
           </div>
 
           <p className="panel-note">
-            Ký hiệu hiện chỉ là placeholder của shell. Math symbols production sẽ render bằng math engine.
+            Phase 0 dùng glyph label cho panel; structure/editor được render bằng MathLive.
           </p>
         </aside>
       </main>

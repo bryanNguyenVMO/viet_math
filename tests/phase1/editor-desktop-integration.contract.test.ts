@@ -23,10 +23,12 @@ describe("production MathLive desktop integration", () => {
     expect(surface).toContain('"compositionend"');
   });
 
-  it("replaces the layout placeholder with the production editor surface", () => {
-    const workspace = read("apps/desktop/src/layout/DesktopWorkspace.tsx");
-    expect(workspace).toContain("<MathEditorSurface");
-    expect(workspace).not.toContain("Production equation editor — Task 4");
+  it("keeps MathLive mounted behind the production editor workspace", () => {
+    const desktop = read("apps/desktop/src/layout/DesktopWorkspace.tsx");
+    const editorWorkspace = read("apps/desktop/src/editor/EditorWorkspace.tsx");
+
+    expect(desktop).toContain("<EditorWorkspace");
+    expect(editorWorkspace).toContain("<MathEditorSurface");
   });
 
   it("routes structure/history toolbar actions through VietMathEditor", () => {

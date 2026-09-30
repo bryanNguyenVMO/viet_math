@@ -37,11 +37,26 @@ Fallback:
 
 ### UI
 
-- React.
-- TypeScript.
-- Component system nội bộ.
-- CSS tokens/design tokens.
+Frontend/UI stack đã thống nhất ở mức thiết kế:
+
+- React + TypeScript;
+- Tailwind CSS;
+- shadcn/ui trên nền Radix UI primitives;
+- Lucide React cho application icons;
+- MathLive cho math symbols/templates trong toolbar và editor;
+- Sonner cho toast;
+- cmdk cho command/search palette;
+- react-resizable-panels cho resizable workspace;
+- Zustand cho UI/application state nhẹ;
+- react-hook-form + Zod cho settings/forms;
+- CSS variables/design tokens cho VietMath Design System;
 - i18next hoặc abstraction tương đương cho localization.
+
+Chi tiết visual direction và component rules nằm tại [UI_DESIGN.md](UI_DESIGN.md).
+
+Không dùng PNG/SVG tĩnh để mô phỏng ký hiệu toán học trong toolbar nếu có thể render bằng math engine. Application icon và math symbol là hai hệ riêng.
+
+Animation mặc định dùng CSS transition ngắn; chỉ thêm animation library khi có use case thực sự cần.
 
 ### Math editor
 
@@ -201,6 +216,8 @@ Trách nhiệm:
 - shared design system.
 
 Không chứa domain conversion.
+
+UI package nên export VietMath-owned components thay vì để feature code import trực tiếp toàn bộ primitive vendor ở nhiều nơi. Mục tiêu là có thể thay đổi implementation mà ít ảnh hưởng feature code.
 
 ### 4.7. i18n
 
@@ -363,7 +380,9 @@ Nguyên tắc:
 - cache expensive export;
 - avoid global state rerender per keystroke;
 - background expensive conversion nếu platform cho phép;
-- benchmark WebView behavior thực tế.
+- benchmark WebView behavior thực tế;
+- import icon/component theo nhu cầu, tránh kéo cả library vào bundle;
+- không dùng animation framework nếu CSS đủ đáp ứng.
 
 ## 12. Security
 
@@ -397,6 +416,7 @@ Mỗi dependency quan trọng cần ghi:
 - editor;
 - math fonts;
 - icon set;
+- UI primitives;
 - MathML/OMML converter;
 - Office helper libraries.
 

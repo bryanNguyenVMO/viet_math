@@ -21,6 +21,7 @@ The documents below are the current source of truth for product and technical de
 
 - [Product](docs/PRODUCT.md) — mục tiêu, người dùng, phạm vi và nguyên tắc sản phẩm
 - [Architecture](docs/ARCHITECTURE.md) — kiến trúc tổng thể, module và data flow
+- [UI Design](docs/UI_DESIGN.md) — visual direction, frontend UI stack, icon/math-symbol strategy và design system
 - [Editor Spec](docs/EDITOR_SPEC.md) — hành vi editor, UX, keyboard, IME và export
 - [Office Integration](docs/OFFICE_INTEGRATION.md) — Word/PowerPoint integration
 - [Roadmap](docs/ROADMAP.md) — phase phát triển và tiêu chí hoàn thành

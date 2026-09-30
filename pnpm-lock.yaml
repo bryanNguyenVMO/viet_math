@@ -16,6 +16,9 @@ importers:
       '@vietmath/editor':
         specifier: workspace:*
         version: link:../../packages/editor
+      '@vietmath/equation-model':
+        specifier: workspace:*
+        version: link:../../packages/equation-model
       '@vietmath/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -598,7 +601,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-
   '@tauri-apps/cli-win32-arm64-msvc@2.12.0':
     resolution: {integrity: sha512-1W+v86wsYLuyBDN0iDessD4CD9o+yNyO0m8Dp3+/vfjiZrJ/v7R7/aTRBeikaq2tLGgxeag0gxnFggBNBGw91A==}
     engines: {node: '>= 10'}
@@ -1197,8 +1199,7 @@ packages:
       lightningcss:
         optional: true
       sass:
-        optional: true
-      sass-embedded:
+        optional: true      sass-embedded:
         optional: true
       stylus:
         optional: true
@@ -1797,8 +1798,7 @@ snapshots:
 
   es-module-lexer@1.7.0: {}
 
-  esbuild@0.28.2:
-    optionalDependencies:
+  esbuild@0.28.2:    optionalDependencies:
       '@esbuild/aix-ppc64': 0.28.2
       '@esbuild/android-arm': 0.28.2
       '@esbuild/android-arm64': 0.28.2

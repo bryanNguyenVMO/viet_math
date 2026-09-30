@@ -7,7 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
-import { MathEditorSurface } from "../editor/MathEditorSurface";
+import { EditorWorkspace } from "../editor/EditorWorkspace";
 import { LibraryPanel } from "./LibraryPanel";
 import { SymbolPanel } from "./SymbolPanel";
 import { Toolbar } from "./Toolbar";
@@ -118,9 +118,9 @@ export function DesktopWorkspace() {
 
         <div className="vm-panel-column">
           <section className="vm-editor-panel" aria-label="Equation editor">
-            <MathEditorSurface
+            <EditorWorkspace
               initialLatex={initialLatex}
-              onReady={handleEditorReady}
+              onEditorReady={handleEditorReady}
             />
           </section>
         </div>

@@ -249,3 +249,110 @@ select { font: inherit; }
   color: var(--vm-text-secondary);
   font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
+
+
+.vm-editor-workspace {
+  width: min(820px, 100%);
+  display: grid;
+  gap: 12px;
+}
+
+.vm-editor-tabs {
+  display: inline-flex;
+  justify-self: start;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-surface);
+}
+
+.vm-editor-tabs button {
+  border: 0;
+  border-radius: 6px;
+  padding: 7px 12px;
+  background: transparent;
+  color: var(--vm-text-secondary);
+  cursor: pointer;
+}
+
+.vm-editor-tabs button.is-active {
+  background: color-mix(in srgb, var(--vm-primary) 12%, var(--vm-surface));
+  color: var(--vm-primary);
+  font-weight: 700;
+}
+
+.vm-editor-mode-panel[hidden] {
+  display: none;
+}
+
+.vm-source-panel {
+  min-height: 280px;
+  display: grid;
+  grid-template-rows: auto minmax(180px, 1fr) auto;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-lg);
+  background: var(--vm-surface);
+  box-shadow: var(--vm-shadow-sm);
+}
+
+.vm-source-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--vm-text-secondary);
+}
+
+.vm-source-panel textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  padding: 12px;
+  outline: none;
+  background: var(--vm-bg);
+  color: var(--vm-text);
+  font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.vm-source-panel textarea:focus {
+  border-color: var(--vm-primary);
+}
+
+.vm-source-panel textarea[aria-invalid="true"] {
+  border-color: var(--vm-danger);
+}
+
+.vm-source-actions {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vm-source-hint,
+.vm-source-error {
+  margin: 0;
+  font-size: 12px;
+}
+
+.vm-source-hint {
+  color: var(--vm-text-secondary);
+}
+
+.vm-source-error {
+  color: var(--vm-danger);
+}
+
+.vm-source-apply {
+  border: 0;
+  border-radius: var(--vm-radius-md);
+  padding: 8px 13px;
+  background: var(--vm-primary);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}

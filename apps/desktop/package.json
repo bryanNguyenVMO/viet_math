@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",
+    "@vietmath/editor": "workspace:*",
+    "@vietmath/equation-model": "workspace:*",
     "@vietmath/ui": "workspace:*",
     "lucide-react": "^0.544.0",
+    "mathlive": "0.110.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "@vietmath/editor": "workspace:*",
-    "mathlive": "0.110.0"
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.8.4",

@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 type MathEditorSurfaceProps = {
   initialLatex: string;
   onReady: (editor: VietMathEditor | null) => void;
+  onLatexChange?: (latex: string) => void;
 };
 
 function createMathLivePort(mathfield: MathfieldElement): MathLivePort {
@@ -39,6 +40,7 @@ function createMathLivePort(mathfield: MathfieldElement): MathLivePort {
 export function MathEditorSurface({
   initialLatex,
   onReady,
+  onLatexChange,
 }: MathEditorSurfaceProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [latex, setLatex] = useState(initialLatex);
@@ -55,7 +57,10 @@ export function MathEditorSurface({
     mathfield.setAttribute("smart-fence", "");
 
     const editor = new MathLiveAdapter(createMathLivePort(mathfield));
-    const unsubscribe = editor.subscribe(setLatex);
+    const unsubscribe = editor.subscribe((value) => {
+      setLatex(value);
+      onLatexChange?.(value);
+    });
 
     const handleCompositionStart = () => {
       imeGuard.startComposition();
@@ -71,7 +76,9 @@ export function MathEditorSurface({
 
     mount.replaceChildren(mathfield);
     onReady(editor);
-    setLatex(editor.getLatex());
+    const currentLatex = editor.getLatex();
+    setLatex(currentLatex);
+    onLatexChange?.(currentLatex);
 
     return () => {
       unsubscribe();
@@ -80,7 +87,7 @@ export function MathEditorSurface({
       mathfield.remove();
       onReady(null);
     };
-  }, [initialLatex, onReady]);
+  }, [initialLatex, onLatexChange, onReady]);
 
   return (
     <div className="vm-editor-surface">

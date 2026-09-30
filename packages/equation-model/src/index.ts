@@ -1,4 +1,9 @@
 export {
+  commitEquationLatex,
+  stageEquationDraft,
+} from "./draft";
+
+export {
   deserializeEquation,
   serializeEquation,
 } from "./serialize";

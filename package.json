@@ -3,8 +3,11 @@
   "private": true,
   "packageManager": "pnpm@10.17.1",
   "scripts": {
-    "test": "pnpm --filter @vietmath/desktop-spike exec vitest --root ../.. --run",
-    "build": "pnpm --filter @vietmath/desktop-spike build",
-    "tauri:build": "pnpm --filter @vietmath/desktop-spike tauri build --debug"
+    "dev": "pnpm --filter @vietmath/desktop dev",
+    "test": "pnpm --filter @vietmath/desktop exec vitest --root ../.. --run",
+    "build": "pnpm --filter @vietmath/desktop build",
+    "tauri:build": "pnpm --filter @vietmath/desktop tauri build --debug",
+    "build:spike": "pnpm --filter @vietmath/desktop-spike build",
+    "tauri:build:spike": "pnpm --filter @vietmath/desktop-spike tauri build --debug"
   }
 }

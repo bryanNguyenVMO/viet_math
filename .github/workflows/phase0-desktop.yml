@@ -1,4 +1,4 @@
-name: Phase 0 Desktop
+name: VietMath Desktop CI
 
 on:
   push:
@@ -29,16 +29,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run tests
         run: pnpm test
-      - name: Build web assets
+      - name: Build production web assets
         run: pnpm build
-      - name: Upload Office spike sources and manual guide
-        uses: actions/upload-artifact@v4
-        with:
-          name: phase0-office-spikes
-          path: |
-            apps/word-addin-spike
-            apps/powerpoint-addin-spike
-            docs/validation/MANUAL_VALIDATION_GUIDE.md
 
   desktop-build:
     needs: test
@@ -59,35 +51,19 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build web assets
+      - name: Build production web assets
         run: pnpm build
       - name: Build Tauri debug binary
         run: pnpm tauri:build
-      - name: Report Windows binary size
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $binary = Get-Item "apps/desktop-spike/src-tauri/target/debug/vietmath.exe"
-          Write-Host "VIETMATH_BINARY_BYTES=$($binary.Length)"
-      - name: Report macOS binary size
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          bytes=$(stat -f%z "apps/desktop-spike/src-tauri/target/debug/vietmath")
-          echo "VIETMATH_BINARY_BYTES=$bytes"
-      - name: Upload Windows validation binary
+      - name: Upload Windows desktop alpha
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: phase0-windows-validation
-          path: |
-            apps/desktop-spike/src-tauri/target/debug/vietmath.exe
-            docs/validation/MANUAL_VALIDATION_GUIDE.md
-      - name: Upload macOS validation binary
+          name: vietmath-desktop-windows-alpha
+          path: apps/desktop/src-tauri/target/debug/vietmath.exe
+      - name: Upload macOS desktop alpha
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
-          name: phase0-macos-validation
-          path: |
-            apps/desktop-spike/src-tauri/target/debug/vietmath
-            docs/validation/MANUAL_VALIDATION_GUIDE.md
+          name: vietmath-desktop-macos-alpha
+          path: apps/desktop/src-tauri/target/debug/vietmath

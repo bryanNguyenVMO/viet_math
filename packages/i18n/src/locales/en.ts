@@ -8,6 +8,7 @@ export const en: Record<keyof typeof vi, string> = {
   "actions.undo": "Undo",
   "actions.redo": "Redo",
   "actions.insert": "Insert",
+  "editor.visual": "Visual",
   "structures.fraction": "Fraction",
   "structures.squareRoot": "Root",
   "structures.superscript": "Superscript",

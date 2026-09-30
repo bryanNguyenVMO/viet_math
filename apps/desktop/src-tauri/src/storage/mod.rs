@@ -56,7 +56,7 @@ pub fn migrate(connection: &Connection) -> Result<(), String> {
     Ok(())
 }
 
-fn connection(state: &State<'_, StorageState>) -> Result<std::sync::MutexGuard<'_, Connection>, String> {
+fn connection<'a>(state: &'a State<'a, StorageState>) -> Result<std::sync::MutexGuard<'a, Connection>, String> {
     state
         .connection
         .lock()

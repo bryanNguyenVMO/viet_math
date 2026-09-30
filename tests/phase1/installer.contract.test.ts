@@ -7,13 +7,15 @@ const workflowPath = fileURLToPath(
 );
 
 describe("Phase 1 alpha installer workflow", () => {
-  it("builds installable Windows and macOS artifacts on demand", () => {
+  it("builds frontend assets before installable Windows and macOS bundles", () => {
     expect(existsSync(workflowPath)).toBe(true);
     const source = readFileSync(workflowPath, "utf8");
 
     expect(source).toContain("workflow_dispatch");
-    expect(source).toContain("--bundles nsis");
-    expect(source).toContain("--bundles dmg");
+    expect(source).toContain("bundle: nsis");
+    expect(source).toContain("bundle: dmg");
+    expect(source).toContain("pnpm build");
+    expect(source).toContain("tauri build --bundles ${{ matrix.bundle }}");
     expect(source).toContain("vietmath-windows-installer");
     expect(source).toContain("vietmath-macos-installer");
   });

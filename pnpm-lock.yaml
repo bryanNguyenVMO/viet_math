@@ -13,6 +13,9 @@ importers:
       '@tauri-apps/api':
         specifier: ^2.8.0
         version: 2.12.0
+      '@vietmath/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       lucide-react:
         specifier: ^0.544.0
         version: 0.544.0(react@19.3.0)

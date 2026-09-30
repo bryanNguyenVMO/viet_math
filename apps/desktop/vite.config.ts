@@ -8,4 +8,16 @@ export default defineConfig({
     port: 1421,
     strictPort: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("/mathlive/") || id.includes("\\mathlive\\")) {
+            return "mathlive";
+          }
+          return undefined;
+        },
+      },
+    },
+  },
 });

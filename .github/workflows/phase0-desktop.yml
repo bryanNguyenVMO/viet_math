@@ -31,6 +31,14 @@ jobs:
         run: pnpm test
       - name: Build web assets
         run: pnpm build
+      - name: Upload Office spike sources and manual guide
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase0-office-spikes
+          path: |
+            apps/word-addin-spike
+            apps/powerpoint-addin-spike
+            docs/validation/MANUAL_VALIDATION_GUIDE.md
 
   desktop-build:
     needs: test
@@ -67,3 +75,19 @@ jobs:
         run: |
           bytes=$(stat -f%z "apps/desktop-spike/src-tauri/target/debug/vietmath")
           echo "VIETMATH_BINARY_BYTES=$bytes"
+      - name: Upload Windows validation binary
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase0-windows-validation
+          path: |
+            apps/desktop-spike/src-tauri/target/debug/vietmath.exe
+            docs/validation/MANUAL_VALIDATION_GUIDE.md
+      - name: Upload macOS validation binary
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase0-macos-validation
+          path: |
+            apps/desktop-spike/src-tauri/target/debug/vietmath
+            docs/validation/MANUAL_VALIDATION_GUIDE.md

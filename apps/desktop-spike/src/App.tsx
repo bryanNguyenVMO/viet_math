@@ -14,6 +14,7 @@ import {
 import { useCallback, useRef, useState } from "react";
 
 import { MathEditorSpike } from "./MathEditorSpike";
+import { ValidationPanel } from "./ValidationPanel";
 
 const initialLatex = String.raw`x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`;
 
@@ -64,6 +65,7 @@ const symbols = [
 export function App() {
   const editorRef = useRef<VietMathEditor | null>(null);
   const [latex, setLatex] = useState(initialLatex);
+  const [validationOpen, setValidationOpen] = useState(false);
 
   const handleEditorReady = useCallback((editor: VietMathEditor | null) => {
     editorRef.current = editor;
@@ -95,9 +97,12 @@ export function App() {
           </div>
         </div>
         <div className="title-actions">
+          <button className="validation-launch" onClick={() => setValidationOpen(true)}>Phase 0 Validation</button>
           <button className="icon-button" aria-label="Cài đặt"><Settings size={18} /></button>
         </div>
       </header>
+
+      {validationOpen ? <ValidationPanel onClose={() => setValidationOpen(false)} /> : null}
 
       <nav className="menu-bar" aria-label="Main menu">
         <button>Tệp</button>

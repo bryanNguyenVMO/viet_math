@@ -1,0 +1,1020 @@
+[
+  {
+    "id": "algebra-001",
+    "latex": "x+1=0",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-002",
+    "latex": "2x-3=7",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-003",
+    "latex": "x^2-5x+6=0",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-004",
+    "latex": "ax^2+bx+c=0",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-005",
+    "latex": "(x+1)^2=x^2+2x+1",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-006",
+    "latex": "a^2-b^2=(a-b)(a+b)",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-007",
+    "latex": "x^3-y^3=(x-y)(x^2+xy+y^2)",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-008",
+    "latex": "\\frac{x+1}{x-1}=2",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-009",
+    "latex": "|x-2|=3",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-010",
+    "latex": "x^2+y^2=25",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-011",
+    "latex": "\\sqrt{x+4}=x",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "algebra-012",
+    "latex": "\\frac{1}{x}+\\frac{1}{y}=1",
+    "tags": [
+      "algebra"
+    ]
+  },
+  {
+    "id": "calculus-001",
+    "latex": "\\int x^2\\,dx=\\frac{x^3}{3}+C",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-002",
+    "latex": "\\int_0^1 x^2\\,dx",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-003",
+    "latex": "\\int_{-\\infty}^{\\infty}e^{-x^2}\\,dx",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-004",
+    "latex": "\\sum_{i=1}^{n}i=\\frac{n(n+1)}{2}",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-005",
+    "latex": "\\prod_{i=1}^{n}a_i",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-006",
+    "latex": "\\lim_{x\\to0}\\frac{\\sin x}{x}=1",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-007",
+    "latex": "\\frac{d}{dx}x^n=nx^{n-1}",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-008",
+    "latex": "\\frac{\\partial f}{\\partial x}",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-009",
+    "latex": "\\int_a^b f(x)\\,dx",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-010",
+    "latex": "\\sum_{k=0}^{\\infty}\\frac{x^k}{k!}",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-011",
+    "latex": "f'(x)=\\lim_{h\\to0}\\frac{f(x+h)-f(x)}{h}",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "calculus-012",
+    "latex": "\\nabla f=(f_x,f_y,f_z)",
+    "tags": [
+      "calculus"
+    ]
+  },
+  {
+    "id": "matrix-001",
+    "latex": "\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-002",
+    "latex": "\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-003",
+    "latex": "\\begin{pmatrix}x&y\\\\z&t\\end{pmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-004",
+    "latex": "\\begin{vmatrix}a&b\\\\c&d\\end{vmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-005",
+    "latex": "\\begin{bmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{bmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-006",
+    "latex": "A^{-1}=\\frac{1}{\\det A}\\operatorname{adj}(A)",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-007",
+    "latex": "AX=B",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-008",
+    "latex": "\\det(A-\\lambda I)=0",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-009",
+    "latex": "\\begin{bmatrix}x\\\\y\\\\z\\end{bmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-010",
+    "latex": "\\begin{bmatrix}a_{11}&a_{12}\\\\a_{21}&a_{22}\\end{bmatrix}",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-011",
+    "latex": "A^T A=I",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-012",
+    "latex": "\\operatorname{rank}(A)=r",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "matrix-013",
+    "latex": "\\lambda_1+\\lambda_2=\\operatorname{tr}(A)",
+    "tags": [
+      "matrix",
+      "algebra"
+    ]
+  },
+  {
+    "id": "cases-001",
+    "latex": "f(x)=\\begin{cases}x&x\\ge0\\\\-x&x<0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-002",
+    "latex": "y=\\begin{cases}1&x>0\\\\0&x=0\\\\-1&x<0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-003",
+    "latex": "f(x)=\\begin{cases}x^2&\\text{nếu }x\\ge0\\\\-x&\\text{nếu }x<0\\end{cases}",
+    "tags": [
+      "cases",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "cases-004",
+    "latex": "\\begin{cases}x+y=2\\\\x-y=0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-005",
+    "latex": "\\begin{cases}2x+3y=7\\\\x-y=1\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-006",
+    "latex": "|x|=\\begin{cases}x&x\\ge0\\\\-x&x<0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-007",
+    "latex": "g(x)=\\begin{cases}\\sin x&0\\le x\\le\\pi\\\\0&\\text{khác}\\end{cases}",
+    "tags": [
+      "cases",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "cases-008",
+    "latex": "u_n=\\begin{cases}1&n=0\\\\u_{n-1}+2&n>0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-009",
+    "latex": "P(x)=\\begin{cases}0&x<0\\\\1-e^{-x}&x\\ge0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-010",
+    "latex": "\\operatorname{sgn}(x)=\\begin{cases}-1&x<0\\\\0&x=0\\\\1&x>0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-011",
+    "latex": "f(x)=\\begin{cases}\\frac{1}{x}&x\\ne0\\\\0&x=0\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "cases-012",
+    "latex": "\\begin{cases}x+y+z=3\\\\x-y=1\\\\z=2\\end{cases}",
+    "tags": [
+      "cases",
+      "system"
+    ]
+  },
+  {
+    "id": "set-001",
+    "latex": "A\\cup B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-002",
+    "latex": "A\\cap B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-003",
+    "latex": "A\\setminus B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-004",
+    "latex": "x\\in\\mathbb{R}",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-005",
+    "latex": "\\mathbb{N}\\subset\\mathbb{Z}\\subset\\mathbb{Q}\\subset\\mathbb{R}",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-006",
+    "latex": "A^c",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-007",
+    "latex": "A\\triangle B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-008",
+    "latex": "\\{x\\in\\mathbb{R}:x>0\\}",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-009",
+    "latex": "\\emptyset\\subset A",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-010",
+    "latex": "|A\\cup B|=|A|+|B|-|A\\cap B|",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-011",
+    "latex": "\\forall x\\in A,\\exists y\\in B",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "set-012",
+    "latex": "A\\times B=\\{(a,b):a\\in A,b\\in B\\}",
+    "tags": [
+      "set"
+    ]
+  },
+  {
+    "id": "geometry-001",
+    "latex": "a^2+b^2=c^2",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-002",
+    "latex": "S=\\pi r^2",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-003",
+    "latex": "C=2\\pi r",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-004",
+    "latex": "V=\\frac{4}{3}\\pi r^3",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-005",
+    "latex": "S_{\\triangle}=\\frac{1}{2}ah",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-006",
+    "latex": "\\cos C=\\frac{a^2+b^2-c^2}{2ab}",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-007",
+    "latex": "AB=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-008",
+    "latex": "x^2+y^2=R^2",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-009",
+    "latex": "\\angle ABC=90^\\circ",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-010",
+    "latex": "\\vec{AB}=(x_B-x_A,y_B-y_A)",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-011",
+    "latex": "S=\\frac{1}{2}ab\\sin C",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "geometry-012",
+    "latex": "V=\\frac{1}{3}S_hh",
+    "tags": [
+      "geometry"
+    ]
+  },
+  {
+    "id": "statistics-001",
+    "latex": "\\bar{x}=\\frac{1}{n}\\sum_{i=1}^{n}x_i",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-002",
+    "latex": "s^2=\\frac{1}{n-1}\\sum_{i=1}^{n}(x_i-\\bar{x})^2",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-003",
+    "latex": "\\sigma=\\sqrt{\\operatorname{Var}(X)}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-004",
+    "latex": "P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-005",
+    "latex": "P(A\\cup B)=P(A)+P(B)-P(A\\cap B)",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-006",
+    "latex": "E(X)=\\sum_x xP(X=x)",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-007",
+    "latex": "\\operatorname{Var}(X)=E(X^2)-E(X)^2",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-008",
+    "latex": "Z=\\frac{X-\\mu}{\\sigma}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-009",
+    "latex": "\\binom{n}{k}=\\frac{n!}{k!(n-k)!}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-010",
+    "latex": "P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-011",
+    "latex": "f(x)=\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "statistics-012",
+    "latex": "r=\\frac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum(x_i-\\bar{x})^2\\sum(y_i-\\bar{y})^2}}",
+    "tags": [
+      "statistics"
+    ]
+  },
+  {
+    "id": "vietnamese-001",
+    "latex": "\\text{phương trình }x^2-3x+2=0",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-002",
+    "latex": "\\text{nghiệm }x_1=1,\\;x_2=2",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-003",
+    "latex": "x\\in\\mathbb{R}\\quad\\text{với mọi }x",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-004",
+    "latex": "\\text{điều kiện }x>0",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-005",
+    "latex": "\\text{tập xác định }D=\\mathbb{R}\\setminus\\{0\\}",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-006",
+    "latex": "\\text{hàm số đồng biến trên }(0,+\\infty)",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-007",
+    "latex": "\\text{hàm số nghịch biến trên }(-\\infty,0)",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-008",
+    "latex": "\\text{giá trị lớn nhất}=5",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-009",
+    "latex": "\\text{giá trị nhỏ nhất}=-2",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-010",
+    "latex": "\\text{tích phân }I=\\int_0^1x\\,dx",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-011",
+    "latex": "\\text{xác suất }P(A)=\\frac{1}{2}",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "vietnamese-012",
+    "latex": "\\text{nếu }a>0\\text{ thì }x>0",
+    "tags": [
+      "vietnamese",
+      "text"
+    ]
+  },
+  {
+    "id": "nested-001",
+    "latex": "\\frac{1}{1+\\frac{1}{x}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-002",
+    "latex": "\\sqrt{1+\\frac{x^2}{1+\\sqrt{y}}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-003",
+    "latex": "\\frac{\\sqrt{a+\\frac{b}{c}}}{1+\\frac{d}{e}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-004",
+    "latex": "\\sum_{n=1}^{\\infty}\\frac{1}{n^2+\\frac{1}{n}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-005",
+    "latex": "\\int_0^1\\frac{\\sqrt{1+x^2}}{1+\\frac{x}{2}}\\,dx",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-006",
+    "latex": "\\left(\\frac{a+b}{c+d}\\right)^2",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-007",
+    "latex": "\\sqrt{\\sqrt{x}+\\sqrt{y}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-008",
+    "latex": "\\frac{1}{\\sqrt{1-\\frac{x^2}{a^2}}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-009",
+    "latex": "\\begin{bmatrix}\\frac{1}{x}&\\sqrt{y}\\\\\\sum_i a_i&\\int f\\end{bmatrix}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-010",
+    "latex": "\\frac{\\sum_{i=1}^n i}{\\sqrt{\\prod_{j=1}^m j}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-011",
+    "latex": "\\lim_{x\\to0}\\frac{\\frac{e^x-1}{x}-1}{x}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "nested-012",
+    "latex": "\\sqrt[3]{\\frac{x^3+y^3}{1+\\sqrt{z}}}",
+    "tags": [
+      "nested"
+    ]
+  },
+  {
+    "id": "physics-001",
+    "latex": "E=mc^2",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-002",
+    "latex": "F=ma",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-003",
+    "latex": "p=mv",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-004",
+    "latex": "V=IR",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-005",
+    "latex": "P=VI",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-006",
+    "latex": "\\lambda=\\frac{h}{p}",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-007",
+    "latex": "E=h\\nu",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-008",
+    "latex": "F=G\\frac{m_1m_2}{r^2}",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-009",
+    "latex": "v=v_0+at",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-010",
+    "latex": "s=v_0t+\\frac{1}{2}at^2",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-011",
+    "latex": "\\Delta E=Q-W",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "physics-012",
+    "latex": "\\omega=2\\pi f",
+    "tags": [
+      "physics"
+    ]
+  },
+  {
+    "id": "invalid-001",
+    "latex": "\\frac{",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-002",
+    "latex": "\\sqrt{",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-003",
+    "latex": "x^{",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-004",
+    "latex": "\\begin{bmatrix}1&2",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-005",
+    "latex": "\\begin{cases}x&x>0",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-006",
+    "latex": "\\sum_{i=1}^{",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-007",
+    "latex": "\\int_{0}^{1",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-008",
+    "latex": "\\text{tiếng Việt",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-009",
+    "latex": "\\left(",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "invalid-010",
+    "latex": "\\frac{1}{\\sqrt{",
+    "tags": [
+      "invalid-draft"
+    ]
+  },
+  {
+    "id": "transcendental-001",
+    "latex": "\\sin^2x+\\cos^2x=1",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-002",
+    "latex": "\\tan x=\\frac{\\sin x}{\\cos x}",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-003",
+    "latex": "\\sin(a+b)=\\sin a\\cos b+\\cos a\\sin b",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-004",
+    "latex": "\\cos(a+b)=\\cos a\\cos b-\\sin a\\sin b",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-005",
+    "latex": "\\log_a x=\\frac{\\ln x}{\\ln a}",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-006",
+    "latex": "\\ln(ab)=\\ln a+\\ln b",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-007",
+    "latex": "a^{m+n}=a^ma^n",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  },
+  {
+    "id": "transcendental-008",
+    "latex": "e^{i\\pi}+1=0",
+    "tags": [
+      "algebra",
+      "trigonometry"
+    ]
+  }
+]

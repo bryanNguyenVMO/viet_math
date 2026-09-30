@@ -14,13 +14,16 @@ function read(path: string): string {
 describe("Phase 1 production desktop layout", () => {
   it("renders the four primary productivity regions from production components", () => {
     const workspace = read("apps/desktop/src/layout/DesktopWorkspace.tsx");
+    const toolbar = read("apps/desktop/src/layout/Toolbar.tsx");
+    const library = read("apps/desktop/src/layout/LibraryPanel.tsx");
+    const symbols = read("apps/desktop/src/layout/SymbolPanel.tsx");
     const app = read("apps/desktop/src/App.tsx");
 
     expect(app).toContain("<DesktopWorkspace");
-    expect(workspace).toContain('aria-label="VietMath toolbar"');
-    expect(workspace).toContain('aria-label="Formula library"');
+    expect(toolbar).toContain('aria-label="VietMath toolbar"');
+    expect(library).toContain('aria-label="Formula library"');
     expect(workspace).toContain('aria-label="Equation editor"');
-    expect(workspace).toContain('aria-label="Symbol palette"');
+    expect(symbols).toContain('aria-label="Symbol palette"');
   });
 
   it("provides collapsible left and right panels with resize handles", () => {

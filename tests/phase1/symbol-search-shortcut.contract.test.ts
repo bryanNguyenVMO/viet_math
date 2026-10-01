@@ -31,4 +31,16 @@ describe("symbol search keyboard workflow", () => {
     expect(symbols).toContain(".focus()");
     expect(searchInput).toContain("forwardRef");
   });
+
+  it("supports arrow-key selection, enter insertion, and escape clearing", () => {
+    const symbols = readFileSync(symbolPath, "utf8");
+
+    expect(symbols).toContain('event.key === "ArrowDown"');
+    expect(symbols).toContain('event.key === "ArrowUp"');
+    expect(symbols).toContain('event.key === "Enter"');
+    expect(symbols).toContain('event.key === "Escape"');
+    expect(symbols).toContain("activeIndex");
+    expect(symbols).toContain("aria-activedescendant");
+    expect(symbols).toContain("is-keyboard-active");
+  });
 });

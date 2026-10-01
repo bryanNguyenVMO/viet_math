@@ -26,6 +26,11 @@ const categoryKeys: Record<MathCatalogCategory, TranslationKey> = {
   greek: "categories.greek",
   relation: "categories.relation",
   set: "categories.set",
+  operator: "categories.operator",
+  logic: "categories.logic",
+  geometry: "categories.geometry",
+  function: "categories.function",
+  accent: "categories.accent",
 };
 
 export function SymbolPanel({
@@ -40,7 +45,7 @@ export function SymbolPanel({
   useEffect(() => {
     if (searchRequestKey > 0) searchRef.current?.focus();
   }, [searchRequestKey]);
-  const results = useMemo(() => searchMathCatalog(query).slice(0, 28), [query]);
+  const results = useMemo(() => searchMathCatalog(query).slice(0, 120), [query]);
 
   const grouped = useMemo(() => {
     const groups = new Map<MathCatalogCategory, typeof results>();

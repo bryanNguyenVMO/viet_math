@@ -6,7 +6,12 @@ export type MathCatalogCategory =
   | "calculus"
   | "greek"
   | "relation"
-  | "set";
+  | "set"
+  | "operator"
+  | "logic"
+  | "geometry"
+  | "function"
+  | "accent";
 
 export type MathCatalogAliases = {
   vi: readonly string[];

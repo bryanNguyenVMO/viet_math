@@ -13,5 +13,12 @@ describe("production structure templates", () => {
     expect(STRUCTURE_TEMPLATES.limit).toContain("#?");
     expect(STRUCTURE_TEMPLATES.matrix).toContain("#0");
     expect(STRUCTURE_TEMPLATES.cases).toContain("#0");
+    expect(STRUCTURE_TEMPLATES.nthRoot).toContain("\\sqrt[");
+    expect(STRUCTURE_TEMPLATES.product).toContain("\\prod");
+    expect(STRUCTURE_TEMPLATES.derivative).toContain("d#?");
+    expect(STRUCTURE_TEMPLATES.partialDerivative).toContain("\\partial");
+    expect(STRUCTURE_TEMPLATES.determinant).toContain("vmatrix");
+    expect(STRUCTURE_TEMPLATES.binomial).toContain("\\binom");
+    expect(STRUCTURE_TEMPLATES.vector).toContain("\\vec");
   });
 });

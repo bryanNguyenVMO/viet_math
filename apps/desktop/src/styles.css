@@ -629,3 +629,42 @@ select { font: inherit; }
   font-size: 18px;
   cursor: pointer;
 }
+
+
+.vm-toolbar__status {
+  color: var(--vm-text-secondary);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.vm-help-content {
+  display: grid;
+  gap: 18px;
+  padding: 18px 16px;
+}
+
+.vm-help-content section {
+  display: grid;
+  gap: 6px;
+}
+
+.vm-help-content h3,
+.vm-help-content p {
+  margin: 0;
+}
+
+.vm-help-content h3 {
+  font-size: 13px;
+}
+
+.vm-help-content p,
+.vm-help-content li {
+  color: var(--vm-text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.vm-help-content ul {
+  margin: 0;
+  padding-left: 20px;
+}

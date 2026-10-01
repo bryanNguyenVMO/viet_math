@@ -8,12 +8,18 @@ import {
   type Locale,
   type TranslationKey,
 } from "@vietmath/i18n";
+import { ClipboardService } from "@vietmath/shared";
 import { Button, IconButton } from "@vietmath/ui";
-import { Copy, Redo2, Settings, Undo2 } from "lucide-react";
+import { Copy, HelpCircle, Redo2, Settings, Undo2 } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import { BrowserClipboardPort } from "../clipboard/BrowserClipboardPort";
 
 type ToolbarProps = {
   editor: VietMathEditor | null;
   locale: Locale;
+  onOpenSettings: () => void;
+  onOpenHelp: () => void;
 };
 
 const structures: Array<{
@@ -32,12 +38,31 @@ const structures: Array<{
   { name: "cases", labelKey: "structures.cases", sample: "{ }" },
 ];
 
-export function Toolbar({ editor, locale }: ToolbarProps) {
+export function Toolbar({
+  editor,
+  locale,
+  onOpenSettings,
+  onOpenHelp,
+}: ToolbarProps) {
   const { t } = createTranslator(locale);
+  const clipboard = useMemo(
+    () => new ClipboardService(new BrowserClipboardPort()),
+    [],
+  );
+  const [copyStatus, setCopyStatus] = useState("");
 
   const insert = (name: StructureTemplateName) => {
     editor?.insertLatex(STRUCTURE_TEMPLATES[name]);
     editor?.focus();
+  };
+
+  const copy = async () => {
+    if (!editor) return;
+
+    const result = await clipboard.copyLatex(editor.getLatex());
+    setCopyStatus(
+      result.ok ? t("actions.copySuccess") : t("actions.copyFailed"),
+    );
   };
 
   return (
@@ -71,10 +96,24 @@ export function Toolbar({ editor, locale }: ToolbarProps) {
         ))}
       </div>
       <div className="vm-toolbar__spacer" />
-      <Button variant="primary">
+      {copyStatus ? (
+        <span className="vm-toolbar__status" role="status">
+          {copyStatus}
+        </span>
+      ) : null}
+      <Button variant="primary" disabled={!editor} onClick={() => void copy()}>
         <Copy size={15} /> {t("actions.copy")}
       </Button>
-      <IconButton aria-label={t("actions.settings")} icon={<Settings size={17} />} />
+      <IconButton
+        aria-label={t("actions.help")}
+        icon={<HelpCircle size={17} />}
+        onClick={onOpenHelp}
+      />
+      <IconButton
+        aria-label={t("actions.settings")}
+        icon={<Settings size={17} />}
+        onClick={onOpenSettings}
+      />
     </div>
   );
 }

@@ -23,6 +23,7 @@ import {
 } from "react";
 
 import { EditorWorkspace } from "../editor/EditorWorkspace";
+import { HelpDialog } from "../help/HelpDialog";
 import { SettingsDialog } from "../settings/SettingsDialog";
 import { TauriStorage } from "../storage/TauriStorage";
 import { LibraryPanel } from "./LibraryPanel";
@@ -48,6 +49,7 @@ export function DesktopWorkspace() {
   }));
   const [locale, setLocale] = useState<Locale>(() => settings.locale);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
@@ -91,6 +93,16 @@ export function DesktopWorkspace() {
     setSettings(next);
     setLocale(next.locale);
   }, []);
+
+  const changeLocale = useCallback(
+    async (nextLocale: Locale) => {
+      const next = { ...settings, locale: nextLocale };
+      setSettings(next);
+      setLocale(nextLocale);
+      await storage.set(SETTINGS_KEY, JSON.stringify(next));
+    },
+    [settings, storage],
+  );
 
   const handleEditorReady = useCallback((next: VietMathEditor | null) => {
     setEditor(next);
@@ -188,7 +200,7 @@ export function DesktopWorkspace() {
               type="button"
               className={locale === "vi" ? "is-active" : undefined}
               aria-pressed={locale === "vi"}
-              onClick={() => setLocale("vi")}
+              onClick={() => void changeLocale("vi")}
             >
               {t("locale.vi")}
             </button>
@@ -196,7 +208,7 @@ export function DesktopWorkspace() {
               type="button"
               className={locale === "en" ? "is-active" : undefined}
               aria-pressed={locale === "en"}
-              onClick={() => setLocale("en")}
+              onClick={() => void changeLocale("en")}
             >
               {t("locale.en")}
             </button>
@@ -213,11 +225,16 @@ export function DesktopWorkspace() {
         </div>
       </header>
 
-      <Toolbar editor={editor} locale={locale} />
+      <Toolbar
+        editor={editor}
+        locale={locale}
+        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenHelp={() => setHelpOpen(true)}
+      />
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
         <div className="vm-panel-column" data-collapsed={leftCollapsed}>
-          <LibraryPanel />
+          <LibraryPanel editor={editor} locale={locale} />
         </div>
         <button
           type="button"
@@ -255,6 +272,11 @@ export function DesktopWorkspace() {
           />
         </div>
       </section>
+      <HelpDialog
+        open={helpOpen}
+        locale={locale}
+        onClose={() => setHelpOpen(false)}
+      />
       <SettingsDialog
         open={settingsOpen}
         storage={storage}

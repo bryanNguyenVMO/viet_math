@@ -115,6 +115,36 @@ describe("production storage behavior", () => {
     expect(await storage.listCollections()).toEqual([]);
   });
 
+  it("renames and deletes equations without leaving library references", async () => {
+    const storageModule = await import("../../packages/storage/src/index");
+    const storage = new storageModule.MemoryStorage();
+    const document: EquationDocument = {
+      schemaVersion: 1,
+      latex: "x+1",
+      displayMode: "block",
+      style: {},
+    };
+
+    await storage.saveEquation({
+      id: "eq-manage",
+      document,
+      createdAt: 1,
+      updatedAt: 1,
+      lastOpenedAt: 1,
+    });
+    await storage.setFavorite("eq-manage", true);
+    await storage.createCollection({ id: "c1", name: "Test", createdAt: 1 });
+    await storage.addEquationToCollection("c1", "eq-manage");
+
+    await storage.renameEquation("eq-manage", "My equation");
+    expect((await storage.getEquation("eq-manage"))?.title).toBe("My equation");
+
+    await storage.deleteEquation("eq-manage");
+    expect(await storage.getEquation("eq-manage")).toBeNull();
+    expect(await storage.listFavorites()).toEqual([]);
+    expect(await storage.listCollectionEquations("c1")).toEqual([]);
+  });
+
   it("debounces draft writes and flushes the latest document", async () => {
     vi.useFakeTimers();
     try {

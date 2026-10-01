@@ -3,6 +3,7 @@ import type { vi } from "./vi";
 export const en: Record<keyof typeof vi, string> = {
   "app.title": "VietMath",
   "app.alpha": "Desktop Alpha",
+  "actions.newEquation": "New equation",
   "actions.copy": "Copy",
   "actions.copySuccess": "LaTeX copied",
   "actions.copyImage": "Copy image",

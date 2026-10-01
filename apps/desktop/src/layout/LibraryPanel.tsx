@@ -48,6 +48,7 @@ type LibraryPanelProps = {
   locale: Locale;
   storage: LibraryStorage;
   recentLimit: number;
+  newEquationRequestKey: number;
 };
 
 const aliases: Record<string, string[]> = {
@@ -112,6 +113,7 @@ export function LibraryPanel({
   locale,
   storage,
   recentLimit,
+  newEquationRequestKey,
 }: LibraryPanelProps) {
   const { t } = createTranslator(locale);
   const [query, setQuery] = useState("");
@@ -241,6 +243,41 @@ export function LibraryPanel({
       if (timer !== undefined) window.clearTimeout(timer);
     };
   }, [editor, storage]);
+
+
+  useEffect(() => {
+    if (!editor || newEquationRequestKey <= 0) return;
+
+    const createNew = async () => {
+      const current = activeEquationRef.current;
+      if (current) await storage.saveEquation(current);
+
+      const now = Date.now();
+      const next: StoredEquation = {
+        id: createId("session"),
+        document: {
+          schemaVersion: 1,
+          latex: "",
+          displayMode: "block",
+          style: {},
+        },
+        createdAt: now,
+        updatedAt: now,
+        lastOpenedAt: now,
+      };
+
+      activeEquationRef.current = next;
+      editor.setLatex("");
+      editor.focus();
+      await storage.saveEquation(next);
+      setTab("recent");
+      setHistoryEquationId(null);
+      setRevisions([]);
+      setRefreshKey((value) => value + 1);
+    };
+
+    void createNew();
+  }, [editor, newEquationRequestKey, storage]);
 
   const openStored = async (equation: StoredEquation) => {
     const next = { ...equation, lastOpenedAt: Date.now() };

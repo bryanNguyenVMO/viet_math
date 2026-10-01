@@ -47,6 +47,10 @@ describe("Phase 1 production storage contract", () => {
     expect(storage).toContain("create_collection");
     expect(storage).toContain("list_collection_equations");
     expect(storage).toContain("PRAGMA user_version = 4");
+    expect(storage).toContain("ALTER TABLE equations ADD COLUMN title TEXT");
+    expect(storage).toContain("rename_equation");
+    expect(storage).toContain("delete_equation");
+    expect(storage).toContain("PRAGMA user_version = 5");
     expect(desktopPkg).toContain('"@vietmath/storage"');
   });
 });

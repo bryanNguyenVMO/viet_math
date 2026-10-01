@@ -14,6 +14,9 @@ const workspacePath = fileURLToPath(
 const helpPath = fileURLToPath(
   new URL("../../apps/desktop/src/help/HelpDialog.tsx", import.meta.url),
 );
+const settingsPath = fileURLToPath(
+  new URL("../../apps/desktop/src/settings/SettingsDialog.tsx", import.meta.url),
+);
 
 describe("Phase 1 primary UI actions", () => {
   it("wires copy, settings, and help actions in the toolbar", () => {
@@ -52,5 +55,23 @@ describe("Phase 1 primary UI actions", () => {
     expect(workspace).toContain("changeLocale");
     expect(workspace).toContain("storage.set(SETTINGS_KEY");
     expect(workspace).toMatch(/onClick=.*changeLocale/u);
+  });
+
+  it("lets mouse users collapse and reopen both side panels", () => {
+    const workspace = readFileSync(workspacePath, "utf8");
+
+    expect(workspace).toContain("handleResizeClick");
+    expect(workspace).toContain('onClick={() => handleResizeClick("left")}');
+    expect(workspace).toContain('onClick={() => handleResizeClick("right")}');
+  });
+
+  it("closes settings and help with Escape", () => {
+    const settings = readFileSync(settingsPath, "utf8");
+    const help = readFileSync(helpPath, "utf8");
+
+    expect(settings).toContain('event.key !== "Escape"');
+    expect(settings).toContain('window.addEventListener("keydown"');
+    expect(help).toContain('event.key !== "Escape"');
+    expect(help).toContain('window.addEventListener("keydown"');
   });
 });

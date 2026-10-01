@@ -1,12 +1,9 @@
+import { invoke } from "@tauri-apps/api/core";
 import type { ClipboardPort } from "@vietmath/shared";
 
 export class BrowserClipboardPort implements ClipboardPort {
   async writeText(text: string): Promise<void> {
-    if (!navigator.clipboard?.writeText) {
-      throw new Error("Text clipboard is unavailable");
-    }
-
-    await navigator.clipboard.writeText(text);
+    await invoke("write_clipboard_text", { text });
   }
 
   async writeBlob(mimeType: string, data: Uint8Array | string): Promise<void> {

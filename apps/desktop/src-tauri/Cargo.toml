@@ -11,6 +11,7 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 rusqlite = { version = "0.32", features = ["bundled"] }
+arboard = "3"
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

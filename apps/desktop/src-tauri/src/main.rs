@@ -7,6 +7,14 @@ use tauri::Manager;
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
 #[tauri::command]
+fn write_clipboard_text(text: String) -> Result<(), String> {
+    let mut clipboard = arboard::Clipboard::new().map_err(|error| error.to_string())?;
+    clipboard
+        .set_text(text)
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
 fn hide_quick_window(app: tauri::AppHandle) -> Result<(), String> {
     let window = app
         .get_webview_window("quick")
@@ -57,6 +65,7 @@ fn main() {
             storage::save_equation,
             storage::load_equation,
             storage::list_recent_equations,
+            write_clipboard_text,
             hide_quick_window,
             show_main_window,
         ])

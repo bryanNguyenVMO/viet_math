@@ -1,31 +1,19 @@
 import type { VietMathEditor } from "@vietmath/editor";
-import { ClipboardService, type ClipboardPort } from "@vietmath/shared";
+import { ClipboardService } from "@vietmath/shared";
 import { invoke } from "@tauri-apps/api/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { BrowserClipboardPort } from "../clipboard/BrowserClipboardPort";
 import { MathEditorSurface } from "../editor/MathEditorSurface";
 
 const initialLatex = String.raw`x^2+y^2=z^2`;
-
-class BrowserTextClipboardPort implements ClipboardPort {
-  async writeText(text: string): Promise<void> {
-    if (!navigator.clipboard?.writeText) {
-      throw new Error("Text clipboard is unavailable");
-    }
-    await navigator.clipboard.writeText(text);
-  }
-
-  async writeBlob(): Promise<void> {
-    throw new Error("Rich clipboard is not used by Quick Editor");
-  }
-}
 
 export function QuickEditor() {
   const editorRef = useRef<VietMathEditor | null>(null);
   const [latex, setLatex] = useState(initialLatex);
   const [status, setStatus] = useState("");
   const clipboard = useMemo(
-    () => new ClipboardService(new BrowserTextClipboardPort()),
+    () => new ClipboardService(new BrowserClipboardPort()),
     [],
   );
 

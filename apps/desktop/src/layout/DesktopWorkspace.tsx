@@ -17,6 +17,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
@@ -55,6 +56,10 @@ export function DesktopWorkspace() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [searchRequestKey, setSearchRequestKey] = useState(0);
+  const resizeMovedRef = useRef<Record<"left" | "right", boolean>>({
+    left: false,
+    right: false,
+  });
   const { t } = createTranslator(locale);
 
   useEffect(() => {
@@ -113,9 +118,11 @@ export function DesktopWorkspace() {
       event.preventDefault();
       const startX = event.clientX;
       const startWidth = side === "left" ? leftWidth : rightWidth;
+      resizeMovedRef.current[side] = false;
 
       const move = (moveEvent: PointerEvent) => {
         const delta = moveEvent.clientX - startX;
+        if (Math.abs(delta) >= 3) resizeMovedRef.current[side] = true;
         if (side === "left") {
           setLeftCollapsed(false);
           setLeftWidth(clamp(startWidth + delta, MIN_LEFT, MAX_LEFT));
@@ -135,6 +142,16 @@ export function DesktopWorkspace() {
     },
     [leftWidth, rightWidth],
   );
+
+  const handleResizeClick = useCallback((side: "left" | "right") => {
+    if (resizeMovedRef.current[side]) {
+      resizeMovedRef.current[side] = false;
+      return;
+    }
+
+    if (side === "left") setLeftCollapsed((value) => !value);
+    else setRightCollapsed((value) => !value);
+  }, []);
 
   useEffect(() => {
     const handleShortcut = (event: globalThis.KeyboardEvent) => {
@@ -242,6 +259,7 @@ export function DesktopWorkspace() {
           data-resize-handle="left"
           aria-label={leftCollapsed ? t("layout.openLibrary") : t("layout.resizeLibrary")}
           onPointerDown={startResize("left")}
+          onClick={() => handleResizeClick("left")}
           onKeyDown={handleKey("left")}
         />
 
@@ -262,6 +280,7 @@ export function DesktopWorkspace() {
           data-resize-handle="right"
           aria-label={rightCollapsed ? t("layout.openSymbols") : t("layout.resizeSymbols")}
           onPointerDown={startResize("right")}
+          onClick={() => handleResizeClick("right")}
           onKeyDown={handleKey("right")}
         />
         <div className="vm-panel-column" data-collapsed={rightCollapsed}>

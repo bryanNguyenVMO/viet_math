@@ -53,6 +53,17 @@ pub fn migrate(connection: &Connection) -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     }
 
+    if version < 2 {
+        connection
+            .execute_batch(
+                "
+                ALTER TABLE equations ADD COLUMN favorite INTEGER NOT NULL DEFAULT 0;
+                PRAGMA user_version = 2;
+                ",
+            )
+            .map_err(|error| error.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -199,6 +210,52 @@ pub fn list_recent_equations(
 
     let rows = statement
         .query_map(params![limit.max(0)], |row| {
+            Ok((
+                row.get(0)?,
+                row.get(1)?,
+                row.get(2)?,
+                row.get(3)?,
+                row.get(4)?,
+            ))
+        })
+        .map_err(|error| error.to_string())?;
+
+    rows.collect::<Result<Vec<_>, _>>()
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn set_equation_favorite(
+    state: State<'_, StorageState>,
+    id: String,
+    favorite: bool,
+) -> Result<(), String> {
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "UPDATE equations SET favorite = ?2 WHERE id = ?1",
+            params![id, if favorite { 1 } else { 0 }],
+        )
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_favorite_equations(
+    state: State<'_, StorageState>,
+) -> Result<Vec<(String, String, i64, i64, i64)>, String> {
+    let connection = connection(&state)?;
+    let mut statement = connection
+        .prepare(
+            "SELECT id, document_json, created_at, updated_at, last_opened_at
+             FROM equations
+             WHERE favorite = 1
+             ORDER BY last_opened_at DESC",
+        )
+        .map_err(|error| error.to_string())?;
+
+    let rows = statement
+        .query_map([], |row| {
             Ok((
                 row.get(0)?,
                 row.get(1)?,

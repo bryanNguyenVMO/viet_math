@@ -6,10 +6,28 @@ import {
 } from "@vietmath/equation-model";
 import type {
   DraftRepository,
+  EquationRepository,
+  FavoriteRepository,
   SettingsRepository,
+  StoredEquation,
 } from "@vietmath/storage";
 
-export class TauriStorage implements DraftRepository, SettingsRepository {
+type StoredEquationRow = [string, string, number, number, number];
+
+function fromRow(row: StoredEquationRow): StoredEquation {
+  const [id, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
+  return {
+    id,
+    document: deserializeEquation(documentJson),
+    createdAt,
+    updatedAt,
+    lastOpenedAt,
+  };
+}
+
+export class TauriStorage
+  implements DraftRepository, SettingsRepository, EquationRepository, FavoriteRepository
+{
   async save(key: string, document: EquationDocument): Promise<void> {
     await invoke("save_draft", {
       key,
@@ -32,5 +50,42 @@ export class TauriStorage implements DraftRepository, SettingsRepository {
 
   async get(key: string): Promise<string | null> {
     return invoke<string | null>("load_setting", { key });
+  }
+
+  async saveEquation(equation: StoredEquation): Promise<void> {
+    await invoke("save_equation", {
+      id: equation.id,
+      documentJson: serializeEquation(equation.document),
+      createdAt: equation.createdAt,
+      updatedAt: equation.updatedAt,
+      lastOpenedAt: equation.lastOpenedAt,
+    });
+  }
+
+  async getEquation(id: string): Promise<StoredEquation | null> {
+    const row = await invoke<[string, number, number, number] | null>(
+      "load_equation",
+      { id },
+    );
+    if (!row) return null;
+
+    const [documentJson, createdAt, updatedAt, lastOpenedAt] = row;
+    return fromRow([id, documentJson, createdAt, updatedAt, lastOpenedAt]);
+  }
+
+  async listRecent(limit: number): Promise<StoredEquation[]> {
+    const rows = await invoke<StoredEquationRow[]>("list_recent_equations", {
+      limit,
+    });
+    return rows.map(fromRow);
+  }
+
+  async setFavorite(id: string, favorite: boolean): Promise<void> {
+    await invoke("set_equation_favorite", { id, favorite });
+  }
+
+  async listFavorites(): Promise<StoredEquation[]> {
+    const rows = await invoke<StoredEquationRow[]>("list_favorite_equations");
+    return rows.map(fromRow);
   }
 }

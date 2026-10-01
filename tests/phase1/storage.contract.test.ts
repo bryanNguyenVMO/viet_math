@@ -32,6 +32,9 @@ describe("Phase 1 production storage contract", () => {
     expect(storage).toContain("save_draft");
     expect(storage).toContain("load_draft");
     expect(storage).toContain("clear_draft");
+    expect(storage).toContain("set_equation_favorite");
+    expect(storage).toContain("list_favorite_equations");
+    expect(storage).toContain("favorite INTEGER NOT NULL DEFAULT 0");
     expect(desktopPkg).toContain('"@vietmath/storage"');
   });
 });

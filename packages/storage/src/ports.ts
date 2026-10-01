@@ -9,8 +9,8 @@ export type StoredEquation = {
 };
 
 export interface EquationRepository {
-  save(equation: StoredEquation): Promise<void>;
-  get(id: string): Promise<StoredEquation | null>;
+  saveEquation(equation: StoredEquation): Promise<void>;
+  getEquation(id: string): Promise<StoredEquation | null>;
   listRecent(limit: number): Promise<StoredEquation[]>;
 }
 

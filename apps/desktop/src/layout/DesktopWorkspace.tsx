@@ -244,7 +244,7 @@ export function DesktopWorkspace() {
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
         <div className="vm-panel-column" data-collapsed={leftCollapsed}>
-          <LibraryPanel editor={editor} locale={locale} />
+          <LibraryPanel editor={editor} locale={locale} storage={storage} />
         </div>
         <button
           type="button"

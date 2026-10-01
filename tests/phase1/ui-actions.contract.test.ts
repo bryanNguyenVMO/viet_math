@@ -38,6 +38,12 @@ describe("Phase 1 primary UI actions", () => {
     expect(source).toContain("onChange=");
     expect(source).toContain("editor?.setLatex");
     expect(source).toContain("onClick=");
+    expect(source).toContain("listRecent");
+    expect(source).toContain("listFavorites");
+    expect(source).toContain("setFavorite");
+    expect(source).toContain('setTab("recent")');
+    expect(source).toContain('setTab("favorites")');
+    expect(source).toContain('setTab("templates")');
   });
 
   it("provides an actual Help dialog and opens it from the workspace", () => {

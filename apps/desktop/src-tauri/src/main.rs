@@ -65,6 +65,8 @@ fn main() {
             storage::save_equation,
             storage::load_equation,
             storage::list_recent_equations,
+            storage::set_equation_favorite,
+            storage::list_favorite_equations,
             write_clipboard_text,
             hide_quick_window,
             show_main_window,

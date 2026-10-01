@@ -93,6 +93,7 @@ export function DesktopWorkspace() {
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [layoutLoaded, setLayoutLoaded] = useState(false);
   const [searchRequestKey, setSearchRequestKey] = useState(0);
+  const [newEquationRequestKey, setNewEquationRequestKey] = useState(0);
   const resizeMovedRef = useRef<Record<"left" | "right", boolean>>({
     left: false,
     right: false,
@@ -346,6 +347,7 @@ export function DesktopWorkspace() {
         onOpenSettings={() => setSettingsOpen(true)}
         onOpenHelp={() => setHelpOpen(true)}
         onOpenExport={() => setExportOpen(true)}
+        onNewEquation={() => setNewEquationRequestKey((value) => value + 1)}
       />
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
@@ -355,6 +357,7 @@ export function DesktopWorkspace() {
             locale={locale}
             storage={storage}
             recentLimit={settings.recentLimit}
+            newEquationRequestKey={newEquationRequestKey}
           />
         </div>
         <button

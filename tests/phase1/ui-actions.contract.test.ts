@@ -19,9 +19,10 @@ const settingsPath = fileURLToPath(
 );
 
 describe("Phase 1 primary UI actions", () => {
-  it("wires copy, settings, and help actions in the toolbar", () => {
+  it("wires new, copy, settings, and help actions in the toolbar", () => {
     const source = readFileSync(toolbarPath, "utf8");
 
+    expect(source).toContain("onNewEquation");
     expect(source).toContain("ClipboardService");
     expect(source).toContain("copyLatex");
     expect(source).toContain("onOpenSettings");

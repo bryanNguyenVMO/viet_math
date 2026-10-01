@@ -20,6 +20,7 @@ import {
   FolderPlus,
   History,
   LayoutTemplate,
+  Pencil,
   RotateCcw,
   Search,
   Star,
@@ -76,12 +77,14 @@ function matchesTemplate(
 
 function matchesEquation(equation: StoredEquation, query: string) {
   if (!query) return true;
-  return normalizeVietnameseSearch(equation.document.latex).includes(
+  const haystack = [equation.title ?? "", equation.document.latex].join(" ");
+  return normalizeVietnameseSearch(haystack).includes(
     normalizeVietnameseSearch(query),
   );
 }
 
 function equationTitle(equation: StoredEquation) {
+  if (equation.title?.trim()) return equation.title.trim();
   const latex = equation.document.latex.trim();
   if (!latex) return "LaTeX";
   return latex.length > 34 ? `${latex.slice(0, 34)}…` : latex;
@@ -123,6 +126,8 @@ export function LibraryPanel({
   const [collectionEquations, setCollectionEquations] = useState<StoredEquation[]>([]);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [collectionStatus, setCollectionStatus] = useState("");
+  const [editingEquationId, setEditingEquationId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const activeEquationRef = useRef<StoredEquation | null>(null);
 
@@ -253,6 +258,47 @@ export function LibraryPanel({
     editor?.setLatex(equation.document.latex);
     editor?.focus();
     setTab("recent");
+    setRefreshKey((value) => value + 1);
+  };
+
+  const beginRename = (equation: StoredEquation) => {
+    setEditingEquationId(equation.id);
+    setEditingTitle(equation.title ?? "");
+  };
+
+  const saveRename = async (equation: StoredEquation) => {
+    const title = editingTitle.trim();
+    await storage.renameEquation(equation.id, title || null);
+    if (activeEquationRef.current?.id === equation.id) {
+      activeEquationRef.current = {
+        ...activeEquationRef.current,
+        title: title || undefined,
+      };
+    }
+    setEditingEquationId(null);
+    setEditingTitle("");
+    setRefreshKey((value) => value + 1);
+  };
+
+  const deleteEquation = async (equation: StoredEquation) => {
+    if (!window.confirm(t("library.deleteConfirm"))) return;
+
+    await storage.deleteEquation(equation.id);
+    if (activeEquationRef.current?.id === equation.id) {
+      const now = Date.now();
+      activeEquationRef.current = {
+        ...equation,
+        id: createId("session"),
+        title: undefined,
+        createdAt: now,
+        updatedAt: now,
+        lastOpenedAt: now,
+      };
+    }
+    if (historyEquationId === equation.id) {
+      setHistoryEquationId(null);
+      setRevisions([]);
+    }
     setRefreshKey((value) => value + 1);
   };
 
@@ -495,6 +541,22 @@ export function LibraryPanel({
                 <button
                   type="button"
                   className="vm-library-action-button"
+                  aria-label={t("library.renameEquation")}
+                  onClick={() => beginRename(equation)}
+                >
+                  <Pencil size={15} />
+                </button>
+                <button
+                  type="button"
+                  className="vm-library-action-button"
+                  aria-label={t("library.deleteEquation")}
+                  onClick={() => void deleteEquation(equation)}
+                >
+                  <Trash2 size={15} />
+                </button>
+                <button
+                  type="button"
+                  className="vm-library-action-button"
                   aria-label={t("library.history")}
                   aria-expanded={historyEquationId === equation.id}
                   onClick={() => void toggleHistory(equation)}
@@ -515,6 +577,28 @@ export function LibraryPanel({
                   <Star size={15} fill={favoriteIds.has(equation.id) ? "currentColor" : "none"} />
                 </button>
               </div>
+
+              {editingEquationId === equation.id ? (
+                <div className="vm-equation-rename">
+                  <input
+                    autoFocus
+                    value={editingTitle}
+                    placeholder={t("library.renamePlaceholder")}
+                    aria-label={t("library.renamePlaceholder")}
+                    onChange={(event) => setEditingTitle(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") void saveRename(equation);
+                      if (event.key === "Escape") {
+                        setEditingEquationId(null);
+                        setEditingTitle("");
+                      }
+                    }}
+                  />
+                  <button type="button" onClick={() => void saveRename(equation)}>
+                    {t("library.saveRename")}
+                  </button>
+                </div>
+              ) : null}
 
               {historyEquationId === equation.id ? (
                 <div className="vm-history-list">

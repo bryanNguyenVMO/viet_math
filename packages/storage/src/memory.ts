@@ -77,6 +77,25 @@ export class MemoryStorage {
       .map(clone);
   }
 
+  async renameEquation(id: string, title: string | null): Promise<void> {
+    const equation = this.equations.get(id);
+    if (!equation) return;
+    const trimmed = title?.trim();
+    this.equations.set(
+      id,
+      clone({ ...equation, title: trimmed ? trimmed : undefined }),
+    );
+  }
+
+  async deleteEquation(id: string): Promise<void> {
+    this.equations.delete(id);
+    this.favorites.delete(id);
+    this.revisions.delete(id);
+    for (const equationIds of this.collectionEquations.values()) {
+      equationIds.delete(id);
+    }
+  }
+
   async setFavorite(id: string, favorite: boolean): Promise<void> {
     if (favorite) this.favorites.add(id);
     else this.favorites.delete(id);

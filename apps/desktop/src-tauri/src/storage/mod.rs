@@ -105,6 +105,17 @@ pub fn migrate(connection: &Connection) -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     }
 
+    if version < 5 {
+        connection
+            .execute_batch(
+                "
+                ALTER TABLE equations ADD COLUMN title TEXT;
+                PRAGMA user_version = 5;
+                ",
+            )
+            .map_err(|error| error.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -197,6 +208,7 @@ pub fn load_setting(
 pub fn save_equation(
     state: State<'_, StorageState>,
     id: String,
+    title: Option<String>,
     document_json: String,
     created_at: i64,
     updated_at: i64,
@@ -240,13 +252,14 @@ pub fn save_equation(
 
     connection
         .execute(
-            "INSERT INTO equations (id, document_json, created_at, updated_at, last_opened_at)
-             VALUES (?1, ?2, ?3, ?4, ?5)
+            "INSERT INTO equations (id, title, document_json, created_at, updated_at, last_opened_at)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)
              ON CONFLICT(id) DO UPDATE SET
+               title = COALESCE(excluded.title, equations.title),
                document_json = excluded.document_json,
                updated_at = excluded.updated_at,
                last_opened_at = excluded.last_opened_at",
-            params![id, document_json, created_at, updated_at, last_opened_at],
+            params![id, title, document_json, created_at, updated_at, last_opened_at],
         )
         .map_err(|error| error.to_string())?;
     Ok(())
@@ -256,11 +269,11 @@ pub fn save_equation(
 pub fn load_equation(
     state: State<'_, StorageState>,
     id: String,
-) -> Result<Option<(String, i64, i64, i64)>, String> {
+) -> Result<Option<(Option<String>, String, i64, i64, i64)>, String> {
     let connection = connection(&state)?;
     connection
         .query_row(
-            "SELECT document_json, created_at, updated_at, last_opened_at
+            "SELECT title, document_json, created_at, updated_at, last_opened_at
              FROM equations WHERE id = ?1",
             params![id],
             |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
@@ -273,11 +286,11 @@ pub fn load_equation(
 pub fn list_recent_equations(
     state: State<'_, StorageState>,
     limit: i64,
-) -> Result<Vec<(String, String, i64, i64, i64)>, String> {
+) -> Result<Vec<(String, Option<String>, String, i64, i64, i64)>, String> {
     let connection = connection(&state)?;
     let mut statement = connection
         .prepare(
-            "SELECT id, document_json, created_at, updated_at, last_opened_at
+            "SELECT id, title, document_json, created_at, updated_at, last_opened_at
              FROM equations
              ORDER BY last_opened_at DESC
              LIMIT ?1",
@@ -292,12 +305,56 @@ pub fn list_recent_equations(
                 row.get(2)?,
                 row.get(3)?,
                 row.get(4)?,
+                row.get(5)?,
             ))
         })
         .map_err(|error| error.to_string())?;
 
     rows.collect::<Result<Vec<_>, _>>()
         .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn rename_equation(
+    state: State<'_, StorageState>,
+    id: String,
+    title: Option<String>,
+) -> Result<(), String> {
+    let normalized = title
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty());
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "UPDATE equations SET title = ?2 WHERE id = ?1",
+            params![id, normalized],
+        )
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn delete_equation(
+    state: State<'_, StorageState>,
+    id: String,
+) -> Result<(), String> {
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "DELETE FROM collection_equations WHERE equation_id = ?1",
+            params![&id],
+        )
+        .map_err(|error| error.to_string())?;
+    connection
+        .execute(
+            "DELETE FROM equation_revisions WHERE equation_id = ?1",
+            params![&id],
+        )
+        .map_err(|error| error.to_string())?;
+    connection
+        .execute("DELETE FROM equations WHERE id = ?1", params![id])
+        .map_err(|error| error.to_string())?;
+    Ok(())
 }
 
 #[tauri::command]
@@ -319,11 +376,11 @@ pub fn set_equation_favorite(
 #[tauri::command]
 pub fn list_favorite_equations(
     state: State<'_, StorageState>,
-) -> Result<Vec<(String, String, i64, i64, i64)>, String> {
+) -> Result<Vec<(String, Option<String>, String, i64, i64, i64)>, String> {
     let connection = connection(&state)?;
     let mut statement = connection
         .prepare(
-            "SELECT id, document_json, created_at, updated_at, last_opened_at
+            "SELECT id, title, document_json, created_at, updated_at, last_opened_at
              FROM equations
              WHERE favorite = 1
              ORDER BY last_opened_at DESC",
@@ -338,6 +395,7 @@ pub fn list_favorite_equations(
                 row.get(2)?,
                 row.get(3)?,
                 row.get(4)?,
+                row.get(5)?,
             ))
         })
         .map_err(|error| error.to_string())?;
@@ -497,11 +555,11 @@ pub fn remove_equation_from_collection(
 pub fn list_collection_equations(
     state: State<'_, StorageState>,
     collection_id: String,
-) -> Result<Vec<(String, String, i64, i64, i64)>, String> {
+) -> Result<Vec<(String, Option<String>, String, i64, i64, i64)>, String> {
     let connection = connection(&state)?;
     let mut statement = connection
         .prepare(
-            "SELECT e.id, e.document_json, e.created_at, e.updated_at, e.last_opened_at
+            "SELECT e.id, e.title, e.document_json, e.created_at, e.updated_at, e.last_opened_at
              FROM collection_equations ce
              JOIN equations e ON e.id = ce.equation_id
              WHERE ce.collection_id = ?1
@@ -517,6 +575,7 @@ pub fn list_collection_equations(
                 row.get(2)?,
                 row.get(3)?,
                 row.get(4)?,
+                row.get(5)?,
             ))
         })
         .map_err(|error| error.to_string())?;

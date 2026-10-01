@@ -489,7 +489,7 @@ select { font: inherit; }
   cursor: pointer;
 }
 
-.vm-quick-actions button:first-child {
+.vm-quick-actions button:first-of-type {
   border-color: #2563eb;
   background: #2563eb;
   color: #fff;

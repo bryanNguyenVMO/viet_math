@@ -235,7 +235,7 @@ select { font: inherit; }
   border: 0;
   outline: 0;
   padding: 14px;
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: var(--vm-editor-font-size, clamp(28px, 4vw, 44px));
   background: transparent;
   color: var(--vm-text);
 }
@@ -566,6 +566,20 @@ select { font: inherit; }
   display: grid;
   gap: 14px;
   padding: 18px 16px;
+}
+
+.vm-settings-form h3 {
+  margin: 6px 0 -2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--vm-border);
+  color: var(--vm-text);
+  font-size: 12px;
+}
+
+.vm-settings-form h3:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .vm-settings-form label {

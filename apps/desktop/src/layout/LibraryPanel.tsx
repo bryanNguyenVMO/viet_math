@@ -25,6 +25,7 @@ type LibraryPanelProps = {
   editor: VietMathEditor | null;
   locale: Locale;
   storage: LibraryStorage;
+  recentLimit: number;
 };
 
 const aliases: Record<string, string[]> = {
@@ -69,7 +70,12 @@ function createEquationId(prefix = "eq") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function LibraryPanel({ editor, locale, storage }: LibraryPanelProps) {
+export function LibraryPanel({
+  editor,
+  locale,
+  storage,
+  recentLimit,
+}: LibraryPanelProps) {
   const { t } = createTranslator(locale);
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<LibraryTab>("recent");
@@ -97,12 +103,12 @@ export function LibraryPanel({ editor, locale, storage }: LibraryPanelProps) {
 
   const refreshLibrary = useCallback(async () => {
     const [nextRecent, nextFavorites] = await Promise.all([
-      storage.listRecent(20),
+      storage.listRecent(recentLimit),
       storage.listFavorites(),
     ]);
     setRecent(nextRecent);
     setFavorites(nextFavorites);
-  }, [storage]);
+  }, [recentLimit, storage]);
 
   useEffect(() => {
     void refreshLibrary();

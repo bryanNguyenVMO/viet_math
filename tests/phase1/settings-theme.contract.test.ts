@@ -18,6 +18,9 @@ describe("Phase 1 settings and theme UI", () => {
     expect(source).toContain('theme');
     expect(source).toContain('exportScale');
     expect(source).toContain('exportBackground');
+    expect(source).toContain("editorFontSize");
+    expect(source).toContain("autosaveDelay");
+    expect(source).toContain("recentLimit");
     expect(source).toContain("storage.set");
   });
 
@@ -27,5 +30,8 @@ describe("Phase 1 settings and theme UI", () => {
     expect(source).toContain("resolveTheme");
     expect(source).toContain("document.documentElement.dataset.theme");
     expect(source).toContain("<SettingsDialog");
+    expect(source).toContain("--vm-editor-font-size");
+    expect(source).toContain("settings.autosaveDelay");
+    expect(source).toContain("settings.recentLimit");
   });
 });

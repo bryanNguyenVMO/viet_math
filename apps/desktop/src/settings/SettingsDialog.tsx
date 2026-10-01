@@ -2,8 +2,11 @@ import {
   SETTINGS_KEY,
   type AppSettings,
   type AppTheme,
+  type AutosaveDelay,
+  type EditorFontSize,
   type ExportBackground,
   type ExportScale,
+  type RecentLimit,
 } from "@vietmath/shared";
 import type { SettingsRepository } from "@vietmath/storage";
 import { useEffect, useState } from "react";
@@ -69,6 +72,7 @@ export function SettingsDialog({
         </header>
 
         <div className="vm-settings-form">
+          <h3>{t("settings.appearanceSection")}</h3>
           <label>
             <span>{t("settings.theme")}</span>
             <select
@@ -96,6 +100,63 @@ export function SettingsDialog({
             </select>
           </label>
 
+          <h3>{t("settings.editorSection")}</h3>
+          <label>
+            <span>{t("settings.editorFontSize")}</span>
+            <select
+              value={draft.editorFontSize}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  editorFontSize: Number(event.target.value) as EditorFontSize,
+                }))
+              }
+            >
+              <option value={28}>28 px</option>
+              <option value={32}>32 px</option>
+              <option value={36}>36 px</option>
+              <option value={40}>40 px</option>
+              <option value={44}>44 px</option>
+            </select>
+          </label>
+
+          <label>
+            <span>{t("settings.autosaveDelay")}</span>
+            <select
+              value={draft.autosaveDelay}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  autosaveDelay: Number(event.target.value) as AutosaveDelay,
+                }))
+              }
+            >
+              <option value={150}>150 ms</option>
+              <option value={300}>300 ms</option>
+              <option value={500}>500 ms</option>
+              <option value={1000}>1 s</option>
+            </select>
+          </label>
+
+          <h3>{t("settings.librarySection")}</h3>
+          <label>
+            <span>{t("settings.recentLimit")}</span>
+            <select
+              value={draft.recentLimit}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  recentLimit: Number(event.target.value) as RecentLimit,
+                }))
+              }
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </label>
+
+          <h3>{t("settings.exportSection")}</h3>
           <label>
             <span>{t("settings.exportScale")}</span>
             <select

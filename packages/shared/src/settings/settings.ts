@@ -3,12 +3,18 @@ export type ResolvedTheme = "light" | "dark";
 export type ExportScale = 1 | 2 | 4;
 export type ExportBackground = "transparent" | "white";
 export type AppLocale = "vi" | "en";
+export type EditorFontSize = 28 | 32 | 36 | 40 | 44;
+export type AutosaveDelay = 150 | 300 | 500 | 1000;
+export type RecentLimit = 10 | 20 | 50;
 
 export type AppSettings = {
   theme: AppTheme;
   locale: AppLocale;
   exportScale: ExportScale;
   exportBackground: ExportBackground;
+  editorFontSize: EditorFontSize;
+  autosaveDelay: AutosaveDelay;
+  recentLimit: RecentLimit;
 };
 
 export const SETTINGS_KEY = "app-settings";
@@ -18,23 +24,37 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
   locale: "vi",
   exportScale: 2,
   exportBackground: "transparent",
+  editorFontSize: 36,
+  autosaveDelay: 300,
+  recentLimit: 20,
 };
 
-function isAppSettings(value: unknown): value is AppSettings {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<AppSettings>;
+function isTheme(value: unknown): value is AppTheme {
+  return value === "light" || value === "dark" || value === "system";
+}
 
-  return (
-    (candidate.theme === "light" ||
-      candidate.theme === "dark" ||
-      candidate.theme === "system") &&
-    (candidate.locale === "vi" || candidate.locale === "en") &&
-    (candidate.exportScale === 1 ||
-      candidate.exportScale === 2 ||
-      candidate.exportScale === 4) &&
-    (candidate.exportBackground === "transparent" ||
-      candidate.exportBackground === "white")
-  );
+function isLocale(value: unknown): value is AppLocale {
+  return value === "vi" || value === "en";
+}
+
+function isExportScale(value: unknown): value is ExportScale {
+  return value === 1 || value === 2 || value === 4;
+}
+
+function isExportBackground(value: unknown): value is ExportBackground {
+  return value === "transparent" || value === "white";
+}
+
+function isEditorFontSize(value: unknown): value is EditorFontSize {
+  return value === 28 || value === 32 || value === 36 || value === 40 || value === 44;
+}
+
+function isAutosaveDelay(value: unknown): value is AutosaveDelay {
+  return value === 150 || value === 300 || value === 500 || value === 1000;
+}
+
+function isRecentLimit(value: unknown): value is RecentLimit {
+  return value === 10 || value === 20 || value === 50;
 }
 
 export function normalizeAppSettings(raw: string | null | undefined): AppSettings {
@@ -42,7 +62,30 @@ export function normalizeAppSettings(raw: string | null | undefined): AppSetting
 
   try {
     const parsed = JSON.parse(raw) as unknown;
-    return isAppSettings(parsed) ? parsed : { ...DEFAULT_APP_SETTINGS };
+    if (!parsed || typeof parsed !== "object") {
+      return { ...DEFAULT_APP_SETTINGS };
+    }
+
+    const candidate = parsed as Partial<AppSettings>;
+    return {
+      theme: isTheme(candidate.theme) ? candidate.theme : DEFAULT_APP_SETTINGS.theme,
+      locale: isLocale(candidate.locale) ? candidate.locale : DEFAULT_APP_SETTINGS.locale,
+      exportScale: isExportScale(candidate.exportScale)
+        ? candidate.exportScale
+        : DEFAULT_APP_SETTINGS.exportScale,
+      exportBackground: isExportBackground(candidate.exportBackground)
+        ? candidate.exportBackground
+        : DEFAULT_APP_SETTINGS.exportBackground,
+      editorFontSize: isEditorFontSize(candidate.editorFontSize)
+        ? candidate.editorFontSize
+        : DEFAULT_APP_SETTINGS.editorFontSize,
+      autosaveDelay: isAutosaveDelay(candidate.autosaveDelay)
+        ? candidate.autosaveDelay
+        : DEFAULT_APP_SETTINGS.autosaveDelay,
+      recentLimit: isRecentLimit(candidate.recentLimit)
+        ? candidate.recentLimit
+        : DEFAULT_APP_SETTINGS.recentLimit,
+    };
   } catch {
     return { ...DEFAULT_APP_SETTINGS };
   }

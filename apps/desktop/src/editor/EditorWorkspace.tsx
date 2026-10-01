@@ -24,6 +24,7 @@ type EditorWorkspaceProps = {
   initialLatex: string;
   locale: Locale;
   storage: DraftRepository;
+  autosaveDelay: number;
   onEditorReady: (editor: VietMathEditor | null) => void;
 };
 
@@ -51,6 +52,7 @@ export function EditorWorkspace({
   initialLatex,
   locale,
   storage,
+  autosaveDelay,
   onEditorReady,
 }: EditorWorkspaceProps) {
   const [mode, setMode] = useState<EditorViewMode>("visual");
@@ -67,8 +69,8 @@ export function EditorWorkspace({
     style: {},
   });
   const autosave = useMemo(
-    () => createDraftAutosave(storage, DRAFT_KEY, 300),
-    [storage],
+    () => createDraftAutosave(storage, DRAFT_KEY, autosaveDelay),
+    [autosaveDelay, storage],
   );
   const { t } = createTranslator(locale);
 

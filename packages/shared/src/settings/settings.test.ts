@@ -31,6 +31,26 @@ describe("VietMath app settings", () => {
     expect(settings.locale).toBe("en");
     expect(settings.exportScale).toBe(4);
     expect(settings.exportBackground).toBe("transparent");
+    expect(settings.editorFontSize).toBe(DEFAULT_APP_SETTINGS.editorFontSize);
+    expect(settings.autosaveDelay).toBe(DEFAULT_APP_SETTINGS.autosaveDelay);
+    expect(settings.recentLimit).toBe(DEFAULT_APP_SETTINGS.recentLimit);
+  });
+
+  it("migrates old partial settings without discarding valid preferences", () => {
+    const settings = normalizeAppSettings(JSON.stringify({
+      theme: "light",
+      locale: "vi",
+      exportScale: 1,
+      exportBackground: "white",
+    }));
+
+    expect(settings).toEqual({
+      ...DEFAULT_APP_SETTINGS,
+      theme: "light",
+      locale: "vi",
+      exportScale: 1,
+      exportBackground: "white",
+    });
   });
 
   it("resolves system theme only from the OS preference", () => {

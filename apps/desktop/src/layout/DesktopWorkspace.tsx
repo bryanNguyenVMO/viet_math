@@ -157,6 +157,13 @@ export function DesktopWorkspace() {
   ]);
 
   useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--vm-editor-font-size",
+      `${settings.editorFontSize}px`,
+    );
+  }, [settings.editorFontSize]);
+
+  useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
 
     const apply = () => {
@@ -325,7 +332,12 @@ export function DesktopWorkspace() {
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
         <div className="vm-panel-column" data-collapsed={leftCollapsed}>
-          <LibraryPanel editor={editor} locale={locale} storage={storage} />
+          <LibraryPanel
+            editor={editor}
+            locale={locale}
+            storage={storage}
+            recentLimit={settings.recentLimit}
+          />
         </div>
         <button
           type="button"
@@ -343,6 +355,7 @@ export function DesktopWorkspace() {
               initialLatex={initialLatex}
               locale={locale}
               storage={storage}
+              autosaveDelay={settings.autosaveDelay}
               onEditorReady={handleEditorReady}
             />
           </section>

@@ -1,4 +1,5 @@
 import { createTranslator, type Locale } from "@vietmath/i18n";
+import { useEffect } from "react";
 
 type HelpDialogProps = {
   open: boolean;
@@ -8,6 +9,19 @@ type HelpDialogProps = {
 
 export function HelpDialog({ open, locale, onClose }: HelpDialogProps) {
   const { t } = createTranslator(locale);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, open]);
 
   if (!open) return null;
 

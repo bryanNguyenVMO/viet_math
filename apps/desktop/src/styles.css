@@ -946,3 +946,41 @@ select { font: inherit; }
   font-size: 11px;
   line-height: 1.45;
 }
+
+
+.vm-equation-rename {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  margin-top: 5px;
+  padding: 7px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-bg);
+}
+
+.vm-equation-rename input {
+  min-width: 0;
+  border: 1px solid var(--vm-border);
+  border-radius: 6px;
+  padding: 6px 7px;
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  font-size: 11px;
+}
+
+.vm-equation-rename input:focus {
+  border-color: var(--vm-primary);
+  outline: none;
+}
+
+.vm-equation-rename button {
+  border: 1px solid var(--vm-primary);
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: var(--vm-primary);
+  color: white;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+}

@@ -3,6 +3,7 @@
 mod storage;
 
 use rusqlite::Connection;
+use std::borrow::Cow;
 use std::path::{Path, PathBuf};
 use tauri::Manager;
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
@@ -12,6 +13,24 @@ fn write_clipboard_text(text: String) -> Result<(), String> {
     let mut clipboard = arboard::Clipboard::new().map_err(|error| error.to_string())?;
     clipboard
         .set_text(text)
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+fn write_clipboard_image(png: Vec<u8>) -> Result<(), String> {
+    let decoded = image::load_from_memory_with_format(&png, image::ImageFormat::Png)
+        .map_err(|error| error.to_string())?
+        .to_rgba8();
+    let (width, height) = decoded.dimensions();
+    let data = arboard::ImageData {
+        width: width as usize,
+        height: height as usize,
+        bytes: Cow::Owned(decoded.into_raw()),
+    };
+
+    let mut clipboard = arboard::Clipboard::new().map_err(|error| error.to_string())?;
+    clipboard
+        .set_image(data)
         .map_err(|error| error.to_string())
 }
 
@@ -117,6 +136,7 @@ fn main() {
             storage::set_equation_favorite,
             storage::list_favorite_equations,
             write_clipboard_text,
+            write_clipboard_image,
             save_export_file,
             hide_quick_window,
             show_main_window,

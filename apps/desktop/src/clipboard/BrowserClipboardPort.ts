@@ -7,6 +7,21 @@ export class BrowserClipboardPort implements ClipboardPort {
   }
 
   async writeBlob(mimeType: string, data: Uint8Array | string): Promise<void> {
+    if (mimeType === "image/png") {
+      if (typeof data === "string") {
+        throw new Error("PNG clipboard data must be binary");
+      }
+      await invoke("write_clipboard_image", { png: Array.from(data) });
+      return;
+    }
+
+    if (mimeType === "application/mathml+xml") {
+      const text =
+        typeof data === "string" ? data : new TextDecoder().decode(data);
+      await invoke("write_clipboard_text", { text });
+      return;
+    }
+
     if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
       throw new Error("Rich clipboard is unavailable");
     }

@@ -29,8 +29,21 @@ describe("native desktop clipboard", () => {
     const main = readFileSync(mainPath, "utf8");
 
     expect(cargo).toContain("arboard");
+    expect(cargo).toContain('image = { version = "0.25"');
     expect(main).toContain("fn write_clipboard_text");
+    expect(main).toContain("fn write_clipboard_image");
+    expect(main).toContain("set_image");
     expect(main).toContain("write_clipboard_text,");
+    expect(main).toContain("write_clipboard_image,");
+  });
+
+  it("routes PNG and MathML through deterministic desktop clipboard paths", () => {
+    const port = readFileSync(portPath, "utf8");
+
+    expect(port).toContain('mimeType === "image/png"');
+    expect(port).toContain('invoke("write_clipboard_image"');
+    expect(port).toContain('mimeType === "application/mathml+xml"');
+    expect(port).toContain('invoke("write_clipboard_text"');
   });
 
   it("uses the same native clipboard port in Quick Editor", () => {

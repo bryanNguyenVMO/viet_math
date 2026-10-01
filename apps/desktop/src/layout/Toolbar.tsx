@@ -1,23 +1,36 @@
+import type { EquationDocument } from "@vietmath/equation-model";
 import {
   STRUCTURE_TEMPLATES,
   type StructureTemplateName,
   type VietMathEditor,
 } from "@vietmath/editor";
+import { exportMathMl, exportPng } from "@vietmath/exporters";
 import {
   createTranslator,
   type Locale,
   type TranslationKey,
 } from "@vietmath/i18n";
-import { ClipboardService } from "@vietmath/shared";
+import { ClipboardService, type AppSettings } from "@vietmath/shared";
 import { Button, IconButton } from "@vietmath/ui";
-import { Copy, Download, HelpCircle, Redo2, Settings, Undo2 } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileCode2,
+  HelpCircle,
+  Image as ImageIcon,
+  Redo2,
+  Settings,
+  Undo2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { BrowserClipboardPort } from "../clipboard/BrowserClipboardPort";
+import { MathLiveExportBackend } from "../export/MathLiveExportBackend";
 
 type ToolbarProps = {
   editor: VietMathEditor | null;
   locale: Locale;
+  settings: AppSettings;
   onOpenSettings: () => void;
   onOpenHelp: () => void;
   onOpenExport: () => void;
@@ -39,9 +52,19 @@ const structures: Array<{
   { name: "cases", labelKey: "structures.cases", sample: "{ }" },
 ];
 
+function currentEquation(editor: VietMathEditor): EquationDocument {
+  return {
+    schemaVersion: 1,
+    latex: editor.getLatex(),
+    displayMode: "block",
+    style: {},
+  };
+}
+
 export function Toolbar({
   editor,
   locale,
+  settings,
   onOpenSettings,
   onOpenHelp,
   onOpenExport,
@@ -51,6 +74,7 @@ export function Toolbar({
     () => new ClipboardService(new BrowserClipboardPort()),
     [],
   );
+  const renderer = useMemo(() => new MathLiveExportBackend(), []);
   const [copyStatus, setCopyStatus] = useState("");
 
   const insert = (name: StructureTemplateName) => {
@@ -58,12 +82,45 @@ export function Toolbar({
     editor?.focus();
   };
 
-  const copy = async () => {
+  const copyLatex = async () => {
     if (!editor) return;
-
     const result = await clipboard.copyLatex(editor.getLatex());
     setCopyStatus(
       result.ok ? t("actions.copySuccess") : t("actions.copyFailed"),
+    );
+  };
+
+  const copyImage = async () => {
+    if (!editor) return;
+
+    const exported = await exportPng(currentEquation(editor), renderer, {
+      scale: settings.exportScale,
+      background: settings.exportBackground,
+      color: "#000000",
+    });
+    if (!exported.ok) {
+      setCopyStatus(t("actions.copyFailed"));
+      return;
+    }
+
+    const result = await clipboard.copyImage(exported.data);
+    setCopyStatus(
+      result.ok ? t("actions.copyImageSuccess") : t("actions.copyFailed"),
+    );
+  };
+
+  const copyMathMl = async () => {
+    if (!editor) return;
+
+    const exported = exportMathMl(currentEquation(editor), renderer);
+    if (!exported.ok) {
+      setCopyStatus(t("actions.copyFailed"));
+      return;
+    }
+
+    const result = await clipboard.copyMathMl(exported.data);
+    setCopyStatus(
+      result.ok ? t("actions.copyMathMlSuccess") : t("actions.copyFailed"),
     );
   };
 
@@ -106,7 +163,25 @@ export function Toolbar({
       <Button variant="ghost" disabled={!editor} onClick={onOpenExport}>
         <Download size={15} /> {t("actions.export")}
       </Button>
-      <Button variant="primary" disabled={!editor} onClick={() => void copy()}>
+      <IconButton
+        aria-label={t("actions.copyImage")}
+        title={t("actions.copyImage")}
+        icon={<ImageIcon size={17} />}
+        disabled={!editor}
+        onClick={() => void copyImage()}
+      />
+      <IconButton
+        aria-label={t("actions.copyMathMl")}
+        title={t("actions.copyMathMl")}
+        icon={<FileCode2 size={17} />}
+        disabled={!editor}
+        onClick={() => void copyMathMl()}
+      />
+      <Button
+        variant="primary"
+        disabled={!editor}
+        onClick={() => void copyLatex()}
+      >
         <Copy size={15} /> {t("actions.copy")}
       </Button>
       <IconButton

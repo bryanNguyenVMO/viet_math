@@ -317,6 +317,7 @@ export function DesktopWorkspace() {
       <Toolbar
         editor={editor}
         locale={locale}
+        settings={settings}
         onOpenSettings={() => setSettingsOpen(true)}
         onOpenHelp={() => setHelpOpen(true)}
         onOpenExport={() => setExportOpen(true)}

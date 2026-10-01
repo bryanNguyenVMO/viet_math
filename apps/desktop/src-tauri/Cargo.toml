@@ -12,6 +12,7 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = [] }
 rusqlite = { version = "0.32", features = ["bundled"] }
 arboard = "3"
+image = { version = "0.25", default-features = false, features = ["png"] }
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

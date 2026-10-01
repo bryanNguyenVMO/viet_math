@@ -29,13 +29,16 @@ describe("desktop export UI", () => {
     expect(workspace).toContain("exportOpen");
   });
 
-  it("exports PNG, SVG and MathML through the production exporter boundary", () => {
+  it("exports PNG, SVG, MathML and LaTeX through the production exporter boundary", () => {
     const dialog = readFileSync(dialogPath, "utf8");
     const backend = readFileSync(backendPath, "utf8");
 
     expect(dialog).toContain("exportPng");
     expect(dialog).toContain("exportSvg");
     expect(dialog).toContain("exportMathMl");
+    expect(dialog).toContain("exportLatex");
+    expect(dialog).toContain('runExport("latex")');
+    expect(dialog).toContain('"tex"');
     expect(dialog).toContain('invoke<string>("save_export_file"');
     expect(backend).toContain("convertLatexToMathMl");
     expect(backend).toContain("canvas.toBlob");

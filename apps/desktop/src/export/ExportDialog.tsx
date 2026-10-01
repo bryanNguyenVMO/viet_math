@@ -1,16 +1,26 @@
 import type { VietMathEditor } from "@vietmath/editor";
 import type { EquationDocument } from "@vietmath/equation-model";
-import { exportMathMl, exportPng, exportSvg } from "@vietmath/exporters";
+import {
+  exportLatex,
+  exportMathMl,
+  exportPng,
+  exportSvg,
+} from "@vietmath/exporters";
 import { createTranslator, type Locale } from "@vietmath/i18n";
 import type { AppSettings } from "@vietmath/shared";
 import { Button } from "@vietmath/ui";
 import { invoke } from "@tauri-apps/api/core";
-import { FileCode2, FileImage, Image as ImageIcon } from "lucide-react";
+import {
+  FileCode2,
+  FileImage,
+  FileText,
+  Image as ImageIcon,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { MathLiveExportBackend } from "./MathLiveExportBackend";
 
-type ExportFormat = "png" | "svg" | "mathml";
+type ExportFormat = "png" | "svg" | "mathml" | "latex";
 
 type ExportDialogProps = {
   open: boolean;
@@ -22,7 +32,9 @@ type ExportDialogProps = {
 
 function filename(format: ExportFormat) {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  return `vietmath-${stamp}.${format === "mathml" ? "mml" : format}`;
+  const extension =
+    format === "mathml" ? "mml" : format === "latex" ? "tex" : format;
+  return `vietmath-${stamp}.${extension}`;
 }
 
 async function saveExportFile(name: string, data: Uint8Array) {
@@ -95,8 +107,12 @@ export function ExportDialog({
         });
         if (!result.ok) throw new Error(result.message);
         data = textBytes(result.data);
-      } else {
+      } else if (format === "mathml") {
         const result = exportMathMl(equation, backend);
+        if (!result.ok) throw new Error(result.message);
+        data = textBytes(result.data);
+      } else {
+        const result = exportLatex(equation);
         if (!result.ok) throw new Error(result.message);
         data = textBytes(result.data);
       }
@@ -145,6 +161,12 @@ export function ExportDialog({
               onClick={() => void runExport("mathml")}
             >
               <FileCode2 size={16} /> MathML
+            </Button>
+            <Button
+              disabled={!editor || busy !== null}
+              onClick={() => void runExport("latex")}
+            >
+              <FileText size={16} /> LaTeX (.tex)
             </Button>
           </div>
           <p className="vm-export-hint">

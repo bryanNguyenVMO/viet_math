@@ -16,14 +16,15 @@ import type {
   StoredEquationRevision,
 } from "@vietmath/storage";
 
-type StoredEquationRow = [string, string, number, number, number];
+type StoredEquationRow = [string, string | null, string, number, number, number];
 type RevisionRow = [number, string, number];
 type CollectionRow = [string, string, number];
 
 function fromRow(row: StoredEquationRow): StoredEquation {
-  const [id, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
+  const [id, title, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
   return {
     id,
+    title: title ?? undefined,
     document: deserializeEquation(documentJson),
     createdAt,
     updatedAt,
@@ -67,6 +68,7 @@ export class TauriStorage
   async saveEquation(equation: StoredEquation): Promise<void> {
     await invoke("save_equation", {
       id: equation.id,
+      title: equation.title ?? null,
       documentJson: serializeEquation(equation.document),
       createdAt: equation.createdAt,
       updatedAt: equation.updatedAt,
@@ -75,14 +77,14 @@ export class TauriStorage
   }
 
   async getEquation(id: string): Promise<StoredEquation | null> {
-    const row = await invoke<[string, number, number, number] | null>(
+    const row = await invoke<[string | null, string, number, number, number] | null>(
       "load_equation",
       { id },
     );
     if (!row) return null;
 
-    const [documentJson, createdAt, updatedAt, lastOpenedAt] = row;
-    return fromRow([id, documentJson, createdAt, updatedAt, lastOpenedAt]);
+    const [title, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
+    return fromRow([id, title, documentJson, createdAt, updatedAt, lastOpenedAt]);
   }
 
   async listRecent(limit: number): Promise<StoredEquation[]> {
@@ -90,6 +92,14 @@ export class TauriStorage
       limit,
     });
     return rows.map(fromRow);
+  }
+
+  async renameEquation(id: string, title: string | null): Promise<void> {
+    await invoke("rename_equation", { id, title });
+  }
+
+  async deleteEquation(id: string): Promise<void> {
+    await invoke("delete_equation", { id });
   }
 
   async setFavorite(id: string, favorite: boolean): Promise<void> {

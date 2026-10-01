@@ -1,6 +1,7 @@
 export const vi = {
   "app.title": "VietMath",
   "app.alpha": "Desktop Alpha",
+  "actions.newEquation": "Công thức mới",
   "actions.copy": "Sao chép",
   "actions.copySuccess": "Đã sao chép LaTeX",
   "actions.copyImage": "Sao chép ảnh",

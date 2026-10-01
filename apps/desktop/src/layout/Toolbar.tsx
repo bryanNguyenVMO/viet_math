@@ -16,6 +16,7 @@ import {
   Copy,
   Download,
   FileCode2,
+  FilePlus2,
   HelpCircle,
   Image as ImageIcon,
   Redo2,
@@ -34,6 +35,7 @@ type ToolbarProps = {
   onOpenSettings: () => void;
   onOpenHelp: () => void;
   onOpenExport: () => void;
+  onNewEquation: () => void;
 };
 
 const structures: Array<{
@@ -68,6 +70,7 @@ export function Toolbar({
   onOpenSettings,
   onOpenHelp,
   onOpenExport,
+  onNewEquation,
 }: ToolbarProps) {
   const { t } = createTranslator(locale);
   const clipboard = useMemo(
@@ -127,6 +130,13 @@ export function Toolbar({
   return (
     <div className="vm-toolbar" aria-label="VietMath toolbar">
       <div className="vm-toolbar__group">
+        <IconButton
+          aria-label={t("actions.newEquation")}
+          title={t("actions.newEquation")}
+          icon={<FilePlus2 size={17} />}
+          disabled={!editor}
+          onClick={onNewEquation}
+        />
         <IconButton
           aria-label={t("actions.undo")}
           icon={<Undo2 size={17} />}

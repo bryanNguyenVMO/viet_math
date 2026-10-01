@@ -12,6 +12,7 @@ export type {
   EditorFontSize,
   ExportBackground,
   ExportScale,
+  QuickEditorShortcut,
   RecentLimit,
   ResolvedTheme,
 } from "./settings";

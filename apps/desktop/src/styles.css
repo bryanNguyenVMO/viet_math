@@ -933,3 +933,16 @@ select { font: inherit; }
   color: var(--vm-text-secondary);
   font-size: 10px;
 }
+
+
+.vm-settings-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--vm-danger) 30%, var(--vm-border));
+  border-radius: var(--vm-radius-md);
+  background: color-mix(in srgb, var(--vm-danger) 7%, var(--vm-surface));
+  color: var(--vm-danger);
+  font-size: 11px;
+  line-height: 1.45;
+}

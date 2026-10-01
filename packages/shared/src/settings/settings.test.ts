@@ -34,6 +34,9 @@ describe("VietMath app settings", () => {
     expect(settings.editorFontSize).toBe(DEFAULT_APP_SETTINGS.editorFontSize);
     expect(settings.autosaveDelay).toBe(DEFAULT_APP_SETTINGS.autosaveDelay);
     expect(settings.recentLimit).toBe(DEFAULT_APP_SETTINGS.recentLimit);
+    expect(settings.quickEditorShortcut).toBe(
+      DEFAULT_APP_SETTINGS.quickEditorShortcut,
+    );
   });
 
   it("migrates old partial settings without discarding valid preferences", () => {
@@ -51,6 +54,22 @@ describe("VietMath app settings", () => {
       exportScale: 1,
       exportBackground: "white",
     });
+  });
+
+  it("accepts only supported Quick Editor shortcut presets", () => {
+    const supported = normalizeAppSettings(JSON.stringify({
+      ...DEFAULT_APP_SETTINGS,
+      quickEditorShortcut: "CmdOrCtrl+Alt+E",
+    }));
+    expect(supported.quickEditorShortcut).toBe("CmdOrCtrl+Alt+E");
+
+    const invalid = normalizeAppSettings(JSON.stringify({
+      ...DEFAULT_APP_SETTINGS,
+      quickEditorShortcut: "F1",
+    }));
+    expect(invalid.quickEditorShortcut).toBe(
+      DEFAULT_APP_SETTINGS.quickEditorShortcut,
+    );
   });
 
   it("resolves system theme only from the OS preference", () => {

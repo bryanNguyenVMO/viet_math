@@ -83,6 +83,28 @@ fn save_export_file(
 }
 
 #[tauri::command]
+fn set_quick_editor_shortcut(
+    app: tauri::AppHandle,
+    previous_shortcut: String,
+    shortcut: String,
+) -> Result<(), String> {
+    if previous_shortcut == shortcut {
+        return Ok(());
+    }
+
+    app.global_shortcut()
+        .register(shortcut.as_str())
+        .map_err(|error| error.to_string())?;
+
+    if let Err(error) = app.global_shortcut().unregister(previous_shortcut.as_str()) {
+        let _ = app.global_shortcut().unregister(shortcut.as_str());
+        return Err(error.to_string());
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
 fn hide_quick_window(app: tauri::AppHandle) -> Result<(), String> {
     let window = app
         .get_webview_window("quick")
@@ -145,6 +167,7 @@ fn main() {
             write_clipboard_text,
             write_clipboard_image,
             save_export_file,
+            set_quick_editor_shortcut,
             hide_quick_window,
             show_main_window,
         ])

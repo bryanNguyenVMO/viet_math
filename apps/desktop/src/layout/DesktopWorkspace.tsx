@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import type { VietMathEditor } from "@vietmath/editor";
 import {
   createTranslator,
@@ -101,11 +102,28 @@ export function DesktopWorkspace() {
   useEffect(() => {
     let cancelled = false;
 
-    void storage.get(SETTINGS_KEY).then((raw) => {
+    void storage.get(SETTINGS_KEY).then(async (raw) => {
       if (cancelled) return;
+
       const loaded = normalizeAppSettings(raw);
-      setSettings(loaded);
-      setLocale(loaded.locale);
+      let effective = loaded;
+
+      try {
+        await invoke("set_quick_editor_shortcut", {
+          previousShortcut: DEFAULT_APP_SETTINGS.quickEditorShortcut,
+          shortcut: loaded.quickEditorShortcut,
+        });
+      } catch {
+        effective = {
+          ...loaded,
+          quickEditorShortcut: DEFAULT_APP_SETTINGS.quickEditorShortcut,
+        };
+        await storage.set(SETTINGS_KEY, JSON.stringify(effective));
+      }
+
+      if (cancelled) return;
+      setSettings(effective);
+      setLocale(effective.locale);
     });
 
     return () => {

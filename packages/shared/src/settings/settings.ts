@@ -6,6 +6,11 @@ export type AppLocale = "vi" | "en";
 export type EditorFontSize = 28 | 32 | 36 | 40 | 44;
 export type AutosaveDelay = 150 | 300 | 500 | 1000;
 export type RecentLimit = 10 | 20 | 50;
+export type QuickEditorShortcut =
+  | "CmdOrCtrl+Shift+M"
+  | "CmdOrCtrl+Shift+E"
+  | "CmdOrCtrl+Alt+M"
+  | "CmdOrCtrl+Alt+E";
 
 export type AppSettings = {
   theme: AppTheme;
@@ -15,6 +20,7 @@ export type AppSettings = {
   editorFontSize: EditorFontSize;
   autosaveDelay: AutosaveDelay;
   recentLimit: RecentLimit;
+  quickEditorShortcut: QuickEditorShortcut;
 };
 
 export const SETTINGS_KEY = "app-settings";
@@ -27,6 +33,7 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
   editorFontSize: 36,
   autosaveDelay: 300,
   recentLimit: 20,
+  quickEditorShortcut: "CmdOrCtrl+Shift+M",
 };
 
 function isTheme(value: unknown): value is AppTheme {
@@ -57,6 +64,15 @@ function isRecentLimit(value: unknown): value is RecentLimit {
   return value === 10 || value === 20 || value === 50;
 }
 
+function isQuickEditorShortcut(value: unknown): value is QuickEditorShortcut {
+  return (
+    value === "CmdOrCtrl+Shift+M" ||
+    value === "CmdOrCtrl+Shift+E" ||
+    value === "CmdOrCtrl+Alt+M" ||
+    value === "CmdOrCtrl+Alt+E"
+  );
+}
+
 export function normalizeAppSettings(raw: string | null | undefined): AppSettings {
   if (!raw) return { ...DEFAULT_APP_SETTINGS };
 
@@ -85,6 +101,9 @@ export function normalizeAppSettings(raw: string | null | undefined): AppSetting
       recentLimit: isRecentLimit(candidate.recentLimit)
         ? candidate.recentLimit
         : DEFAULT_APP_SETTINGS.recentLimit,
+      quickEditorShortcut: isQuickEditorShortcut(candidate.quickEditorShortcut)
+        ? candidate.quickEditorShortcut
+        : DEFAULT_APP_SETTINGS.quickEditorShortcut,
     };
   } catch {
     return { ...DEFAULT_APP_SETTINGS };

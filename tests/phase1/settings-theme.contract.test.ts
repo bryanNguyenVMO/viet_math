@@ -21,6 +21,8 @@ describe("Phase 1 settings and theme UI", () => {
     expect(source).toContain("editorFontSize");
     expect(source).toContain("autosaveDelay");
     expect(source).toContain("recentLimit");
+    expect(source).toContain("quickEditorShortcut");
+    expect(source).toContain("set_quick_editor_shortcut");
     expect(source).toContain("storage.set");
   });
 
@@ -33,5 +35,6 @@ describe("Phase 1 settings and theme UI", () => {
     expect(source).toContain("--vm-editor-font-size");
     expect(source).toContain("settings.autosaveDelay");
     expect(source).toContain("settings.recentLimit");
+    expect(source).toContain("set_quick_editor_shortcut");
   });
 });

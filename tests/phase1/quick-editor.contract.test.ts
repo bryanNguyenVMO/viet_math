@@ -31,6 +31,8 @@ describe("Phase 1 quick editor contract", () => {
     )).toBe(true);
     expect(cargo).toContain("tauri-plugin-global-shortcut");
     expect(rust).toContain("CmdOrCtrl+Shift+M");
+    expect(rust).toContain("set_quick_editor_shortcut");
+    expect(rust).toContain(".unregister(");
     expect(rust).toContain('get_webview_window("quick")');
   });
 });

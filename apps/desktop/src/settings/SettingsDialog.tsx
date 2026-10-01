@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import {
   SETTINGS_KEY,
   type AppSettings,
@@ -6,11 +7,12 @@ import {
   type EditorFontSize,
   type ExportBackground,
   type ExportScale,
+  type QuickEditorShortcut,
   type RecentLimit,
 } from "@vietmath/shared";
 import type { SettingsRepository } from "@vietmath/storage";
-import { useEffect, useState } from "react";
 import { createTranslator, type Locale } from "@vietmath/i18n";
+import { useEffect, useState } from "react";
 
 type SettingsDialogProps = {
   open: boolean;
@@ -30,10 +32,14 @@ export function SettingsDialog({
   onSaved,
 }: SettingsDialogProps) {
   const [draft, setDraft] = useState(settings);
+  const [saveError, setSaveError] = useState("");
   const { t } = createTranslator(locale);
 
   useEffect(() => {
-    if (open) setDraft(settings);
+    if (open) {
+      setDraft(settings);
+      setSaveError("");
+    }
   }, [open, settings]);
 
   useEffect(() => {
@@ -52,9 +58,33 @@ export function SettingsDialog({
   if (!open) return null;
 
   const save = async () => {
-    await storage.set(SETTINGS_KEY, JSON.stringify(draft));
-    onSaved(draft);
-    onClose();
+    const shortcutChanged =
+      draft.quickEditorShortcut !== settings.quickEditorShortcut;
+
+    try {
+      if (shortcutChanged) {
+        await invoke("set_quick_editor_shortcut", {
+          previousShortcut: settings.quickEditorShortcut,
+          shortcut: draft.quickEditorShortcut,
+        });
+      }
+
+      await storage.set(SETTINGS_KEY, JSON.stringify(draft));
+      onSaved(draft);
+      onClose();
+    } catch {
+      if (shortcutChanged) {
+        try {
+          await invoke("set_quick_editor_shortcut", {
+            previousShortcut: draft.quickEditorShortcut,
+            shortcut: settings.quickEditorShortcut,
+          });
+        } catch {
+          // Keep the dialog open and let the user choose another shortcut.
+        }
+      }
+      setSaveError(t("settings.shortcutFailed"));
+    }
   };
 
   return (
@@ -138,6 +168,25 @@ export function SettingsDialog({
             </select>
           </label>
 
+          <h3>{t("settings.shortcutsSection")}</h3>
+          <label>
+            <span>{t("settings.quickEditorShortcut")}</span>
+            <select
+              value={draft.quickEditorShortcut}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  quickEditorShortcut: event.target.value as QuickEditorShortcut,
+                }))
+              }
+            >
+              <option value="CmdOrCtrl+Shift+M">Cmd/Ctrl + Shift + M</option>
+              <option value="CmdOrCtrl+Shift+E">Cmd/Ctrl + Shift + E</option>
+              <option value="CmdOrCtrl+Alt+M">Cmd/Ctrl + Alt + M</option>
+              <option value="CmdOrCtrl+Alt+E">Cmd/Ctrl + Alt + E</option>
+            </select>
+          </label>
+
           <h3>{t("settings.librarySection")}</h3>
           <label>
             <span>{t("settings.recentLimit")}</span>
@@ -189,6 +238,10 @@ export function SettingsDialog({
               <option value="white">{t("settings.white")}</option>
             </select>
           </label>
+
+          {saveError ? (
+            <p className="vm-settings-error" role="status">{saveError}</p>
+          ) : null}
         </div>
 
         <footer className="vm-settings-footer">

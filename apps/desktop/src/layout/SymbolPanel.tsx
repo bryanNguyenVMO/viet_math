@@ -11,7 +11,7 @@ import {
 import { Panel, SearchInput, SymbolButton } from "@vietmath/ui";
 import { convertLatexToMarkup } from "mathlive/ssr";
 import { Search, Sigma } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 type SymbolPanelProps = {
   editor: VietMathEditor | null;
@@ -40,12 +40,25 @@ export function SymbolPanel({
 }: SymbolPanelProps) {
   const { t } = createTranslator(locale);
   const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (searchRequestKey > 0) searchRef.current?.focus();
   }, [searchRequestKey]);
   const results = useMemo(() => searchMathCatalog(query).slice(0, 120), [query]);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query]);
+
+  useEffect(() => {
+    if (results.length === 0) {
+      setActiveIndex(0);
+      return;
+    }
+    setActiveIndex((index) => Math.min(index, results.length - 1));
+  }, [results.length]);
 
   const grouped = useMemo(() => {
     const groups = new Map<MathCatalogCategory, typeof results>();
@@ -59,6 +72,34 @@ export function SymbolPanel({
   const insert = (latex: string) => {
     editor?.insertLatex(latex);
     editor?.focus();
+  };
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (results.length === 0) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((index) => (index + 1) % results.length);
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((index) => (index - 1 + results.length) % results.length);
+      return;
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const selected = results[activeIndex];
+      if (selected) insert(selected.latex);
+      return;
+    }
+
+    if (event.key === "Escape" && query) {
+      event.preventDefault();
+      setQuery("");
+    }
   };
 
   return (
@@ -77,7 +118,9 @@ export function SymbolPanel({
         placeholder={t("symbols.searchPlaceholder")}
         icon={<Search size={15} />}
         value={query}
+        aria-activedescendant={results[activeIndex] ? `vm-symbol-${results[activeIndex].id}` : undefined}
         onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={handleSearchKeyDown}
       />
 
       <div className="vm-catalog-groups">
@@ -85,11 +128,17 @@ export function SymbolPanel({
           <section className="vm-catalog-group" key={category}>
             <h3>{t(categoryKeys[category])}</h3>
             <div className="vm-symbol-grid">
-              {items.map((item) => (
+              {items.map((item) => {
+                const resultIndex = results.findIndex((result) => result.id === item.id);
+                return (
                 <SymbolButton
                   key={item.id}
+                  id={`vm-symbol-${item.id}`}
                   label={item.label}
+                  className={resultIndex === activeIndex ? "is-keyboard-active" : undefined}
                   disabled={!editor}
+                  onMouseEnter={() => setActiveIndex(resultIndex)}
+                  onFocus={() => setActiveIndex(resultIndex)}
                   onClick={() => insert(item.latex)}
                   symbol={
                     <span
@@ -101,7 +150,8 @@ export function SymbolPanel({
                     />
                   }
                 />
-              ))}
+                );
+              })}
             </div>
           </section>
         ))}

@@ -35,10 +35,43 @@ const MIN_LEFT = 200;
 const MAX_LEFT = 420;
 const MIN_RIGHT = 220;
 const MAX_RIGHT = 420;
+const WORKSPACE_LAYOUT_KEY = "workspace-layout-v1";
 const initialLatex = String.raw`x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+type WorkspaceLayout = {
+  leftWidth: number;
+  rightWidth: number;
+  leftCollapsed: boolean;
+  rightCollapsed: boolean;
+};
+
+function parseWorkspaceLayout(raw: string | null): WorkspaceLayout | null {
+  if (!raw) return null;
+
+  try {
+    const value = JSON.parse(raw) as Partial<WorkspaceLayout>;
+    if (
+      typeof value.leftWidth !== "number" ||
+      typeof value.rightWidth !== "number" ||
+      typeof value.leftCollapsed !== "boolean" ||
+      typeof value.rightCollapsed !== "boolean"
+    ) {
+      return null;
+    }
+
+    return {
+      leftWidth: clamp(value.leftWidth, MIN_LEFT, MAX_LEFT),
+      rightWidth: clamp(value.rightWidth, MIN_RIGHT, MAX_RIGHT),
+      leftCollapsed: value.leftCollapsed,
+      rightCollapsed: value.rightCollapsed,
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function DesktopWorkspace() {
@@ -55,6 +88,7 @@ export function DesktopWorkspace() {
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
+  const [layoutLoaded, setLayoutLoaded] = useState(false);
   const [searchRequestKey, setSearchRequestKey] = useState(0);
   const resizeMovedRef = useRef<Record<"left" | "right", boolean>>({
     left: false,
@@ -76,6 +110,49 @@ export function DesktopWorkspace() {
       cancelled = true;
     };
   }, [storage]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void storage.get(WORKSPACE_LAYOUT_KEY).then((raw) => {
+      if (cancelled) return;
+      const loaded = parseWorkspaceLayout(raw);
+      if (loaded) {
+        setLeftWidth(loaded.leftWidth);
+        setRightWidth(loaded.rightWidth);
+        setLeftCollapsed(loaded.leftCollapsed);
+        setRightCollapsed(loaded.rightCollapsed);
+      }
+      setLayoutLoaded(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [storage]);
+
+  useEffect(() => {
+    if (!layoutLoaded) return;
+
+    const timer = window.setTimeout(() => {
+      const layout: WorkspaceLayout = {
+        leftWidth,
+        rightWidth,
+        leftCollapsed,
+        rightCollapsed,
+      };
+      void storage.set(WORKSPACE_LAYOUT_KEY, JSON.stringify(layout));
+    }, 180);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    layoutLoaded,
+    leftCollapsed,
+    leftWidth,
+    rightCollapsed,
+    rightWidth,
+    storage,
+  ]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");

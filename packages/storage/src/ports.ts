@@ -8,6 +8,13 @@ export type StoredEquation = {
   lastOpenedAt: number;
 };
 
+export type StoredEquationRevision = {
+  id: number;
+  equationId: string;
+  document: EquationDocument;
+  createdAt: number;
+};
+
 export interface EquationRepository {
   saveEquation(equation: StoredEquation): Promise<void>;
   getEquation(id: string): Promise<StoredEquation | null>;
@@ -28,6 +35,10 @@ export interface SettingsRepository {
 export interface FavoriteRepository {
   setFavorite(id: string, favorite: boolean): Promise<void>;
   listFavorites(): Promise<StoredEquation[]>;
+}
+
+export interface HistoryRepository {
+  listRevisions(equationId: string, limit: number): Promise<StoredEquationRevision[]>;
 }
 
 export type FormulaTemplate = {

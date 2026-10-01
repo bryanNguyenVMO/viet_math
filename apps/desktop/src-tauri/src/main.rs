@@ -135,6 +135,7 @@ fn main() {
             storage::list_recent_equations,
             storage::set_equation_favorite,
             storage::list_favorite_equations,
+            storage::list_equation_revisions,
             write_clipboard_text,
             write_clipboard_image,
             save_export_file,

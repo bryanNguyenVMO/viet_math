@@ -6,10 +6,20 @@ import {
   cloneTemplate,
   type EquationRepository,
   type FavoriteRepository,
+  type HistoryRepository,
   type StoredEquation,
+  type StoredEquationRevision,
 } from "@vietmath/storage";
 import { EquationCard, Panel, SearchInput } from "@vietmath/ui";
-import { BookOpen, Clock3, LayoutTemplate, Search, Star } from "lucide-react";
+import {
+  BookOpen,
+  Clock3,
+  History,
+  LayoutTemplate,
+  RotateCcw,
+  Search,
+  Star,
+} from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -18,7 +28,7 @@ import {
   useState,
 } from "react";
 
-type LibraryStorage = EquationRepository & FavoriteRepository;
+type LibraryStorage = EquationRepository & FavoriteRepository & HistoryRepository;
 type LibraryTab = "recent" | "favorites" | "templates";
 
 type LibraryPanelProps = {
@@ -66,6 +76,19 @@ function equationTitle(equation: StoredEquation) {
   return latex.length > 34 ? `${latex.slice(0, 34)}…` : latex;
 }
 
+function revisionPreview(revision: StoredEquationRevision) {
+  const latex = revision.document.latex.trim();
+  if (!latex) return "LaTeX";
+  return latex.length > 42 ? `${latex.slice(0, 42)}…` : latex;
+}
+
+function formatHistoryTime(value: number, locale: Locale) {
+  return new Intl.DateTimeFormat(locale === "vi" ? "vi-VN" : "en-US", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
 function createEquationId(prefix = "eq") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -81,6 +104,9 @@ export function LibraryPanel({
   const [tab, setTab] = useState<LibraryTab>("recent");
   const [recent, setRecent] = useState<StoredEquation[]>([]);
   const [favorites, setFavorites] = useState<StoredEquation[]>([]);
+  const [historyEquationId, setHistoryEquationId] = useState<string | null>(null);
+  const [revisions, setRevisions] = useState<StoredEquationRevision[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const activeEquationRef = useRef<StoredEquation | null>(null);
 
@@ -193,6 +219,42 @@ export function LibraryPanel({
     setRefreshKey((value) => value + 1);
   };
 
+  const toggleHistory = async (equation: StoredEquation) => {
+    if (historyEquationId === equation.id) {
+      setHistoryEquationId(null);
+      setRevisions([]);
+      return;
+    }
+
+    setHistoryEquationId(equation.id);
+    setHistoryLoading(true);
+    try {
+      setRevisions(await storage.listRevisions(equation.id, 12));
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  const restoreRevision = async (
+    equation: StoredEquation,
+    revision: StoredEquationRevision,
+  ) => {
+    const now = Date.now();
+    const restored: StoredEquation = {
+      ...equation,
+      document: revision.document,
+      updatedAt: now,
+      lastOpenedAt: now,
+    };
+    activeEquationRef.current = restored;
+    await storage.saveEquation(restored);
+    editor?.setLatex(restored.document.latex);
+    editor?.focus();
+    setHistoryEquationId(null);
+    setRevisions([]);
+    setRefreshKey((value) => value + 1);
+  };
+
   const storedItems = tab === "favorites" ? filteredFavorites : filteredRecent;
   const emptyMessage =
     tab === "favorites"
@@ -274,19 +336,58 @@ export function LibraryPanel({
                   disabled={!editor}
                   onClick={() => void openStored(equation)}
                 />
-                <button
-                  type="button"
-                  className="vm-favorite-button"
-                  aria-label={
-                    favoriteIds.has(equation.id)
-                      ? t("library.removeFavorite")
-                      : t("library.addFavorite")
-                  }
-                  aria-pressed={favoriteIds.has(equation.id)}
-                  onClick={() => void toggleFavorite(equation)}
-                >
-                  <Star size={15} fill={favoriteIds.has(equation.id) ? "currentColor" : "none"} />
-                </button>
+                <div className="vm-library-card-actions">
+                  <button
+                    type="button"
+                    className="vm-library-action-button"
+                    aria-label={t("library.history")}
+                    aria-expanded={historyEquationId === equation.id}
+                    onClick={() => void toggleHistory(equation)}
+                  >
+                    <History size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    className="vm-library-action-button"
+                    aria-label={
+                      favoriteIds.has(equation.id)
+                        ? t("library.removeFavorite")
+                        : t("library.addFavorite")
+                    }
+                    aria-pressed={favoriteIds.has(equation.id)}
+                    onClick={() => void toggleFavorite(equation)}
+                  >
+                    <Star
+                      size={15}
+                      fill={favoriteIds.has(equation.id) ? "currentColor" : "none"}
+                    />
+                  </button>
+                </div>
+
+                {historyEquationId === equation.id ? (
+                  <div className="vm-history-list">
+                    <strong>{t("library.history")}</strong>
+                    {historyLoading ? (
+                      <span>{t("library.historyLoading")}</span>
+                    ) : revisions.length === 0 ? (
+                      <span>{t("library.noHistory")}</span>
+                    ) : (
+                      revisions.map((revision) => (
+                        <button
+                          type="button"
+                          key={revision.id}
+                          onClick={() => void restoreRevision(equation, revision)}
+                        >
+                          <span>
+                            <RotateCcw size={13} />
+                            {formatHistoryTime(revision.createdAt, locale)}
+                          </span>
+                          <code>{revisionPreview(revision)}</code>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                ) : null}
               </div>
             ))}
 

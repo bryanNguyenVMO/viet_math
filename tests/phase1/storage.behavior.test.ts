@@ -35,6 +35,45 @@ describe("production storage behavior", () => {
     expect(await storage.load("current")).toBeNull();
   });
 
+  it("keeps a bounded version history when an equation changes", async () => {
+    const storageModule = await import("../../packages/storage/src/index");
+    const storage = new storageModule.MemoryStorage();
+    const base: EquationDocument = {
+      schemaVersion: 1,
+      latex: "x",
+      displayMode: "block",
+      style: {},
+    };
+
+    await storage.saveEquation({
+      id: "history-1",
+      document: base,
+      createdAt: 1,
+      updatedAt: 10,
+      lastOpenedAt: 10,
+    });
+    await storage.saveEquation({
+      id: "history-1",
+      document: { ...base, latex: "x+1" },
+      createdAt: 1,
+      updatedAt: 20,
+      lastOpenedAt: 20,
+    });
+    await storage.saveEquation({
+      id: "history-1",
+      document: { ...base, latex: "x+2" },
+      createdAt: 1,
+      updatedAt: 30,
+      lastOpenedAt: 30,
+    });
+
+    const revisions = await storage.listRevisions("history-1", 10);
+    expect(revisions.map((revision) => revision.document.latex)).toEqual([
+      "x+1",
+      "x",
+    ]);
+  });
+
   it("debounces draft writes and flushes the latest document", async () => {
     vi.useFakeTimers();
     try {

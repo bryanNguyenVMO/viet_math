@@ -64,6 +64,24 @@ pub fn migrate(connection: &Connection) -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     }
 
+    if version < 3 {
+        connection
+            .execute_batch(
+                "
+                CREATE TABLE IF NOT EXISTS equation_revisions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    equation_id TEXT NOT NULL,
+                    document_json TEXT NOT NULL,
+                    created_at INTEGER NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_equation_revisions_equation
+                    ON equation_revisions(equation_id, id DESC);
+                PRAGMA user_version = 3;
+                ",
+            )
+            .map_err(|error| error.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -162,6 +180,41 @@ pub fn save_equation(
     last_opened_at: i64,
 ) -> Result<(), String> {
     let connection = connection(&state)?;
+
+    let previous = connection
+        .query_row(
+            "SELECT document_json, updated_at FROM equations WHERE id = ?1",
+            params![&id],
+            |row| Ok((row.get::<_, String>(0)?, row.get::<_, i64>(1)?)),
+        )
+        .optional()
+        .map_err(|error| error.to_string())?;
+
+    if let Some((previous_document, previous_updated_at)) = previous {
+        if previous_document != document_json {
+            connection
+                .execute(
+                    "INSERT INTO equation_revisions (equation_id, document_json, created_at)
+                     VALUES (?1, ?2, ?3)",
+                    params![&id, previous_document, previous_updated_at],
+                )
+                .map_err(|error| error.to_string())?;
+            connection
+                .execute(
+                    "DELETE FROM equation_revisions
+                     WHERE equation_id = ?1
+                       AND id NOT IN (
+                         SELECT id FROM equation_revisions
+                         WHERE equation_id = ?1
+                         ORDER BY id DESC
+                         LIMIT 50
+                       )",
+                    params![&id],
+                )
+                .map_err(|error| error.to_string())?;
+        }
+    }
+
     connection
         .execute(
             "INSERT INTO equations (id, document_json, created_at, updated_at, last_opened_at)
@@ -263,6 +316,33 @@ pub fn list_favorite_equations(
                 row.get(3)?,
                 row.get(4)?,
             ))
+        })
+        .map_err(|error| error.to_string())?;
+
+    rows.collect::<Result<Vec<_>, _>>()
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn list_equation_revisions(
+    state: State<'_, StorageState>,
+    equation_id: String,
+    limit: i64,
+) -> Result<Vec<(i64, String, i64)>, String> {
+    let connection = connection(&state)?;
+    let mut statement = connection
+        .prepare(
+            "SELECT id, document_json, created_at
+             FROM equation_revisions
+             WHERE equation_id = ?1
+             ORDER BY id DESC
+             LIMIT ?2",
+        )
+        .map_err(|error| error.to_string())?;
+
+    let rows = statement
+        .query_map(params![equation_id, limit.max(0)], |row| {
+            Ok((row.get(0)?, row.get(1)?, row.get(2)?))
         })
         .map_err(|error| error.to_string())?;
 

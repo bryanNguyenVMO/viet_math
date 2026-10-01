@@ -41,6 +41,8 @@ describe("Phase 1 primary UI actions", () => {
     expect(source).toContain("listRecent");
     expect(source).toContain("listFavorites");
     expect(source).toContain("setFavorite");
+    expect(source).toContain("listRevisions");
+    expect(source).toContain("restoreRevision");
     expect(source).toContain('setTab("recent")');
     expect(source).toContain('setTab("favorites")');
     expect(source).toContain('setTab("templates")');

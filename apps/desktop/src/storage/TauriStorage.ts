@@ -8,11 +8,14 @@ import type {
   DraftRepository,
   EquationRepository,
   FavoriteRepository,
+  HistoryRepository,
   SettingsRepository,
   StoredEquation,
+  StoredEquationRevision,
 } from "@vietmath/storage";
 
 type StoredEquationRow = [string, string, number, number, number];
+type RevisionRow = [number, string, number];
 
 function fromRow(row: StoredEquationRow): StoredEquation {
   const [id, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
@@ -26,7 +29,12 @@ function fromRow(row: StoredEquationRow): StoredEquation {
 }
 
 export class TauriStorage
-  implements DraftRepository, SettingsRepository, EquationRepository, FavoriteRepository
+  implements
+    DraftRepository,
+    SettingsRepository,
+    EquationRepository,
+    FavoriteRepository,
+    HistoryRepository
 {
   async save(key: string, document: EquationDocument): Promise<void> {
     await invoke("save_draft", {
@@ -87,5 +95,21 @@ export class TauriStorage
   async listFavorites(): Promise<StoredEquation[]> {
     const rows = await invoke<StoredEquationRow[]>("list_favorite_equations");
     return rows.map(fromRow);
+  }
+
+  async listRevisions(
+    equationId: string,
+    limit: number,
+  ): Promise<StoredEquationRevision[]> {
+    const rows = await invoke<RevisionRow[]>("list_equation_revisions", {
+      equationId,
+      limit,
+    });
+    return rows.map(([id, documentJson, createdAt]) => ({
+      id,
+      equationId,
+      document: deserializeEquation(documentJson),
+      createdAt,
+    }));
   }
 }

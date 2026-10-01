@@ -786,3 +786,87 @@ select { font: inherit; }
   color: var(--vm-primary) !important;
   font-weight: 700;
 }
+
+
+.vm-library-card-row .vm-equation-card {
+  padding-right: 70px;
+}
+
+.vm-library-card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 2px;
+}
+
+.vm-library-action-button {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vm-text-muted);
+  cursor: pointer;
+}
+
+.vm-library-action-button:hover,
+.vm-library-action-button:focus-visible,
+.vm-library-action-button[aria-pressed="true"],
+.vm-library-action-button[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--vm-primary) 10%, transparent);
+  color: var(--vm-primary);
+  outline: none;
+}
+
+.vm-history-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-bg);
+}
+
+.vm-history-list > strong,
+.vm-history-list > span {
+  font-size: 10px;
+  color: var(--vm-text-secondary);
+}
+
+.vm-history-list > button {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  border: 1px solid var(--vm-border);
+  border-radius: 6px;
+  padding: 7px 8px;
+  text-align: left;
+  background: var(--vm-surface);
+  color: var(--vm-text);
+  cursor: pointer;
+}
+
+.vm-history-list > button:hover,
+.vm-history-list > button:focus-visible {
+  border-color: var(--vm-primary);
+  outline: none;
+}
+
+.vm-history-list > button span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--vm-text-secondary);
+  font-size: 9px;
+}
+
+.vm-history-list code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+}

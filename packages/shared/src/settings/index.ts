@@ -8,7 +8,10 @@ export type {
   AppLocale,
   AppSettings,
   AppTheme,
+  AutosaveDelay,
+  EditorFontSize,
   ExportBackground,
   ExportScale,
+  RecentLimit,
   ResolvedTheme,
 } from "./settings";

@@ -984,3 +984,12 @@ select { font: inherit; }
   font-weight: 750;
   cursor: pointer;
 }
+
+
+.vm-symbol-button.is-keyboard-active {
+  border-color: var(--vm-primary);
+  background: color-mix(in srgb, var(--vm-primary) 10%, var(--vm-surface));
+  color: var(--vm-primary);
+  outline: 2px solid color-mix(in srgb, var(--vm-primary) 24%, transparent);
+  outline-offset: 1px;
+}

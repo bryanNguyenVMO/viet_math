@@ -686,7 +686,7 @@ select { font: inherit; }
 
 .vm-library-tabs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 4px;
   margin-bottom: 10px;
   padding: 3px;
@@ -868,5 +868,68 @@ select { font: inherit; }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 10px;
+}
+
+
+.vm-collection-tools {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.vm-collection-create,
+.vm-collection-select-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+}
+
+.vm-collection-select-row {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.vm-collection-create input,
+.vm-collection-select-row select {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--vm-border);
+  border-radius: 6px;
+  padding: 6px 7px;
+  background: var(--vm-bg);
+  color: var(--vm-text);
+  font-size: 11px;
+}
+
+.vm-collection-create button,
+.vm-collection-select-row button {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--vm-border);
+  border-radius: 6px;
+  background: var(--vm-surface);
+  color: var(--vm-text-secondary);
+  cursor: pointer;
+}
+
+.vm-collection-create button:hover:not(:disabled),
+.vm-collection-select-row button:hover:not(:disabled),
+.vm-collection-create button:focus-visible,
+.vm-collection-select-row button:focus-visible {
+  border-color: var(--vm-primary);
+  color: var(--vm-primary);
+  outline: none;
+}
+
+.vm-collection-create button:disabled,
+.vm-collection-select-row button:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+.vm-collection-status {
+  color: var(--vm-text-secondary);
   font-size: 10px;
 }

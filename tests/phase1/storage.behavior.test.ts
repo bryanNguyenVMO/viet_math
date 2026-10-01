@@ -74,6 +74,47 @@ describe("production storage behavior", () => {
     ]);
   });
 
+  it("organizes equations into persistent collections", async () => {
+    const storageModule = await import("../../packages/storage/src/index");
+    const storage = new storageModule.MemoryStorage();
+    const document: EquationDocument = {
+      schemaVersion: 1,
+      latex: "x^2+y^2=z^2",
+      displayMode: "block",
+      style: {},
+    };
+
+    await storage.saveEquation({
+      id: "collection-eq",
+      document,
+      createdAt: 1,
+      updatedAt: 1,
+      lastOpenedAt: 1,
+    });
+    await storage.createCollection({
+      id: "geometry",
+      name: "Hình học",
+      createdAt: 2,
+    });
+    await storage.addEquationToCollection("geometry", "collection-eq");
+    await storage.addEquationToCollection("geometry", "collection-eq");
+
+    expect(await storage.listCollections()).toEqual([
+      { id: "geometry", name: "Hình học", createdAt: 2 },
+    ]);
+    expect(
+      (await storage.listCollectionEquations("geometry")).map(
+        (equation) => equation.id,
+      ),
+    ).toEqual(["collection-eq"]);
+
+    await storage.removeEquationFromCollection("geometry", "collection-eq");
+    expect(await storage.listCollectionEquations("geometry")).toEqual([]);
+
+    await storage.deleteCollection("geometry");
+    expect(await storage.listCollections()).toEqual([]);
+  });
+
   it("debounces draft writes and flushes the latest document", async () => {
     vi.useFakeTimers();
     try {

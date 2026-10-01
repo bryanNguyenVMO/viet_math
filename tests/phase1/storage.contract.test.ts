@@ -22,6 +22,8 @@ describe("Phase 1 production storage contract", () => {
     expect(index).toContain("SettingsRepository");
     expect(index).toContain("HistoryRepository");
     expect(index).toContain("StoredEquationRevision");
+    expect(index).toContain("CollectionRepository");
+    expect(index).toContain("StoredCollection");
   });
 
   it("provides a native SQLite boundary in the production Tauri app", () => {
@@ -40,6 +42,11 @@ describe("Phase 1 production storage contract", () => {
     expect(storage).toContain("equation_revisions");
     expect(storage).toContain("list_equation_revisions");
     expect(storage).toContain("PRAGMA user_version = 3");
+    expect(storage).toContain("formula_collections");
+    expect(storage).toContain("collection_equations");
+    expect(storage).toContain("create_collection");
+    expect(storage).toContain("list_collection_equations");
+    expect(storage).toContain("PRAGMA user_version = 4");
     expect(desktopPkg).toContain('"@vietmath/storage"');
   });
 });

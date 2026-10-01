@@ -1,6 +1,10 @@
 import type { EquationDocument } from "@vietmath/equation-model";
 
-import type { StoredEquation, StoredEquationRevision } from "./ports";
+import type {
+  StoredCollection,
+  StoredEquation,
+  StoredEquationRevision,
+} from "./ports";
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -19,6 +23,8 @@ export class MemoryStorage {
   private readonly equations = new Map<string, StoredEquation>();
   private readonly favorites = new Set<string>();
   private readonly revisions = new Map<string, StoredEquationRevision[]>();
+  private readonly collections = new Map<string, StoredCollection>();
+  private readonly collectionEquations = new Map<string, Set<string>>();
   private revisionId = 1;
 
   async save(key: string, document: EquationDocument): Promise<void> {
@@ -89,6 +95,53 @@ export class MemoryStorage {
   ): Promise<StoredEquationRevision[]> {
     return (this.revisions.get(equationId) ?? [])
       .slice(0, Math.max(0, limit))
+      .map(clone);
+  }
+
+  async createCollection(collection: StoredCollection): Promise<void> {
+    this.collections.set(collection.id, clone(collection));
+    if (!this.collectionEquations.has(collection.id)) {
+      this.collectionEquations.set(collection.id, new Set());
+    }
+  }
+
+  async listCollections(): Promise<StoredCollection[]> {
+    return [...this.collections.values()]
+      .sort((left, right) => left.createdAt - right.createdAt)
+      .map(clone);
+  }
+
+  async deleteCollection(id: string): Promise<void> {
+    this.collections.delete(id);
+    this.collectionEquations.delete(id);
+  }
+
+  async addEquationToCollection(
+    collectionId: string,
+    equationId: string,
+  ): Promise<void> {
+    if (!this.collections.has(collectionId)) {
+      throw new Error("Collection not found");
+    }
+    const equationIds = this.collectionEquations.get(collectionId) ?? new Set();
+    equationIds.add(equationId);
+    this.collectionEquations.set(collectionId, equationIds);
+  }
+
+  async removeEquationFromCollection(
+    collectionId: string,
+    equationId: string,
+  ): Promise<void> {
+    this.collectionEquations.get(collectionId)?.delete(equationId);
+  }
+
+  async listCollectionEquations(
+    collectionId: string,
+  ): Promise<StoredEquation[]> {
+    return [...(this.collectionEquations.get(collectionId) ?? new Set())]
+      .map((id) => this.equations.get(id))
+      .filter((equation): equation is StoredEquation => Boolean(equation))
+      .sort((left, right) => right.lastOpenedAt - left.lastOpenedAt)
       .map(clone);
   }
 }

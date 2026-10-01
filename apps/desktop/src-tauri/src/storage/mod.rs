@@ -82,6 +82,29 @@ pub fn migrate(connection: &Connection) -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     }
 
+    if version < 4 {
+        connection
+            .execute_batch(
+                "
+                CREATE TABLE IF NOT EXISTS formula_collections (
+                    id TEXT PRIMARY KEY NOT NULL,
+                    name TEXT NOT NULL,
+                    created_at INTEGER NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS collection_equations (
+                    collection_id TEXT NOT NULL,
+                    equation_id TEXT NOT NULL,
+                    added_at INTEGER NOT NULL,
+                    PRIMARY KEY (collection_id, equation_id)
+                );
+                CREATE INDEX IF NOT EXISTS idx_collection_equations_collection
+                    ON collection_equations(collection_id, added_at DESC);
+                PRAGMA user_version = 4;
+                ",
+            )
+            .map_err(|error| error.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -343,6 +366,158 @@ pub fn list_equation_revisions(
     let rows = statement
         .query_map(params![equation_id, limit.max(0)], |row| {
             Ok((row.get(0)?, row.get(1)?, row.get(2)?))
+        })
+        .map_err(|error| error.to_string())?;
+
+    rows.collect::<Result<Vec<_>, _>>()
+        .map_err(|error| error.to_string())
+}
+
+
+#[tauri::command]
+pub fn create_collection(
+    state: State<'_, StorageState>,
+    id: String,
+    name: String,
+    created_at: i64,
+) -> Result<(), String> {
+    let trimmed = name.trim();
+    if trimmed.is_empty() {
+        return Err("Collection name cannot be empty".to_string());
+    }
+
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "INSERT INTO formula_collections (id, name, created_at)
+             VALUES (?1, ?2, ?3)
+             ON CONFLICT(id) DO UPDATE SET name = excluded.name",
+            params![id, trimmed, created_at],
+        )
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_collections(
+    state: State<'_, StorageState>,
+) -> Result<Vec<(String, String, i64)>, String> {
+    let connection = connection(&state)?;
+    let mut statement = connection
+        .prepare(
+            "SELECT id, name, created_at
+             FROM formula_collections
+             ORDER BY created_at ASC, name ASC",
+        )
+        .map_err(|error| error.to_string())?;
+
+    let rows = statement
+        .query_map([], |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)))
+        .map_err(|error| error.to_string())?;
+
+    rows.collect::<Result<Vec<_>, _>>()
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn delete_collection(
+    state: State<'_, StorageState>,
+    id: String,
+) -> Result<(), String> {
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "DELETE FROM collection_equations WHERE collection_id = ?1",
+            params![&id],
+        )
+        .map_err(|error| error.to_string())?;
+    connection
+        .execute("DELETE FROM formula_collections WHERE id = ?1", params![id])
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn add_equation_to_collection(
+    state: State<'_, StorageState>,
+    collection_id: String,
+    equation_id: String,
+) -> Result<(), String> {
+    let connection = connection(&state)?;
+
+    let collection_exists: bool = connection
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM formula_collections WHERE id = ?1)",
+            params![&collection_id],
+            |row| row.get(0),
+        )
+        .map_err(|error| error.to_string())?;
+    let equation_exists: bool = connection
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM equations WHERE id = ?1)",
+            params![&equation_id],
+            |row| row.get(0),
+        )
+        .map_err(|error| error.to_string())?;
+
+    if !collection_exists || !equation_exists {
+        return Err("Collection or equation not found".to_string());
+    }
+
+    connection
+        .execute(
+            "INSERT INTO collection_equations (collection_id, equation_id, added_at)
+             VALUES (?1, ?2, ?3)
+             ON CONFLICT(collection_id, equation_id)
+             DO UPDATE SET added_at = excluded.added_at",
+            params![collection_id, equation_id, now_millis()],
+        )
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn remove_equation_from_collection(
+    state: State<'_, StorageState>,
+    collection_id: String,
+    equation_id: String,
+) -> Result<(), String> {
+    let connection = connection(&state)?;
+    connection
+        .execute(
+            "DELETE FROM collection_equations
+             WHERE collection_id = ?1 AND equation_id = ?2",
+            params![collection_id, equation_id],
+        )
+        .map_err(|error| error.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_collection_equations(
+    state: State<'_, StorageState>,
+    collection_id: String,
+) -> Result<Vec<(String, String, i64, i64, i64)>, String> {
+    let connection = connection(&state)?;
+    let mut statement = connection
+        .prepare(
+            "SELECT e.id, e.document_json, e.created_at, e.updated_at, e.last_opened_at
+             FROM collection_equations ce
+             JOIN equations e ON e.id = ce.equation_id
+             WHERE ce.collection_id = ?1
+             ORDER BY ce.added_at DESC",
+        )
+        .map_err(|error| error.to_string())?;
+
+    let rows = statement
+        .query_map(params![collection_id], |row| {
+            Ok((
+                row.get(0)?,
+                row.get(1)?,
+                row.get(2)?,
+                row.get(3)?,
+                row.get(4)?,
+            ))
         })
         .map_err(|error| error.to_string())?;
 

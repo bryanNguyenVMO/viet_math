@@ -43,9 +43,14 @@ describe("Phase 1 primary UI actions", () => {
     expect(source).toContain("setFavorite");
     expect(source).toContain("listRevisions");
     expect(source).toContain("restoreRevision");
+    expect(source).toContain("createCollection");
+    expect(source).toContain("listCollections");
+    expect(source).toContain("addEquationToCollection");
+    expect(source).toContain("removeEquationFromCollection");
     expect(source).toContain('setTab("recent")');
     expect(source).toContain('setTab("favorites")');
     expect(source).toContain('setTab("templates")');
+    expect(source).toContain('setTab("collections")');
   });
 
   it("provides an actual Help dialog and opens it from the workspace", () => {

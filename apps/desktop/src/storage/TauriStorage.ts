@@ -5,17 +5,20 @@ import {
   type EquationDocument,
 } from "@vietmath/equation-model";
 import type {
+  CollectionRepository,
   DraftRepository,
   EquationRepository,
   FavoriteRepository,
   HistoryRepository,
   SettingsRepository,
+  StoredCollection,
   StoredEquation,
   StoredEquationRevision,
 } from "@vietmath/storage";
 
 type StoredEquationRow = [string, string, number, number, number];
 type RevisionRow = [number, string, number];
+type CollectionRow = [string, string, number];
 
 function fromRow(row: StoredEquationRow): StoredEquation {
   const [id, documentJson, createdAt, updatedAt, lastOpenedAt] = row;
@@ -34,7 +37,8 @@ export class TauriStorage
     SettingsRepository,
     EquationRepository,
     FavoriteRepository,
-    HistoryRepository
+    HistoryRepository,
+    CollectionRepository
 {
   async save(key: string, document: EquationDocument): Promise<void> {
     await invoke("save_draft", {
@@ -111,5 +115,43 @@ export class TauriStorage
       document: deserializeEquation(documentJson),
       createdAt,
     }));
+  }
+
+  async createCollection(collection: StoredCollection): Promise<void> {
+    await invoke("create_collection", {
+      id: collection.id,
+      name: collection.name,
+      createdAt: collection.createdAt,
+    });
+  }
+
+  async listCollections(): Promise<StoredCollection[]> {
+    const rows = await invoke<CollectionRow[]>("list_collections");
+    return rows.map(([id, name, createdAt]) => ({ id, name, createdAt }));
+  }
+
+  async deleteCollection(id: string): Promise<void> {
+    await invoke("delete_collection", { id });
+  }
+
+  async addEquationToCollection(
+    collectionId: string,
+    equationId: string,
+  ): Promise<void> {
+    await invoke("add_equation_to_collection", { collectionId, equationId });
+  }
+
+  async removeEquationFromCollection(
+    collectionId: string,
+    equationId: string,
+  ): Promise<void> {
+    await invoke("remove_equation_from_collection", { collectionId, equationId });
+  }
+
+  async listCollectionEquations(collectionId: string): Promise<StoredEquation[]> {
+    const rows = await invoke<StoredEquationRow[]>("list_collection_equations", {
+      collectionId,
+    });
+    return rows.map(fromRow);
   }
 }

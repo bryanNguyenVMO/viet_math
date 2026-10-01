@@ -15,6 +15,12 @@ export type StoredEquationRevision = {
   createdAt: number;
 };
 
+export type StoredCollection = {
+  id: string;
+  name: string;
+  createdAt: number;
+};
+
 export interface EquationRepository {
   saveEquation(equation: StoredEquation): Promise<void>;
   getEquation(id: string): Promise<StoredEquation | null>;
@@ -38,7 +44,22 @@ export interface FavoriteRepository {
 }
 
 export interface HistoryRepository {
-  listRevisions(equationId: string, limit: number): Promise<StoredEquationRevision[]>;
+  listRevisions(
+    equationId: string,
+    limit: number,
+  ): Promise<StoredEquationRevision[]>;
+}
+
+export interface CollectionRepository {
+  createCollection(collection: StoredCollection): Promise<void>;
+  listCollections(): Promise<StoredCollection[]>;
+  deleteCollection(id: string): Promise<void>;
+  addEquationToCollection(collectionId: string, equationId: string): Promise<void>;
+  removeEquationFromCollection(
+    collectionId: string,
+    equationId: string,
+  ): Promise<void>;
+  listCollectionEquations(collectionId: string): Promise<StoredEquation[]>;
 }
 
 export type FormulaTemplate = {

@@ -1,10 +1,12 @@
 export type {
+  CollectionRepository,
   DraftRepository,
   EquationRepository,
   FavoriteRepository,
   FormulaTemplate,
   HistoryRepository,
   SettingsRepository,
+  StoredCollection,
   StoredEquation,
   StoredEquationRevision,
 } from "./ports";

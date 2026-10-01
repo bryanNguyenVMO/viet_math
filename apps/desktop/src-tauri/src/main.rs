@@ -155,6 +155,8 @@ fn main() {
             storage::save_equation,
             storage::load_equation,
             storage::list_recent_equations,
+            storage::rename_equation,
+            storage::delete_equation,
             storage::set_equation_favorite,
             storage::list_favorite_equations,
             storage::list_equation_revisions,

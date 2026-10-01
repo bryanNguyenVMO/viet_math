@@ -2,6 +2,7 @@ import type { EquationDocument } from "@vietmath/equation-model";
 
 export type StoredEquation = {
   id: string;
+  title?: string;
   document: EquationDocument;
   createdAt: number;
   updatedAt: number;
@@ -25,6 +26,8 @@ export interface EquationRepository {
   saveEquation(equation: StoredEquation): Promise<void>;
   getEquation(id: string): Promise<StoredEquation | null>;
   listRecent(limit: number): Promise<StoredEquation[]>;
+  renameEquation(id: string, title: string | null): Promise<void>;
+  deleteEquation(id: string): Promise<void>;
 }
 
 export interface DraftRepository {

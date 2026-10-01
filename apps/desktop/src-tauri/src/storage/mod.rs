@@ -276,7 +276,13 @@ pub fn load_equation(
             "SELECT title, document_json, created_at, updated_at, last_opened_at
              FROM equations WHERE id = ?1",
             params![id],
-            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+            |row| Ok((
+                row.get(0)?,
+                row.get(1)?,
+                row.get(2)?,
+                row.get(3)?,
+                row.get(4)?,
+            )),
         )
         .optional()
         .map_err(|error| error.to_string())

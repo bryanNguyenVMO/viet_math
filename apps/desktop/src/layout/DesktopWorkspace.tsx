@@ -175,13 +175,6 @@ export function DesktopWorkspace() {
   }, []);
 
   const handleKey = (side: "left" | "right") => (event: ReactKeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (side === "left") setLeftCollapsed((value) => !value);
-      else setRightCollapsed((value) => !value);
-      return;
-    }
-
     const amount = event.shiftKey ? 30 : 10;
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault();

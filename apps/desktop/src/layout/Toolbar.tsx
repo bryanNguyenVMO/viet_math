@@ -10,7 +10,7 @@ import {
 } from "@vietmath/i18n";
 import { ClipboardService } from "@vietmath/shared";
 import { Button, IconButton } from "@vietmath/ui";
-import { Copy, HelpCircle, Redo2, Settings, Undo2 } from "lucide-react";
+import { Copy, Download, HelpCircle, Redo2, Settings, Undo2 } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { BrowserClipboardPort } from "../clipboard/BrowserClipboardPort";
@@ -20,6 +20,7 @@ type ToolbarProps = {
   locale: Locale;
   onOpenSettings: () => void;
   onOpenHelp: () => void;
+  onOpenExport: () => void;
 };
 
 const structures: Array<{
@@ -43,6 +44,7 @@ export function Toolbar({
   locale,
   onOpenSettings,
   onOpenHelp,
+  onOpenExport,
 }: ToolbarProps) {
   const { t } = createTranslator(locale);
   const clipboard = useMemo(
@@ -101,6 +103,9 @@ export function Toolbar({
           {copyStatus}
         </span>
       ) : null}
+      <Button variant="ghost" disabled={!editor} onClick={onOpenExport}>
+        <Download size={15} /> {t("actions.export")}
+      </Button>
       <Button variant="primary" disabled={!editor} onClick={() => void copy()}>
         <Copy size={15} /> {t("actions.copy")}
       </Button>

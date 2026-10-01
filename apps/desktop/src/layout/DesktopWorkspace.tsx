@@ -24,6 +24,7 @@ import {
 } from "react";
 
 import { EditorWorkspace } from "../editor/EditorWorkspace";
+import { ExportDialog } from "../export/ExportDialog";
 import { HelpDialog } from "../help/HelpDialog";
 import { SettingsDialog } from "../settings/SettingsDialog";
 import { TauriStorage } from "../storage/TauriStorage";
@@ -84,6 +85,7 @@ export function DesktopWorkspace() {
   const [locale, setLocale] = useState<Locale>(() => settings.locale);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(260);
   const [rightWidth, setRightWidth] = useState(280);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
@@ -317,6 +319,7 @@ export function DesktopWorkspace() {
         locale={locale}
         onOpenSettings={() => setSettingsOpen(true)}
         onOpenHelp={() => setHelpOpen(true)}
+        onOpenExport={() => setExportOpen(true)}
       />
 
       <section className="vm-main-grid" style={{ gridTemplateColumns: columns }}>
@@ -361,6 +364,13 @@ export function DesktopWorkspace() {
           />
         </div>
       </section>
+      <ExportDialog
+        open={exportOpen}
+        editor={editor}
+        settings={settings}
+        locale={locale}
+        onClose={() => setExportOpen(false)}
+      />
       <HelpDialog
         open={helpOpen}
         locale={locale}

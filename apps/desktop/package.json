@@ -13,6 +13,7 @@
     "@tauri-apps/api": "^2.8.0",
     "@vietmath/editor": "workspace:*",
     "@vietmath/equation-model": "workspace:*",
+    "@vietmath/exporters": "workspace:*",
     "@vietmath/i18n": "workspace:*",
     "@vietmath/ui": "workspace:*",
     "@vietmath/storage": "workspace:*",

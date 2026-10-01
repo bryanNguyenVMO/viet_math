@@ -19,6 +19,9 @@ importers:
       '@vietmath/equation-model':
         specifier: workspace:*
         version: link:../../packages/equation-model
+      '@vietmath/exporters':
+        specifier: workspace:*
+        version: link:../../packages/exporters
       '@vietmath/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n

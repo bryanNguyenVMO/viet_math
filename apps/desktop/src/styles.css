@@ -735,3 +735,40 @@ select { font: inherit; }
   color: var(--vm-primary);
   outline: none;
 }
+
+
+.vm-export-content {
+  display: grid;
+  gap: 14px;
+  padding: 18px 16px;
+}
+
+.vm-export-content > p {
+  margin: 0;
+  color: var(--vm-text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.vm-export-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vm-export-grid .vm-button {
+  justify-content: center;
+}
+
+.vm-export-hint {
+  padding: 8px 10px;
+  border: 1px solid var(--vm-border);
+  border-radius: var(--vm-radius-md);
+  background: var(--vm-bg);
+}
+
+.vm-export-status {
+  overflow-wrap: anywhere;
+  color: var(--vm-primary) !important;
+  font-weight: 700;
+}

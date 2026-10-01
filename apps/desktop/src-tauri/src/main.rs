@@ -3,6 +3,7 @@
 mod storage;
 
 use rusqlite::Connection;
+use std::path::{Path, PathBuf};
 use tauri::Manager;
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
@@ -12,6 +13,54 @@ fn write_clipboard_text(text: String) -> Result<(), String> {
     clipboard
         .set_text(text)
         .map_err(|error| error.to_string())
+}
+
+fn unique_export_path(download_dir: &Path, filename: &str) -> PathBuf {
+    let requested = Path::new(filename);
+    let stem = requested
+        .file_stem()
+        .and_then(|value| value.to_str())
+        .unwrap_or("vietmath");
+    let extension = requested.extension().and_then(|value| value.to_str());
+
+    let direct = download_dir.join(filename);
+    if !direct.exists() {
+        return direct;
+    }
+
+    for index in 1..1000 {
+        let next_name = match extension {
+            Some(extension) => format!("{stem}-{index}.{extension}"),
+            None => format!("{stem}-{index}"),
+        };
+        let candidate = download_dir.join(next_name);
+        if !candidate.exists() {
+            return candidate;
+        }
+    }
+
+    download_dir.join(format!("{stem}-export"))
+}
+
+#[tauri::command]
+fn save_export_file(
+    app: tauri::AppHandle,
+    filename: String,
+    bytes: Vec<u8>,
+) -> Result<String, String> {
+    let safe_name = Path::new(&filename)
+        .file_name()
+        .and_then(|value| value.to_str())
+        .ok_or_else(|| "Invalid export filename".to_string())?;
+    let download_dir = app
+        .path()
+        .download_dir()
+        .map_err(|error| error.to_string())?;
+    std::fs::create_dir_all(&download_dir).map_err(|error| error.to_string())?;
+
+    let path = unique_export_path(&download_dir, safe_name);
+    std::fs::write(&path, bytes).map_err(|error| error.to_string())?;
+    Ok(path.to_string_lossy().into_owned())
 }
 
 #[tauri::command]
@@ -68,6 +117,7 @@ fn main() {
             storage::set_equation_favorite,
             storage::list_favorite_equations,
             write_clipboard_text,
+            save_export_file,
             hide_quick_window,
             show_main_window,
         ])
